@@ -1,7 +1,7 @@
 /* ============================================================
    FT Sicherheitstechnik — single source of truth for business
    facts, navigation and routes. Values verified against
-   website-content.md (live-site extraction, 2026-08-22).
+   docs/website-content.md (live-site extraction, 2026-08-22).
    ============================================================ */
 
 export const site = {
