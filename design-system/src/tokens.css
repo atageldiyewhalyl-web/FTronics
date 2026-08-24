@@ -1,0 +1,143 @@
+/* ============================================================
+   FT Sicherheitstechnik — Design Tokens
+   Three layers: raw colour → semantic role → component property
+   ============================================================ */
+
+:root {
+  /* ---------- Layer 1: raw ---------- */
+  --ft-ink-950: #08090a;
+  --ft-ink-900: #0e1012;
+  --ft-ink-850: #141719;
+  --ft-ink-800: #1b1f22;
+  --ft-ink-700: #262b30;
+  --ft-ink-600: #3a4147;
+
+  --ft-paper: #ffffff;
+  --ft-paper-98: #fafbfb;
+  --ft-paper-96: #f4f6f7;
+  --ft-paper-92: #e9ecee;
+
+  --ft-slate-500: #5c656c;
+  --ft-slate-400: #697279;
+
+  /* The single accent */
+  --ft-signal-500: #ff4d3d;   /* graphic accent — rails, ticks, marks */
+  --ft-signal-600: #e63c2d;   /* focus ring */
+  --ft-signal-700: #c62f1d;   /* signal button — passes AA on white */
+
+  /* Functional only — never decorative, never a CTA */
+  --ft-ok: #188444;
+  --ft-warn: #9a6112;
+  --ft-error: #c8232a;
+
+  /* ---------- Layer 2: semantic ---------- */
+  --bg: var(--ft-paper-96);
+  --bg-raised: var(--ft-paper);
+  --bg-card: var(--ft-paper);
+  --bg-card-hover: var(--ft-paper-98);
+  --fg: var(--ft-ink-900);
+  --fg-secondary: var(--ft-slate-500);
+  --fg-tertiary: var(--ft-slate-400);
+  --border: rgba(14, 16, 18, 0.10);
+  --border-strong: rgba(14, 16, 18, 0.20);
+  --ring: var(--ft-signal-600);
+  --chip-bg: rgba(14, 16, 18, 0.035);
+
+  --btn-primary-bg: var(--ft-ink-900);
+  --btn-primary-fg: #ffffff;
+  --btn-secondary-bg: transparent;
+  --btn-secondary-fg: var(--ft-ink-900);
+  --btn-secondary-bd: rgba(14, 16, 18, 0.22);
+
+  /* ---------- Typography ---------- */
+  --font-display: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-ui: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --t-eyebrow: clamp(0.95rem, 0.30vw + 0.88rem, 1.20rem);
+  --t-body-sm: clamp(0.88rem, 0.15vw + 0.84rem, 0.95rem);
+  --t-body:    clamp(1.00rem, 0.25vw + 0.94rem, 1.15rem);
+  --t-lead:    clamp(1.15rem, 0.55vw + 1.02rem, 1.50rem);
+  --t-h4:      clamp(1.25rem, 0.45vw + 1.14rem, 1.60rem);
+  --t-h3:      clamp(1.60rem, 1.00vw + 1.35rem, 2.40rem);
+  --t-h2:      clamp(2.20rem, 2.20vw + 1.65rem, 3.75rem);
+  --t-h1:      clamp(2.75rem, 3.20vw + 1.95rem, 5.00rem);
+  --t-display: clamp(3.25rem, 4.60vw + 2.10rem, 6.00rem);
+
+  /* ---------- Space ---------- */
+  --sp-1: .25rem;  --sp-2: .5rem;   --sp-3: .75rem;  --sp-4: 1rem;
+  --sp-6: 1.5rem;  --sp-8: 2rem;    --sp-12: 3rem;   --sp-16: 4rem;
+  --sp-20: 5rem;   --sp-24: 6rem;   --sp-32: 8rem;   --sp-40: 10rem;
+
+  --section-pad: clamp(5rem, 7.143vw + 3.571rem, 10rem);
+  --container: 1200px;
+  --container-wide: 1440px;
+  --container-text: 680px;
+  --gutter: clamp(1rem, 3vw, 2rem);
+
+  /* ---------- Radius ---------- */
+  --r-sm: 8px;  --r-md: 14px;  --r-lg: 20px;
+  --r-xl: 28px; --r-bento: 36px; --r-pill: 9999px;
+
+  /* ---------- Motion ---------- */
+  --ease-out: cubic-bezier(0.16, 1, 0.30, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+  --dur-1: 120ms; --dur-2: 240ms; --dur-3: 420ms;
+  --dur-4: 700ms; --dur-5: 1100ms;
+}
+
+
+/* ============================================================
+   Base
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-ui);
+  font-size: var(--t-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  transition: background var(--dur-4) var(--ease-out), color var(--dur-4) var(--ease-out);
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin: 0;
+  hyphens: auto;
+  text-wrap: balance;
+}
+h1 { font-size: var(--t-h1); font-weight: 700; line-height: 1.05; letter-spacing: -0.022em; margin-bottom: .2em; }
+h2 { font-size: var(--t-h2); line-height: 1.08; letter-spacing: -0.018em; margin-bottom: .3em; }
+h3 { font-size: var(--t-h3); line-height: 1.15; letter-spacing: -0.012em; margin-bottom: .5em; }
+h4 { font-size: var(--t-h4); line-height: 1.25; letter-spacing: -0.004em; font-weight: 500; margin-bottom: .8em; }
+p  { margin: 0 0 1em; max-width: var(--container-text); }
+
+a { color: inherit; }
+
+::selection { background: var(--ft-signal-500); color: #fff; }
+
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ============================================================
+   Reduced motion — hard gate
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  [data-rev] { opacity: 1 !important; transform: none !important; }
+  .pin-stack { height: auto !important; }
+  .pin-stage { position: static !important; height: auto !important; }
+  .pin-panel { position: static !important; opacity: 1 !important; }
+}

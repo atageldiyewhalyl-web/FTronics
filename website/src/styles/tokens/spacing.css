@@ -1,0 +1,11 @@
+/* FT Sicherheitstechnik — space, layout, radius */
+:root{
+  --sp-1:.25rem;--sp-2:.5rem;--sp-3:.75rem;--sp-4:1rem;--sp-6:1.5rem;--sp-8:2rem;
+  --sp-12:3rem;--sp-16:4rem;--sp-20:5rem;--sp-24:6rem;--sp-32:8rem;--sp-40:10rem;
+  --section-pad:clamp(5rem,7.143vw + 3.571rem,10rem); /* @kind spacing */
+  --container:1260px; /* @kind spacing */
+  --container-wide:1440px; /* @kind spacing */
+  --container-text:680px; /* @kind spacing */
+  --gutter:clamp(1rem,3vw,2rem); /* @kind spacing */
+  --r-sm:8px;--r-md:14px;--r-lg:20px;--r-xl:28px;--r-bento:36px;--r-pill:9999px;
+}

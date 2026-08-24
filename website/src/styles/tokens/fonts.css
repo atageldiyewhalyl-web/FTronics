@@ -1,0 +1,5 @@
+/* DM Sans — the single family for display + UI (kit v1.0).
+   NOTE: loaded from Google Fonts CDN because the source codebase links it from CDN
+   and ships no font binaries. The earlier brief wanted self-hosted (DSGVO);
+   supply woff2 files to replace this import. */
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap");

@@ -1,0 +1,11 @@
+/* FT Sicherheitstechnik — motion. Animate only transform/opacity/filter/clip-path. */
+:root{
+  --ease-out:cubic-bezier(0.16,1,0.30,1); /* @kind other */
+  --ease-in-out:cubic-bezier(0.65,0,0.35,1); /* @kind other */
+  --ease-soft:cubic-bezier(0.33,1,0.68,1); /* @kind other */
+  --dur-1:120ms; /* @kind other */
+  --dur-2:240ms; /* @kind other */
+  --dur-3:420ms; /* @kind other */
+  --dur-4:700ms; /* @kind other */
+  --dur-5:1100ms; /* @kind other */
+}

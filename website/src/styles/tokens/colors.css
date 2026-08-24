@@ -1,0 +1,24 @@
+/* FT Sicherheitstechnik — colour tokens (source: design-system/src/tokens.css, v1.0 light) */
+:root{
+  /* Layer 1 — raw */
+  --ft-ink-950:#08090a;--ft-ink-900:#0e1012;--ft-ink-850:#141719;--ft-ink-800:#1b1f22;--ft-ink-700:#262b30;--ft-ink-600:#3a4147;
+  --ft-paper:#ffffff;--ft-paper-98:#fafbfb;--ft-paper-96:#f4f6f7;--ft-paper-92:#e9ecee;
+  --ft-ink-text:#1d1d1f;/* text ink — softer than ink-900 surfaces */
+  --ft-ink-grad-end:#3a4045;/* heading gradient baseline — 9.7:1 on paper-96 */
+  --ft-slate-500:#5c656c;--ft-slate-400:#697279;
+  /* The single accent */
+  --ft-red-brand:#eb0a16;/* brand red — 4.58:1 with white text, clears WCAG AA */
+  --ft-red-brand-hover:#cc0813;
+  --ft-signal-500:#ff4d3d;/* graphic accent — rails, ticks, marks */
+  --ft-signal-600:#e63c2d;/* focus ring */
+  --ft-signal-700:#c62f1d;/* signal button — passes AA on white */
+  /* Functional only — never decorative, never a CTA */
+  --ft-ok:#188444;--ft-warn:#9a6112;--ft-error:#c8232a;
+  /* Layer 2 — semantic */
+  --bg:var(--ft-paper-96);--bg-raised:var(--ft-paper);--bg-card:var(--ft-paper);--bg-card-hover:var(--ft-paper-98);
+  --fg:var(--ft-ink-text);--fg-secondary:var(--ft-slate-500);--fg-tertiary:var(--ft-slate-400);
+  --border:rgba(14,16,18,0.10);--border-strong:rgba(14,16,18,0.20);
+  --ring:var(--ft-signal-600);--chip-bg:rgba(14,16,18,0.035);
+  --btn-primary-bg:var(--ft-red-brand);--btn-primary-fg:#ffffff;
+  --btn-secondary-bg:transparent;--btn-secondary-fg:var(--ft-ink-900);--btn-secondary-bd:rgba(14,16,18,0.22);
+}

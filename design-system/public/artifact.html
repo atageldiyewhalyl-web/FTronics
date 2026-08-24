@@ -1,0 +1,807 @@
+<title>FT Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   FT Sicherheitstechnik — Design System
+   Light, single visual world. Committed by decision, so there is
+   no media query and no theme stamp — but every colour, including
+   the body ground, is painted explicitly so the page holds on any
+   host background.
+   ============================================================ */
+
+:root {
+  /* Layer 1 — raw */
+  --ft-ink-950:#08090a; --ft-ink-900:#0e1012; --ft-ink-850:#141719;
+  --ft-ink-800:#1b1f22; --ft-ink-700:#262b30; --ft-ink-600:#3a4147;
+  --ft-paper:#ffffff; --ft-paper-98:#fafbfb; --ft-paper-96:#f4f6f7; --ft-paper-92:#e9ecee;
+  --ft-slate-500:#5c656c; --ft-slate-400:#697279;
+  --ft-signal-500:#ff4d3d; --ft-signal-600:#e63c2d; --ft-signal-700:#c62f1d;
+  --ft-ok:#188444; --ft-warn:#9a6112; --ft-error:#c8232a;
+
+  /* Layer 2 — semantic */
+  --bg:var(--ft-paper-96); --bg-raised:var(--ft-paper);
+  --bg-card:var(--ft-paper); --bg-card-hover:var(--ft-paper-98);
+  --fg:var(--ft-ink-900); --fg-secondary:var(--ft-slate-500); --fg-tertiary:var(--ft-slate-400);
+  --border:rgba(14,16,18,.10); --border-strong:rgba(14,16,18,.20);
+  --ring:var(--ft-signal-600);
+  --chip-bg:rgba(14,16,18,.035);
+  --btn-primary-bg:var(--ft-ink-900); --btn-primary-fg:#ffffff;
+  --btn-secondary-fg:var(--ft-ink-900); --btn-secondary-bd:rgba(14,16,18,.22);
+
+  /* Type */
+  --font-display:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-ui:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-mono:'DM Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+
+  --t-eyebrow:clamp(.95rem,.30vw + .88rem,1.20rem);
+  --t-body-sm:clamp(.88rem,.15vw + .84rem,.95rem);
+  --t-body:clamp(1rem,.25vw + .94rem,1.15rem);
+  --t-lead:clamp(1.15rem,.55vw + 1.02rem,1.5rem);
+  --t-h4:clamp(1.25rem,.45vw + 1.14rem,1.6rem);
+  --t-h3:clamp(1.6rem,1vw + 1.35rem,2.4rem);
+  --t-h2:clamp(2.2rem,2.2vw + 1.65rem,3.75rem);
+  --t-h1:clamp(2.75rem,3.2vw + 1.95rem,5rem);
+  --t-display:clamp(3.25rem,4.6vw + 2.1rem,6rem);
+
+  /* Space */
+  --sp-1:.25rem; --sp-2:.5rem; --sp-3:.75rem; --sp-4:1rem; --sp-6:1.5rem;
+  --sp-8:2rem; --sp-12:3rem; --sp-16:4rem; --sp-20:5rem; --sp-24:6rem;
+  --sp-32:8rem; --sp-40:10rem;
+  --container-text:680px;
+
+  /* Radius */
+  --r-sm:8px; --r-md:14px; --r-lg:20px; --r-xl:28px; --r-bento:36px; --r-pill:9999px;
+
+  /* Motion */
+  --ease-out:cubic-bezier(.16,1,.30,1);
+  --ease-in-out:cubic-bezier(.65,0,.35,1);
+  --ease-soft:cubic-bezier(.33,1,.68,1);
+  --dur-1:120ms; --dur-2:240ms; --dur-3:420ms; --dur-4:700ms; --dur-5:1100ms;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font-family:var(--font-ui); font-size:var(--t-body); line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  transition:background var(--dur-4) var(--ease-out),color var(--dur-4) var(--ease-out);
+}
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;margin:0;hyphens:auto;text-wrap:balance}
+h1{font-size:var(--t-h1);line-height:1.05;letter-spacing:-.022em;margin-bottom:.2em}
+h2{font-size:var(--t-h2);line-height:1.08;letter-spacing:-.018em;margin-bottom:.3em}
+h3{font-size:var(--t-h3);line-height:1.15;letter-spacing:-.012em;margin-bottom:.5em}
+h4{font-size:var(--t-h4);line-height:1.25;letter-spacing:-.004em;font-weight:500;margin-bottom:.8em}
+p{margin:0 0 1em;max-width:var(--container-text)}
+a{color:inherit}
+::selection{background:var(--ft-signal-500);color:#fff}
+:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border-radius:4px}
+
+/* ---------------- Shell ---------------- */
+.shell{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+.nav{
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+  border-right:1px solid var(--border);background:var(--bg-raised);
+  padding:var(--sp-6) var(--sp-4);display:flex;flex-direction:column;gap:var(--sp-4);
+}
+.brand{display:flex;align-items:center;gap:10px;padding:0 var(--sp-3) var(--sp-4)}
+.brand-mark{
+  width:32px;height:32px;border-radius:9px;flex:0 0 auto;background:var(--ft-signal-500);
+  display:grid;place-items:center;font-weight:600;font-size:13px;color:#fff;letter-spacing:-.02em;
+}
+.brand-text{display:flex;flex-direction:column;line-height:1.15}
+.brand-text b{font-size:14px;font-weight:600;letter-spacing:-.01em}
+.brand-text span{font-size:11px;color:var(--fg-tertiary)}
+.nav-list{display:flex;flex-direction:column;gap:2px}
+.nav-link{
+  display:flex;align-items:center;gap:10px;padding:8px var(--sp-3);border-radius:var(--r-sm);
+  font-size:13.5px;color:var(--fg-secondary);text-decoration:none;
+  transition:background var(--dur-2) var(--ease-out),color var(--dur-2) var(--ease-out);
+}
+.nav-link:hover{background:var(--bg-card);color:var(--fg)}
+.nav-link.active{background:var(--bg-card);color:var(--fg);font-weight:500}
+.nav-link.active .dot{background:var(--ft-signal-500)}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--border-strong);flex:0 0 auto;transition:background var(--dur-2)}
+.nav-foot{margin-top:auto;padding:var(--sp-4) var(--sp-3) 0;border-top:1px solid var(--border)}
+.main{min-width:0}
+.section{padding:var(--sp-20) var(--sp-12);border-bottom:1px solid var(--border);max-width:1180px}
+.section:last-child{border-bottom:0}
+
+.eyebrow{
+  font:500 var(--t-eyebrow)/1.1 var(--font-ui);letter-spacing:.06em;text-transform:uppercase;
+  color:var(--fg-tertiary);margin:0 0 var(--sp-4);
+}
+.lead{font-size:var(--t-lead);line-height:1.45;letter-spacing:-.002em;color:var(--fg-secondary);max-width:var(--container-text);margin-bottom:var(--sp-8)}
+.note{font-size:var(--t-body-sm);color:var(--fg-tertiary);max-width:var(--container-text)}
+
+.grid{display:grid;gap:var(--sp-4)}
+.c2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.c3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.c4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.c5{grid-template-columns:repeat(5,minmax(0,1fr))}
+@media(max-width:1000px){.c4,.c5{grid-template-columns:repeat(2,1fr)}.c3{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:680px){.c2,.c3,.c4,.c5{grid-template-columns:1fr}}
+
+/* Swatches */
+.swatch{border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden;background:var(--bg-card)}
+.swatch-chip{height:84px}
+.swatch-meta{padding:var(--sp-3);display:flex;flex-direction:column;gap:2px}
+.swatch-meta b{font-size:13px;font-weight:500}
+.swatch-meta code{font:400 11.5px var(--font-mono);color:var(--fg-tertiary)}
+.ratio{font-size:11px;color:var(--fg-tertiary);margin-top:2px;font-variant-numeric:tabular-nums}
+.ratio.pass{color:var(--ft-ok)} .ratio.fail{color:var(--ft-warn)}
+
+/* Type specimens */
+.spec{padding:var(--sp-6) 0;border-bottom:1px solid var(--border)}
+.spec:last-child{border-bottom:0}
+.spec-meta{display:flex;flex-wrap:wrap;gap:var(--sp-4);margin-bottom:var(--sp-3)}
+.spec-meta span{font:400 11.5px/1 var(--font-mono);color:var(--fg-tertiary);font-variant-numeric:tabular-nums}
+.spec-meta b{color:var(--fg-secondary);font-weight:500}
+.sample{margin:0;max-width:none}
+
+/* Buttons */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font:500 var(--t-body-sm)/1.4 var(--font-ui);padding:.85rem 1.6rem;border-radius:var(--r-pill);
+  border:1px solid transparent;cursor:pointer;text-decoration:none;min-height:44px;
+  transition:transform var(--dur-2) var(--ease-out),background var(--dur-2) var(--ease-out),
+             border-color var(--dur-2) var(--ease-out),color var(--dur-2) var(--ease-out);
+}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:translateY(0) scale(.985)}
+.primary{background:var(--btn-primary-bg);color:var(--btn-primary-fg)}
+.secondary{background:transparent;color:var(--btn-secondary-fg);border-color:var(--btn-secondary-bd)}
+.secondary:hover{border-color:var(--fg)}
+.signal{background:var(--ft-signal-700);color:#fff}
+.signal:hover{background:#a82616}
+.quiet{background:none;color:var(--fg-secondary);padding:.5rem 0;min-height:0;border-radius:4px}
+.quiet:hover{color:var(--fg)}
+.sm{padding:.55rem 1.1rem;min-height:38px;font-size:13px}
+
+/* Cards */
+.card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--sp-8);
+  transition:background var(--dur-3) var(--ease-out),border-color var(--dur-3) var(--ease-out),transform var(--dur-3) var(--ease-out);
+}
+.card:hover{background:var(--bg-card-hover);border-color:var(--border-strong);transform:translateY(-3px)}
+.card h4{margin-bottom:.5em}
+.card p{color:var(--fg-secondary);font-size:var(--t-body-sm);margin:0}
+.bento{border-radius:var(--r-bento);padding:var(--sp-12);min-height:250px;display:flex;flex-direction:column;justify-content:flex-end}
+.stat-num{font-size:var(--t-h2);font-weight:600;line-height:1;letter-spacing:-.018em;display:block;font-variant-numeric:tabular-nums}
+.stat-label{font:500 var(--t-eyebrow)/1.1 var(--font-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--fg-tertiary);margin-top:var(--sp-3);display:block}
+
+/* Chips */
+.chip{
+  display:inline-block;font:500 var(--t-body-sm)/1 var(--font-ui);letter-spacing:.04em;text-transform:uppercase;
+  padding:.45rem .7rem;border-radius:var(--r-sm);background:var(--chip-bg);
+  border:1px solid var(--border);color:var(--fg-secondary);
+}
+.chip.status{border-color:color-mix(in srgb,var(--ft-ok) 40%,transparent);color:var(--ft-ok);text-transform:none;letter-spacing:0}
+.chip-row{display:flex;flex-wrap:wrap;gap:var(--sp-2)}
+
+/* Scales */
+.scale-row{display:flex;align-items:center;gap:var(--sp-4);padding:7px 0}
+.scale-bar{height:14px;background:var(--ft-signal-500);border-radius:3px;opacity:.85}
+.scale-label{font:400 12px var(--font-mono);color:var(--fg-tertiary);width:130px;flex:0 0 auto;font-variant-numeric:tabular-nums}
+.radius-demo{height:96px;background:var(--bg-card);border:1px solid var(--border-strong);display:grid;place-items:center;font:400 12px var(--font-mono);color:var(--fg-tertiary)}
+
+/* Fields */
+.field{display:flex;flex-direction:column;gap:7px;margin-bottom:var(--sp-4)}
+.field label{font-size:var(--t-body-sm);color:var(--fg-secondary);font-weight:500}
+.field input,.field select,.field textarea{
+  background:var(--bg-raised);border:1px solid var(--border);border-radius:var(--r-md);
+  min-height:52px;padding:0 var(--sp-4);color:var(--fg);font:400 16px var(--font-ui);width:100%;
+  transition:border-color var(--dur-2) var(--ease-out),box-shadow var(--dur-2) var(--ease-out);
+}
+.field textarea{padding:var(--sp-3) var(--sp-4);min-height:110px;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{
+  outline:none;border-color:var(--ring);box-shadow:0 0 0 3px rgba(255,77,61,.18);
+}
+
+/* Demos */
+.frame{border:1px solid var(--border);border-radius:var(--r-lg);background:var(--bg-raised);overflow:hidden;position:relative}
+.scroller{height:420px;overflow-y:auto;overflow-x:hidden;position:relative;scrollbar-width:thin}
+.hint{
+  position:absolute;z-index:5;top:12px;right:12px;font:500 11px var(--font-ui);
+  letter-spacing:.05em;text-transform:uppercase;color:var(--fg-tertiary);
+  background:var(--bg);border:1px solid var(--border);padding:6px 10px;border-radius:var(--r-pill);pointer-events:none;
+}
+.bar{position:absolute;left:0;bottom:0;height:2px;background:var(--ft-signal-500);width:0}
+
+.pin-stage{position:sticky;top:0;height:420px;overflow:hidden}
+.pin-panel{position:absolute;inset:0;display:grid;place-content:center;padding:var(--sp-12);will-change:opacity,transform;opacity:0}
+.pin-num{font:600 13px var(--font-ui);letter-spacing:.1em;color:var(--ft-signal-500);margin-bottom:var(--sp-3);display:block}
+.pin-panel h4{max-width:430px}
+.pin-panel p{color:var(--fg-secondary);font-size:var(--t-body-sm);max-width:430px}
+.rail{position:absolute;left:var(--sp-6);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:4}
+.tick{width:3px;height:26px;border-radius:2px;background:var(--border-strong);transition:background var(--dur-3) var(--ease-out)}
+.tick.on{background:var(--ft-signal-500)}
+
+.scrub-stage{position:sticky;top:0;height:420px;display:grid;place-items:center;overflow:hidden}
+.cam{position:relative;width:210px;height:210px}
+.layer{
+  position:absolute;inset:0;border:1px solid var(--border-strong);border-radius:50%;
+  display:grid;place-items:center;font:500 10px var(--font-ui);letter-spacing:.08em;
+  text-transform:uppercase;color:var(--fg-tertiary);background:var(--bg-card);will-change:transform,opacity;
+}
+.caption{position:absolute;bottom:var(--sp-8);left:0;right:0;text-align:center;font-weight:600;font-size:20px;letter-spacing:-.012em}
+
+[data-rev]{opacity:0;transform:translateY(28px);transition:opacity var(--dur-4) var(--ease-out),transform var(--dur-4) var(--ease-out)}
+[data-rev].in{opacity:1;transform:none}
+
+.gallery{display:flex;gap:var(--sp-4);overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:var(--sp-2) 0 var(--sp-4)}
+.gallery::-webkit-scrollbar{display:none}
+.g-item{flex:0 0 min(78vw,300px);scroll-snap-align:center}
+.paddles{display:flex;gap:var(--sp-2);justify-content:flex-end}
+.paddle{
+  width:40px;height:40px;border-radius:50%;background:var(--bg-card);border:1px solid var(--border);
+  color:var(--fg);cursor:pointer;display:grid;place-items:center;font-size:15px;
+  transition:background var(--dur-2) var(--ease-out),border-color var(--dur-2) var(--ease-out);
+}
+.paddle:hover{background:var(--bg-card-hover);border-color:var(--border-strong)}
+
+.ease-row{display:flex;align-items:center;gap:var(--sp-4);padding:var(--sp-3) 0}
+.ease-track{flex:1;height:36px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-pill);position:relative;overflow:hidden;cursor:pointer}
+.ball{position:absolute;top:5px;left:5px;width:24px;height:24px;border-radius:50%;background:var(--ft-signal-500)}
+
+.dd{border-radius:var(--r-md);border:1px solid var(--border);padding:var(--sp-6);background:var(--bg-card)}
+.dd h4{display:flex;align-items:center;gap:8px;margin-bottom:var(--sp-4)}
+.dd ul{margin:0;padding-left:1.1em;color:var(--fg-secondary);font-size:var(--t-body-sm)}
+.dd li{margin-bottom:7px}
+.do{border-color:color-mix(in srgb,var(--ft-ok) 30%,transparent)}
+.do h4{color:var(--ft-ok)}
+.dont{border-color:color-mix(in srgb,var(--ft-error) 30%,transparent)}
+.dont h4{color:var(--ft-error)}
+
+code.inline{font:400 .9em var(--font-mono);background:var(--chip-bg);border:1px solid var(--border);padding:2px 6px;border-radius:5px;color:var(--fg-secondary)}
+pre.block{
+  background:var(--bg-raised);border:1px solid var(--border);border-radius:var(--r-md);
+  padding:var(--sp-4);overflow-x:auto;font:400 12.5px/1.65 var(--font-mono);color:var(--fg-secondary);margin:0;
+}
+
+@media(max-width:860px){
+  .shell{grid-template-columns:1fr}
+  .nav{position:static;height:auto;border-right:0;border-bottom:1px solid var(--border)}
+  .nav-list{flex-direction:row;flex-wrap:wrap}
+  .section{padding:var(--sp-12) var(--sp-6)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
+  [data-rev]{opacity:1 !important;transform:none !important}
+  .pin-stage{position:static !important;height:auto !important}
+  .pin-panel{position:static !important;opacity:1 !important}
+}
+</style>
+
+<div class="shell">
+  <nav class="nav" aria-label="Design system sections">
+    <div class="brand">
+      <span class="brand-mark">FT</span>
+      <span class="brand-text"><b>Design System</b><span>FT Sicherheitstechnik</span></span>
+    </div>
+    <div class="nav-list" id="navList"></div>
+    <div class="nav-foot">
+      <p style="font-size:11px;color:var(--fg-tertiary);margin:0">v1.0 · DM Sans · one accent · light</p>
+    </div>
+  </nav>
+
+  <main class="main">
+    <!-- Overview -->
+    <section class="section" id="overview">
+      <p class="eyebrow">FT Sicherheitstechnik</p>
+      <h1>Design System</h1>
+      <p class="lead">A light, single-world system for a Mannheim security-technology installer. Synthesised from three references — Bevel, Apple AirPods Pro and Bridge — then reduced to five constraints that are enforced, not suggested.</p>
+      <div class="grid c2" style="margin-bottom:var(--sp-8)">
+        <div class="dd do">
+          <h4>The five constraints</h4>
+          <ul>
+            <li>One accent colour. Never two.</li>
+            <li>The primary button is never the accent.</li>
+            <li>Headings 500–600 weight. Never bolder.</li>
+            <li>Tracking tightens as type grows.</li>
+            <li>Long pages are paid for with scroll choreography.</li>
+          </ul>
+        </div>
+        <div class="dd">
+          <h4>Token architecture</h4>
+          <ul>
+            <li><code class="inline">--ft-ink-900</code> — raw colour</li>
+            <li><code class="inline">--bg</code> — semantic role</li>
+            <li><code class="inline">--btn-primary-bg</code> — component property</li>
+          </ul>
+          <p style="font-size:13px;color:var(--fg-tertiary);margin:var(--sp-3) 0 0">Components read the semantic layer, never a raw hex. Retheming is a token swap, not a component rewrite.</p>
+        </div>
+      </div>
+      <div class="grid c4">
+        <div class="card"><span class="stat-num">15+</span><span class="stat-label">Jahre Erfahrung</span></div>
+        <div class="card"><span class="stat-num">5.0</span><span class="stat-label">Google-Bewertung</span></div>
+        <div class="card"><span class="stat-num">18</span><span class="stat-label">FTronics Produkte</span></div>
+        <div class="card"><span class="stat-num">Top 100</span><span class="stat-label">Deutschlands</span></div>
+      </div>
+    </section>
+
+    <!-- Colour -->
+    <section class="section" id="colour">
+      <p class="eyebrow">Foundations</p>
+      <h2>Colour</h2>
+      <p class="lead">One accent, used at most twice per viewport. Everything else is neutral. Contrast ratios are computed live against white.</p>
+      <h4>Raw neutrals</h4>
+      <div class="grid c4" id="rawColors" style="margin-bottom:var(--sp-12)"></div>
+      <h4>The single accent</h4>
+      <div class="grid c3" id="accentColors" style="margin-bottom:var(--sp-12)"></div>
+      <h4>Functional — never decorative</h4>
+      <div class="grid c3" id="funcColors" style="margin-bottom:var(--sp-8)"></div>
+      <div class="dd dont">
+        <h4>The rule that matters most</h4>
+        <ul>
+          <li>The current live site runs <b>three</b> accents — red, green and cyan — each with a glow, on a near-black ground. Every reference uses <b>one</b>, on light.</li>
+          <li>Green means “armed / online / success” only. It is never a call to action.</li>
+          <li>No glow tokens, no bloom shadows. Depth is surface + 1px border + a 3px lift.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Type -->
+    <section class="section" id="type">
+      <p class="eyebrow">Foundations</p>
+      <h2>Typography</h2>
+      <p class="lead">DM Sans throughout — one family for display and UI, the way Bevel and Bridge each run a single face. Weight 600 maximum. Letter-spacing tightens as size grows; line-height compresses to match.</p>
+      <div id="typeScale"></div>
+      <div class="dd" style="margin-top:var(--sp-8)">
+        <h4>German requirement</h4>
+        <ul>
+          <li><code class="inline">hyphens:auto</code> with <code class="inline">lang="de"</code> — <i>Videoüberwachungsanlage</i> at 96px overflows a 1200px container otherwise.</li>
+          <li><code class="inline">text-wrap:balance</code> on H1/H2 to prevent orphans in compound-heavy headlines.</li>
+          <li>Bottom margins in <code class="inline">em</code>: h1 .2 · h2 .3 · h3 .5 · h4 .8 · p 1.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Space -->
+    <section class="section" id="space">
+      <p class="eyebrow">Foundations</p>
+      <h2>Space &amp; Layout</h2>
+      <p class="lead">A 12-column grid on a 1200px container. Prose caps at a 680px measure — never let body copy run the full width.</p>
+      <div id="spaceScale" style="margin-bottom:var(--sp-12)"></div>
+      <div class="grid c3">
+        <div class="card"><h4 style="font-size:15px;margin-bottom:6px">--container</h4><p style="margin-bottom:4px"><code class="inline">1200px</code></p><p style="font-size:12px;color:var(--fg-tertiary)">default</p></div>
+        <div class="card"><h4 style="font-size:15px;margin-bottom:6px">--container-text</h4><p style="margin-bottom:4px"><code class="inline">680px</code></p><p style="font-size:12px;color:var(--fg-tertiary)">prose measure</p></div>
+        <div class="card"><h4 style="font-size:15px;margin-bottom:6px">--section-pad</h4><p style="margin-bottom:4px"><code class="inline">80→160px</code></p><p style="font-size:12px;color:var(--fg-tertiary)">clamp(5rem, 7.143vw + 3.571rem, 10rem)</p></div>
+      </div>
+    </section>
+
+    <!-- Radius -->
+    <section class="section" id="radius">
+      <p class="eyebrow">Foundations</p>
+      <h2>Radius</h2>
+      <p class="lead">Large radii read as software; small radii read as document. Buttons are always pills.</p>
+      <div class="grid c3" id="radiusScale"></div>
+    </section>
+
+    <!-- Motion -->
+    <section class="section" id="motion">
+      <p class="eyebrow">Foundations</p>
+      <h2>Motion</h2>
+      <p class="lead">Animate only transform, opacity, filter and clip-path. Never height, top, width or margin. Click a track to play.</p>
+      <div id="easings"></div>
+      <div class="grid c5" style="margin-top:var(--sp-8)" id="durations"></div>
+    </section>
+
+    <!-- Buttons -->
+    <section class="section" id="buttons">
+      <p class="eyebrow">Components</p>
+      <h2>Buttons</h2>
+      <p class="lead">The primary button is near-black on the light ground — never the accent. That single rule is most of why the reference sites feel expensive.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:var(--sp-4);align-items:center;margin-bottom:var(--sp-8)">
+        <button class="btn primary">Kostenlose Beratung anfragen</button>
+        <button class="btn secondary">Produkte ansehen</button>
+        <button class="btn signal">Jetzt Anfrage starten</button>
+        <button class="btn quiet">Mehr erfahren →</button>
+      </div>
+      <div class="grid c4">
+        <div class="card" style="padding:var(--sp-4)"><h4 style="font-size:15px;margin-bottom:4px">Primary</h4><p style="font-size:12.5px;margin-bottom:4px">near-black on light</p><p style="font-size:12px;color:var(--fg-tertiary)">The main conversion action</p></div>
+        <div class="card" style="padding:var(--sp-4)"><h4 style="font-size:15px;margin-bottom:4px">Secondary</h4><p style="font-size:12.5px;margin-bottom:4px">transparent + border</p><p style="font-size:12px;color:var(--fg-tertiary)">Alternate path</p></div>
+        <div class="card" style="padding:var(--sp-4)"><h4 style="font-size:15px;margin-bottom:4px">Signal</h4><p style="font-size:12.5px;margin-bottom:4px">accent</p><p style="font-size:12px;color:var(--fg-tertiary)">Once per page, maximum</p></div>
+        <div class="card" style="padding:var(--sp-4)"><h4 style="font-size:15px;margin-bottom:4px">Quiet</h4><p style="font-size:12.5px;margin-bottom:4px">text only</p><p style="font-size:12px;color:var(--fg-tertiary)">Inline links</p></div>
+      </div>
+      <p class="note" style="margin-top:var(--sp-6)">All variants: pill radius, weight 500, 44px minimum touch target, <code class="inline">translateY(-1px)</code> on hover, <code class="inline">scale(.985)</code> on press, 2px accent focus ring at 3px offset.</p>
+    </section>
+
+    <!-- Cards -->
+    <section class="section" id="cards">
+      <p class="eyebrow">Components</p>
+      <h2>Cards &amp; Chips</h2>
+      <p class="lead">Elevation is surface + 1px border + a 3px lift. No glow, no 3D tilt. Spec chips stay monochrome — colour-coding them is the trap.</p>
+      <div class="grid c3" style="margin-bottom:var(--sp-8)">
+        <div class="card"><h4>Alarmanlagen</h4><p>Hybride Ajax-Alarmanlagen mit App-Steuerung, Funk- und Draht-Komponenten.</p></div>
+        <div class="card"><h4>Videoüberwachung</h4><p>4K/8MP Kameras mit KI-Erkennung von Menschen und Fahrzeugen.</p></div>
+        <div class="card"><h4>Zutrittskontrolle</h4><p>Fingerprint, RFID, PIN — flexibel und sicher.</p></div>
+      </div>
+      <div class="card bento" style="margin-bottom:var(--sp-8)">
+        <p class="eyebrow" style="margin-bottom:var(--sp-2)">Unser Bekenntnis</p>
+        <h4 style="font-size:var(--t-h3);max-width:560px">Wir verlassen jeden Ort besser, als wir ihn vorgefunden haben.</h4>
+        <p style="max-width:480px">36px bento radius · full-bleed media slot · 420px minimum height in production.</p>
+      </div>
+      <h4>Spec chips</h4>
+      <div class="chip-row" style="margin-bottom:var(--sp-4)">
+        <span class="chip">4K 8MP</span><span class="chip">IP67</span><span class="chip">IK10</span>
+        <span class="chip">PoE</span><span class="chip">Sony IMX415</span><span class="chip">NDAA</span><span class="chip">KI-Analyse</span>
+      </div>
+      <div class="chip-row">
+        <span class="chip status">● Anlage scharf</span><span class="chip status">● Online</span>
+      </div>
+      <p class="note" style="margin-top:var(--sp-3)">Status chips are the only place functional green appears.</p>
+    </section>
+
+    <!-- Forms -->
+    <section class="section" id="forms">
+      <p class="eyebrow">Components</p>
+      <h2>Forms</h2>
+      <p class="lead">16px font size prevents iOS zoom. 52px minimum height. Focus is an accent border plus a soft 3px ring.</p>
+      <div style="max-width:520px">
+        <div class="field"><label for="f-name">Name *</label><input id="f-name" placeholder="Max Mustermann"></div>
+        <div class="field"><label for="f-sub">Betreff *</label>
+          <select id="f-sub">
+            <option value="" selected disabled>Bitte wählen…</option>
+            <option>Alarmanlage</option><option>Videoüberwachung</option><option>Zutrittskontrolle</option>
+            <option>Smart Home</option><option>Brandschutz</option><option>Sonstiges</option>
+          </select>
+        </div>
+        <div class="field"><label for="f-msg">Nachricht *</label><textarea id="f-msg" placeholder="Wie können wir helfen?"></textarea></div>
+        <button class="btn primary">Anfrage senden</button>
+      </div>
+    </section>
+
+    <!-- Scroll -->
+    <section class="section" id="scroll">
+      <p class="eyebrow">The important part</p>
+      <h2>Scroll Patterns</h2>
+      <p class="lead">Scroll is the primary input device, not navigation. Every demo below is live — scroll inside the frames. Production uses Lenis + GSAP ScrollTrigger; these run on native scroll to stay dependency-free.</p>
+
+      <h4 style="margin-top:var(--sp-8)">A · Pinned panel stack</h4>
+      <p class="note" style="margin-bottom:var(--sp-4)">Container <code class="inline">(N+1) × 100dvh</code>; the stage is <code class="inline">position:sticky</code>; panels crossfade on scroll progress. Five panels maximum. The progress rail is the only accent in the section.</p>
+      <div class="frame">
+        <span class="hint">Scroll inside ↓</span>
+        <div class="scroller" id="pinScroller">
+          <div id="pinStack" style="position:relative">
+            <div class="pin-stage">
+              <div class="rail" id="pinRail"></div>
+              <div id="pinPanels"></div>
+            </div>
+          </div>
+        </div>
+        <div class="bar" id="pinBar"></div>
+      </div>
+
+      <h4 style="margin-top:var(--sp-12)">B · Scroll-scrubbed sequence</h4>
+      <p class="note" style="margin-bottom:var(--sp-4)">In production this is <code class="inline">video.currentTime = progress × duration</code> — the visitor scrubs a product demo with the wheel. This demo stands in with transformed layers. Encode with <code class="inline">-g 8 -movflags +faststart</code> or seeking stutters badly.</p>
+      <div class="frame">
+        <span class="hint">Scroll to scrub ↓</span>
+        <div class="scroller" id="scrubScroller">
+          <div style="height:1680px;position:relative">
+            <div class="scrub-stage">
+              <div class="cam" id="cam"></div>
+              <div class="caption" id="scrubCaption"></div>
+            </div>
+          </div>
+        </div>
+        <div class="bar" id="scrubBar"></div>
+      </div>
+
+      <h4 style="margin-top:var(--sp-12)">C · Staggered entrance reveal</h4>
+      <p class="note" style="margin-bottom:var(--sp-4)">IntersectionObserver at a 0.15 threshold, <code class="inline">translateY(28px)</code> plus fade, 70ms stagger, capped at six items, fires once and never re-animates on scroll-up.</p>
+      <div class="frame">
+        <span class="hint">Scroll ↓ · 70 ms stagger</span>
+        <div class="scroller" id="revScroller">
+          <div style="height:300px;display:grid;place-items:center;color:var(--fg-tertiary);font-size:13px">keep scrolling…</div>
+          <div id="revGroup" style="padding:var(--sp-8)">
+            <p class="eyebrow" data-rev>Unsere Leistungen</p>
+            <h4 data-rev style="font-size:26px">Ganzheitliche Sicherheitslösungen</h4>
+            <p data-rev style="color:var(--fg-secondary);font-size:14px">Von der Beratung bis zur Installation.</p>
+            <div class="grid c3" style="margin-top:var(--sp-6)">
+              <div class="card" data-rev style="padding:var(--sp-4)"><h4 style="font-size:15px;margin-bottom:4px">Alarmanlagen</h4></div>
+              <div class="card" data-rev style="padding:var(--sp-4)"><h4 style="font-size:15px;margin-bottom:4px">Videoüberwachung</h4></div>
+              <div class="card" data-rev style="padding:var(--sp-4)"><h4 style="font-size:15px;margin-bottom:4px">Zutrittskontrolle</h4></div>
+            </div>
+          </div>
+          <div style="height:160px"></div>
+        </div>
+        <div style="padding:var(--sp-3) var(--sp-4);border-top:1px solid var(--border)">
+          <button class="btn secondary sm" id="replay">Replay</button>
+        </div>
+      </div>
+
+      <h4 style="margin-top:var(--sp-12)">E · Horizontal scroll gallery</h4>
+      <p class="note" style="margin-bottom:var(--sp-4)">Scroll-snap plus paddle buttons. Focus the rail and use ← → — keyboard support is mandatory, not optional.</p>
+      <div class="gallery" id="gallery" tabindex="0" aria-label="FTronics Produkte"></div>
+      <div class="paddles">
+        <button class="paddle" id="gPrev" aria-label="Zurück">←</button>
+        <button class="paddle" id="gNext" aria-label="Weiter">→</button>
+      </div>
+
+      <div class="dd" style="margin-top:var(--sp-12)">
+        <h4>Engine</h4>
+        <pre class="block">const lenis = new Lenis({
+  duration: 1.05,
+  easing: t =&gt; Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+  smoothWheel: true,
+  smoothTouch: false,      // never hijack touch
+});
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add(t =&gt; lenis.raf(t * 1000));
+gsap.ticker.lagSmoothing(0);</pre>
+      </div>
+    </section>
+
+    <!-- Rules -->
+    <section class="section" id="rules">
+      <p class="eyebrow">Discipline</p>
+      <h2>Do / Don’t</h2>
+      <p class="lead">The system holds together only if these hold. Most are one-line rules that are easy to break by accident.</p>
+      <div class="grid c2">
+        <div class="dd do">
+          <h4>✓ Do</h4>
+          <ul>
+            <li>One accent, twice per viewport maximum.</li>
+            <li>Primary button near-black. Always.</li>
+            <li>Semibold 500–600 headlines.</li>
+            <li>Negative tracking that tightens as type grows.</li>
+            <li><code class="inline">dvh</code> not <code class="inline">vh</code> for pinned stages.</li>
+            <li>Reveal once, never re-animate on scroll-up.</li>
+            <li>Reserve every media box with <code class="inline">aspect-ratio</code>.</li>
+            <li>Let one section carry the page.</li>
+            <li><code class="inline">text-wrap:balance</code> on German display type.</li>
+          </ul>
+        </div>
+        <div class="dd dont">
+          <h4>✕ Don’t</h4>
+          <ul>
+            <li>Don’t keep three accent colours.</li>
+            <li>Don’t use glows or bloom for depth.</li>
+            <li>Don’t run infinite ambient animations.</li>
+            <li>Don’t hijack or block scroll. Ever.</li>
+            <li>Don’t smooth-scroll touch.</li>
+            <li>Don’t animate height / top / width / margin.</li>
+            <li>Don’t colour-code spec chips.</li>
+            <li>Don’t exceed five panels in a pinned stack.</li>
+            <li>Don’t put more than three scrubbed videos on a page.</li>
+            <li>Don’t let body copy exceed 680px.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="dd" style="margin-top:var(--sp-8)">
+        <h4>Reduced motion is a hard gate</h4>
+        <p style="font-size:14px;color:var(--fg-secondary);margin:0">Pinned stacks collapse into a normal vertical stack. Scrubbed video freezes at its poster with a manual play control. Lenis never initialises. This is not a degraded experience — it is a complete, static, readable page.</p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- contrast ---------- */
+  function hexToRgb(hex){var h=hex.replace('#','');if(h.length===3)h=h.split('').map(function(c){return c+c}).join('');
+    return [0,2,4].map(function(i){return parseInt(h.slice(i,i+2),16)})}
+  function lum(hex){var c=hexToRgb(hex).map(function(v){var s=v/255;return s<=0.03928?s/12.92:Math.pow((s+0.055)/1.055,2.4)});
+    return 0.2126*c[0]+0.7152*c[1]+0.0722*c[2]}
+  function contrast(a,b){var l=[lum(a),lum(b)].sort(function(x,y){return y-x});return (l[0]+0.05)/(l[1]+0.05)}
+
+  /* ---------- data ---------- */
+  var RAW=[['paper','#ffffff','card / raised surface'],['paper-98','#fafbfb','card hover'],['paper-96','#f4f6f7','page ground'],
+    ['paper-92','#e9ecee','sunken / divider fill'],['slate-400','#697279','tertiary text'],['slate-500','#5c656c','secondary text'],
+    ['ink-600','#3a4147','strong icon'],['ink-900','#0e1012','primary text / primary button']];
+  var ACCENT=[['signal-500','#ff4d3d','graphic accent — rails, ticks, marks'],['signal-600','#e63c2d','focus ring'],['signal-700','#c62f1d','signal button — passes AA on white']];
+  var FUNC=[['ok','#188444','operational status only — never a CTA'],['warn','#9a6112','warning'],['error','#c8232a','form error']];
+
+  var TYPE=[
+    ['--t-display','Display','clamp(3.25rem, 4.6vw + 2.1rem, 6rem)',1.02,'-0.026em',600,'Sicherheits­technik',0,0],
+    ['--t-h1','H1','clamp(2.75rem, 3.2vw + 1.95rem, 5rem)',1.05,'-0.022em',600,'Eine Kamera. Genau hingesehen.',0,0],
+    ['--t-h2','H2','clamp(2.2rem, 2.2vw + 1.65rem, 3.75rem)',1.08,'-0.018em',600,'Ganzheitliche Sicherheits­lösungen',0,0],
+    ['--t-h3','H3','clamp(1.6rem, 1vw + 1.35rem, 2.4rem)',1.15,'-0.012em',600,'Perimeterschutz — die erste Verteidigungslinie',0,0],
+    ['--t-h4','H4','clamp(1.25rem, 0.45vw + 1.14rem, 1.6rem)',1.25,'-0.004em',500,'Onboard-KI. Keine Cloud. Keine Latenz.',0,0],
+    ['--t-lead','Lead','clamp(1.15rem, 0.55vw + 1.02rem, 1.5rem)',1.45,'-0.002em',400,'Kein Call-Center, kein Sub-Sub-Unternehmer. Unser eigenes Experten-Team plant, installiert und wartet jede Anlage persönlich.',1,0],
+    ['--t-body','Body','clamp(1rem, 0.25vw + 0.94rem, 1.15rem)',1.6,'0',400,'Kabel sauber im Kanal. Bohrlöcher verspachtelt. Werkzeug aufgeräumt. Boden gefegt.',1,0],
+    ['--t-eyebrow','Eyebrow','clamp(0.95rem, 0.3vw + 0.88rem, 1.2rem)',1.1,'0.06em',500,'Unser Bekenntnis',1,1]
+  ];
+
+  var SPACE=[[1,4],[2,8],[3,12],[4,16],[6,24],[8,32],[12,48],[16,64],[20,80],[24,96],[32,128],[40,160]];
+  var RADII=[['--r-sm',8,'chips, inputs'],['--r-md',14,'buttons, small cards'],['--r-lg',20,'standard card'],
+    ['--r-xl',28,'feature card'],['--r-bento',36,'full-bleed bento']];
+  var EASE=[['--ease-out','cubic-bezier(.16,1,.30,1)','the default — expo-out'],
+    ['--ease-in-out','cubic-bezier(.65,0,.35,1)','symmetric moves'],
+    ['--ease-soft','cubic-bezier(.33,1,.68,1)','gentle settle']];
+  var DUR=[['--dur-1','120ms','micro'],['--dur-2','240ms','button'],['--dur-3','420ms','card'],
+    ['--dur-4','700ms','section'],['--dur-5','1100ms','hero']];
+
+  var PANELS=[
+    ['01','Ungeschützte Objekte sind verwundbar','Ohne professionelle Sicherheitstechnik ist jedes Objekt ein leichtes Ziel. Einbrüche dauern unter 60 Sekunden.'],
+    ['02','Perimeterschutz — die erste Verteidigungslinie','PTZ-Kameras überwachen das gesamte Gelände, Tore werden zutrittskontrolliert, Außenleuchten reagieren auf Bewegung.'],
+    ['03','Gebäudeüberwachung','4K-Bullet- und Dome-Kameras an allen kritischen Punkten. KI unterscheidet Mensch, Fahrzeug und Tier.'],
+    ['04','Alarmanlage &amp; Sensorik','Tür- und Fensterkontakte, Bewegungsmelder, Glasbruchsensoren. Alarm in Millisekunden.'],
+    ['05','App-Steuerung &amp; Wartung','Push-Benachrichtigungen bei jedem Ereignis, jährliche Wartung durch unser Team direkt aus Mannheim.']
+  ];
+  var CAPTIONS=['Sechs Bauteile. Jedes für sich.','Sony Starvis Sensor. 4K bei Tag und Nacht.',
+    'Smart IR · 18 LEDs. 30 m Reichweite.','Onboard-KI. Keine Cloud. Keine Latenz.','IP67 Aluminium. Für draußen gemacht.'];
+  var LAYERS=['Dome-Glas','Sensor','Objektiv','Smart IR','KI-Chip','Aluminium'];
+  var PRODUCTS=[['FC-8D Pro','Dome IP-Kamera',['4K 8MP','IP67','KI','PoE']],
+    ['FB-8A Pro','Bullet IP-Kamera',['4K 8MP','IP67','Gesichtserkennung']],
+    ['FP-8T 20X','PTZ Speed Dome',['20x Zoom','Auto-Tracking','IR 100m']],
+    ['FN-64 Pro','64-Kanal NVR',['12MP','RAID','8x SATA']]];
+  var NAV=[['overview','Overview'],['colour','Colour'],['type','Typography'],['space','Space & Layout'],
+    ['radius','Radius'],['motion','Motion'],['buttons','Buttons'],['cards','Cards & Chips'],
+    ['forms','Forms'],['scroll','Scroll Patterns'],['rules','Do / Don’t']];
+
+  var $ = function(id){return document.getElementById(id)};
+  var esc = function(s){return String(s).replace(/&(?!amp;|lt;|gt;)/g,'&amp;').replace(/</g,'&lt;')};
+
+  /* ---------- nav ---------- */
+  $('navList').innerHTML = NAV.map(function(n){
+    return '<a class="nav-link" href="#'+n[0]+'" data-t="'+n[0]+'"><span class="dot"></span>'+esc(n[1])+'</a>';
+  }).join('');
+
+  /* ---------- swatches ---------- */
+  var GROUND = '#ffffff';
+  function renderSwatches(){
+    function block(list){
+      return list.map(function(c){
+        var r = contrast(c[1], GROUND), pass = r >= 4.5;
+        return '<div class="swatch"><div class="swatch-chip" style="background:'+c[1]+'"></div>'+
+          '<div class="swatch-meta"><b>'+c[0]+'</b><code>'+c[1]+'</code>'+
+          '<span class="ratio">'+esc(c[2])+'</span>'+
+          '<span class="ratio '+(pass?'pass':'fail')+'">'+r.toFixed(2)+':1 vs ground '+(pass?'✓ AA':'· large text only')+'</span>'+
+          '</div></div>';
+      }).join('');
+    }
+    $('rawColors').innerHTML = block(RAW);
+    $('accentColors').innerHTML = block(ACCENT);
+    $('funcColors').innerHTML = block(FUNC);
+  }
+  renderSwatches();
+
+  /* ---------- type ---------- */
+  $('typeScale').innerHTML = TYPE.map(function(t){
+    var color = t[1]==='Lead' ? 'var(--fg-secondary)' : (t[1]==='Eyebrow' ? 'var(--fg-tertiary)' : 'var(--fg)');
+    return '<div class="spec"><div class="spec-meta">'+
+      '<span><b>'+t[1]+'</b></span><span>'+t[0]+'</span><span>size <b>'+esc(t[2])+'</b></span>'+
+      '<span>lh <b>'+t[3]+'</b></span><span>ls <b>'+t[4]+'</b></span><span>weight <b>'+t[5]+'</b></span></div>'+
+      '<p class="sample" style="font-size:var('+t[0]+');line-height:'+t[3]+';letter-spacing:'+t[4]+
+      ';font-weight:'+t[5]+';color:'+color+(t[8]?';text-transform:uppercase':'')+'">'+t[6]+'</p></div>';
+  }).join('');
+
+  /* ---------- space / radius / motion ---------- */
+  $('spaceScale').innerHTML = SPACE.map(function(s){
+    return '<div class="scale-row"><span class="scale-label">--sp-'+s[0]+' · '+s[1]+'px</span>'+
+      '<span class="scale-bar" style="width:'+s[1]+'px"></span></div>';
+  }).join('');
+
+  $('radiusScale').innerHTML = RADII.map(function(r){
+    return '<div><div class="radius-demo" style="border-radius:'+r[1]+'px">'+r[1]+'px</div>'+
+      '<p style="font-size:13px;margin:var(--sp-2) 0 0"><b style="font-weight:500">'+r[0]+'</b>'+
+      '<span style="color:var(--fg-tertiary)"> — '+esc(r[2])+'</span></p></div>';
+  }).join('');
+
+  $('easings').innerHTML = EASE.map(function(e,i){
+    return '<div class="ease-row"><div style="width:160px;flex:0 0 auto">'+
+      '<div style="font:500 13px var(--font-ui)">'+e[0]+'</div>'+
+      '<div style="font:400 11px var(--font-mono);color:var(--fg-tertiary)">'+esc(e[2])+'</div></div>'+
+      '<div class="ease-track" data-ease="'+i+'"><div class="ball" id="ball'+i+'"></div></div>'+
+      '<button class="btn secondary sm" data-ease="'+i+'">Play</button></div>';
+  }).join('');
+
+  $('durations').innerHTML = DUR.map(function(d){
+    return '<div class="card" style="padding:var(--sp-4)">'+
+      '<div style="font:500 13px var(--font-ui)">'+d[1]+'</div>'+
+      '<div style="font:400 11px var(--font-mono);color:var(--fg-tertiary)">'+d[0]+'</div>'+
+      '<div style="font-size:11px;color:var(--fg-tertiary);margin-top:4px">'+esc(d[2])+'</div></div>';
+  }).join('');
+
+  document.addEventListener('click', function(ev){
+    var t = ev.target.closest('[data-ease]');
+    if(!t) return;
+    var i = t.getAttribute('data-ease');
+    var ball = $('ball'+i), track = ball.parentElement;
+    var travel = track.clientWidth - 34;
+    var on = ball.dataset.on === '1';
+    ball.style.transition = 'transform 700ms ' + EASE[i][1];
+    ball.style.transform = on ? 'translateX(0)' : 'translateX(' + travel + 'px)';
+    ball.dataset.on = on ? '0' : '1';
+  });
+
+  /* ---------- Pattern A: pinned stack ---------- */
+  var pinScroller = $('pinScroller'), pinStack = $('pinStack');
+  pinStack.style.height = ((PANELS.length + 1) * 420) + 'px';
+  $('pinRail').innerHTML = PANELS.map(function(){return '<span class="tick"></span>'}).join('');
+  $('pinPanels').innerHTML = PANELS.map(function(p){
+    return '<div class="pin-panel"><span class="pin-num">'+p[0]+'</span><h4>'+p[1]+'</h4><p>'+p[2]+'</p></div>';
+  }).join('');
+  var pinPanels = $('pinPanels').children, pinTicks = $('pinRail').children;
+
+  function updatePin(){
+    var max = pinScroller.scrollHeight - pinScroller.clientHeight;
+    var prog = max > 0 ? pinScroller.scrollTop / max : 0;
+    var n = PANELS.length, pos = prog * n;
+    for (var i = 0; i < n; i++){
+      var d = Math.abs(pos - (i + 0.5));
+      var o = Math.max(0, Math.min(1, 1.6 - d * 1.6));
+      pinPanels[i].style.opacity = o;
+      pinPanels[i].style.transform = 'translateY(' + ((pos - (i + 0.5)) * -40) + 'px)';
+      pinTicks[i].classList.toggle('on', i === Math.min(n - 1, Math.floor(pos)));
+    }
+    $('pinBar').style.width = (prog * 100) + '%';
+  }
+  pinScroller.addEventListener('scroll', updatePin, {passive:true});
+  updatePin();
+
+  /* ---------- Pattern B: scrub ---------- */
+  var scrubScroller = $('scrubScroller');
+  $('cam').innerHTML = LAYERS.map(function(l){return '<div class="layer"></div>'}).join('');
+  var camLayers = $('cam').children;
+
+  function updateScrub(){
+    var max = scrubScroller.scrollHeight - scrubScroller.clientHeight;
+    var prog = max > 0 ? scrubScroller.scrollTop / max : 0;
+    var spread = prog * 76;
+    for (var i = 0; i < camLayers.length; i++){
+      var offset = (i - (camLayers.length - 1) / 2) * spread;
+      var scale = 1 - i * 0.11;
+      camLayers[i].style.transform = 'translateY(' + offset + 'px) scale(' + scale + ') rotateX(' + (prog * 46) + 'deg)';
+      camLayers[i].style.opacity = 0.35 + (1 - i / camLayers.length) * 0.65;
+      camLayers[i].style.zIndex = camLayers.length - i;
+      camLayers[i].textContent = prog > 0.25 ? LAYERS[i] : '';
+    }
+    $('scrubCaption').textContent = CAPTIONS[Math.min(CAPTIONS.length - 1, Math.floor(prog * CAPTIONS.length))];
+    $('scrubBar').style.width = (prog * 100) + '%';
+  }
+  scrubScroller.addEventListener('scroll', updateScrub, {passive:true});
+  updateScrub();
+
+  /* ---------- Pattern C: staggered reveal ---------- */
+  var revScroller = $('revScroller'), revGroup = $('revGroup'), revIO = null;
+  function armReveal(){
+    var items = revGroup.querySelectorAll('[data-rev]');
+    for (var i = 0; i < items.length; i++) items[i].classList.remove('in');
+    if (revIO) revIO.disconnect();
+    revIO = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (!e.isIntersecting) return;
+        items.forEach(function(el, i){ setTimeout(function(){ el.classList.add('in') }, i * 70) });
+        revIO.disconnect();
+      });
+    }, {root: revScroller, threshold: 0.15, rootMargin: '0px 0px -8% 0px'});
+    revIO.observe(revGroup);
+  }
+  armReveal();
+  $('replay').addEventListener('click', function(){ revScroller.scrollTop = 0; armReveal(); });
+
+  /* ---------- Pattern E: gallery ---------- */
+  $('gallery').innerHTML = PRODUCTS.map(function(p){
+    return '<div class="card g-item">'+
+      '<div style="aspect-ratio:4/3;background:var(--bg-raised);border-radius:var(--r-md);margin-bottom:var(--sp-4);display:grid;place-items:center;color:var(--fg-tertiary);font-size:12px">product render</div>'+
+      '<h4 style="font-size:17px;margin-bottom:4px">'+p[0]+'</h4>'+
+      '<p style="margin-bottom:var(--sp-3)">'+esc(p[1])+'</p>'+
+      '<div class="chip-row">'+p[2].map(function(c){return '<span class="chip">'+esc(c)+'</span>'}).join('')+'</div></div>';
+  }).join('');
+  function nudge(d){ $('gallery').scrollBy({left: d * 320, behavior: 'smooth'}) }
+  $('gPrev').addEventListener('click', function(){ nudge(-1) });
+  $('gNext').addEventListener('click', function(){ nudge(1) });
+  $('gallery').addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight'){ e.preventDefault(); nudge(1) }
+    if (e.key === 'ArrowLeft'){ e.preventDefault(); nudge(-1) }
+  });
+
+  /* ---------- scroll spy ---------- */
+  var links = document.querySelectorAll('.nav-link');
+  var spy = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (!e.isIntersecting) return;
+      links.forEach(function(l){ l.classList.toggle('active', l.getAttribute('data-t') === e.target.id) });
+    });
+  }, {rootMargin: '-20% 0px -70% 0px'});
+  NAV.forEach(function(n){ var el = $(n[0]); if (el) spy.observe(el) });
+})();
+</script>

@@ -1,0 +1,1623 @@
+/* ============================================================
+   FT Sicherheitstechnik — global stylesheet
+   Tokens are copied verbatim from the Claude Design handoff
+   (_ds/.../tokens/*). Component classes below match the
+   handoff's `ensureCss()` strings exactly so the built site
+   reproduces the artboards 1:1.
+   ============================================================ */
+
+@import "./tokens/fonts.css";
+@import "./tokens/colors.css";
+@import "./tokens/typography.css";
+@import "./tokens/spacing.css";
+@import "./tokens/motion.css";
+@import "./tokens/base.css";
+
+/* DM Sans ships a variable optical-size axis (opsz 9..40) and fonts.css already
+   requests it — but without this the browser never varies by size, so the axis
+   was loaded and paid for while doing nothing. Letterforms now adjust with
+   size the way the type designer intended. */
+html{font-optical-sizing:auto}
+
+/* ---------------- Layout helpers ---------------- */
+.ft-shell { max-width: var(--container); margin: 0 auto; padding: 0 var(--gutter); }
+.ft-section { padding: clamp(5rem, 7vw, 9rem) 0; }
+.ft-section--tight { padding: 0 0 clamp(5rem, 7vw, 9rem); }
+.ft-section--raised {
+  background: var(--bg-raised);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+/* Two raised sections in a row share one ground, so the seam between them
+   rules a line across nothing. Drop both halves of it — the outer edges,
+   where the raised ground actually meets the page, keep their rule. */
+.ft-section--raised + .ft-section--raised { border-top: 0; }
+.ft-section--raised:has(+ .ft-section--raised) { border-bottom: 0; }
+.ft-grid { display: grid; gap: 1.25rem; }
+.ft-grid--auto { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.ft-grid--auto-sm { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+.ft-grid--auto-xs { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.ft-media {
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+/* Real imagery: contain so product cutouts are never stretched or cropped. */
+.ft-media-img{width:100%;height:100%;display:block;object-fit:contain}
+/* Photographs are meant to fill their frame rather than sit inside it. */
+.ft-media-img--cover{object-fit:cover}
+/* Bare: no frame, no fill — a transparent cutout sits directly on the page. */
+.ft-media--bare{border:0;background:transparent;overflow:visible}
+
+/* ---------------- Button ---------------- */
+/* Press feedback rides on --dur-1 (120ms) while colour settles on --dur-2.
+   Feedback must land on pointer-down, not on release; a 240ms transform made
+   the press feel detached from the finger. */
+.ft-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:500 var(--t-body-sm)/1.4 var(--font-ui);padding:.85rem 1.6rem;border-radius:var(--r-pill);border:1px solid transparent;cursor:pointer;text-decoration:none;min-height:44px;transition:transform var(--dur-1) var(--ease-out),background var(--dur-2) var(--ease-out),border-color var(--dur-2) var(--ease-out),color var(--dur-2) var(--ease-out)}
+.ft-btn:hover{transform:translateY(-1px)}
+.ft-btn:active{transform:translateY(0) scale(.985)}
+.ft-btn--primary{background:var(--btn-primary-bg);color:var(--btn-primary-fg)}
+.ft-btn--primary:hover{background:var(--ft-red-brand-hover);color:var(--btn-primary-fg)}
+.ft-btn--secondary{background:transparent;color:var(--btn-secondary-fg);border-color:var(--btn-secondary-bd)}
+.ft-btn--secondary:hover{border-color:var(--fg);color:var(--btn-secondary-fg)}
+.ft-btn--signal{background:var(--ft-signal-700);color:#fff}
+.ft-btn--signal:hover{background:#a82616;color:#fff}
+.ft-btn--quiet{background:none;color:var(--fg-secondary);padding:.5rem 0;border-radius:4px;min-height:0}
+.ft-btn--quiet:hover{color:var(--fg);transform:none}
+.ft-btn--sm{padding:.55rem 1.1rem;min-height:38px;font-size:13px}
+.ft-btn[disabled],.ft-btn[aria-disabled="true"]{opacity:.45;pointer-events:none}
+
+/* ---------------- Card ---------------- */
+.ft-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--sp-8);transition:background var(--dur-3) var(--ease-out),border-color var(--dur-3) var(--ease-out),transform var(--dur-3) var(--ease-out)}
+.ft-card:hover{background:var(--bg-card-hover);border-color:var(--border-strong);transform:translateY(-3px)}
+.ft-card h4{margin-bottom:.5em}
+.ft-card p{color:var(--fg-secondary);font-size:var(--t-body-sm);margin:0}
+.ft-card--bento{border-radius:var(--r-bento);padding:var(--sp-12);min-height:260px;display:flex;flex-direction:column;justify-content:flex-end}
+.ft-card--stat .ft-stat-num{font-family:var(--font-display);font-size:var(--t-h2);font-weight:600;line-height:1;letter-spacing:-0.008em;display:block}
+.ft-card--stat .ft-stat-label{font:500 var(--t-eyebrow)/1.1 var(--font-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--fg-tertiary);margin-top:var(--sp-3);display:block}
+.ft-card--flat:hover{transform:none;background:var(--bg-card);border-color:var(--border)}
+/* Smaller figures. Scoped to this row rather than to the stat variant: the
+   same variant carries the product pages' figures, where h2 still fits —
+   here one of them is a twelve-letter place name rather than a number, and
+   at h2 it dwarfed the card it sits in. */
+.ft-card--stat-compact{height:100%}
+/* Sized to the longest figure, not to the shortest. "Rhein-Neckar" is a
+   twelve-letter place name where the others are three or four characters,
+   and at h3 it broke at its hyphen onto a second line. Measured against the
+   card's own content width it needs to be under about 36px to hold one
+   line, so the ceiling is set below that. */
+.ft-card--stat-compact .ft-stat-num{font-size:clamp(1.5rem,2.3vw,2.1rem);line-height:1.1}
+/* No panel behind these — the ring field is the section's ground and a card
+   would box a piece of it off. */
+.ft-card--stat-compact{background:none;padding-left:0;padding-right:0}
+.ft-card--stat-compact:hover{background:none;transform:none}
+/* Sentence case, not caps. The uppercase treatment belongs to the eyebrow, and
+   it needs the tracking that comes with it; set in normal case that tracking
+   just looks loose, so both go together. */
+.ft-card--stat-compact .ft-stat-label{
+  text-transform:none;
+  letter-spacing:normal;
+  font-size:var(--t-body-sm);
+  color:var(--fg-secondary);
+}
+/* Centred within each column, like the header above them. Left-ranged in a
+   four-column row with no panels to hold them, the figures read as one
+   left-heavy block rather than as four. The icon is width:max-content, so
+   text-align alone would not move it — it needs the auto margins. */
+.ft-card--stat-compact{text-align:center}
+.ft-card--stat-compact .ft-card-icon{margin:0 auto .55rem;color:var(--fg)}
+/* "Rhein-Neckar" wraps to two lines where the other three do not, so its
+   card ran taller than its neighbours. Filling the grid cell puts the four
+   bottoms back on one line. */
+/* Media card: the photograph IS the card. The words sit on it, pinned to the
+   foot of the frame, and the picture runs edge to edge behind them. Fills its
+   grid cell so a two-line title on one card does not leave the others hanging
+   short — side by side, mismatched bottoms read as a mistake, not as rhythm.
+   The min-height is what gives the picture room to be a picture: without it
+   the card collapses to the height of its own two lines of copy. */
+.ft-card--media{
+  position:relative;
+  padding:0;
+  overflow:hidden;
+  height:100%;
+  min-height:clamp(260px,24vw,340px);
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  border-color:transparent;
+}
+.ft-card--media:hover{border-color:transparent;background:var(--bg-card)}
+/* Rail-sized media card. Taller than the grid version because on a snap rail
+   it gets a whole column to itself rather than a quarter of one — and the copy
+   stays exactly the size it is, so the extra height is all picture. */
+.ft-card--tall{min-height:clamp(380px,36vw,500px)}
+.ft-card-media{position:absolute;inset:0;background:var(--ft-paper-96)}
+.ft-card-media img{width:100%;height:100%;display:block;object-fit:cover;transition:transform var(--dur-4) var(--ease-out)}
+.ft-card--media:hover .ft-card-media img{transform:scale(1.04)}
+/* The scrim. Clear across the top third so the picture is still a picture,
+   then deepening under the copy. Stops are colour-matched to the ink rather
+   than plain black, and the transparent end carries the same channels — fade
+   to `transparent` and it interpolates through transparent black, greying
+   the image out across the middle of the card. */
+.ft-card--media::after{
+  content:'';
+  position:absolute;inset:0;
+  pointer-events:none;
+  /* Anchored to the foot of the card in pixels, not in percentages. The copy
+     is a fixed physical size — roughly 140px, up to ~210px once a title wraps
+     on a narrow card — while the card's height moves with the viewport and
+     with which rail it sits on. Percentage stops drift against that: tuned for
+     a short card they leave the text bare on a tall one, tuned for a tall one
+     they black out half a short one. Measuring up from the bottom, the copy
+     always lands in the same part of the ramp. Stops are colour-matched to the
+     ink and the clear end carries the same channels — fade to `transparent`
+     and it interpolates through transparent black, greying the picture out
+     across the middle of the card. */
+  background:linear-gradient(to top,
+    rgba(10,12,14,.94) 0,
+    rgba(10,12,14,.82) 90px,
+    rgba(10,12,14,.52) 170px,
+    rgba(10,12,14,.16) 250px,
+    rgba(10,12,14,0) 320px);
+}
+.ft-card-body{padding:var(--sp-8)}
+.ft-card--media .ft-card-body{
+  position:relative;z-index:1;
+  color:rgba(255,255,255,.92);
+}
+.ft-card--media .ft-card-body h4{color:#fff;font-weight:700}
+/* Every title on the same line across the row. The copy is pinned to the
+   foot of the card, so a one-line description lifts its title while a
+   two-line one does not, and four cards side by side read as ragged.
+   Reserving two lines' worth of copy on every card fixes the titles to a
+   common baseline; a card with one line simply carries the slack below it,
+   where there is nothing to line up against. line-height is pinned here so
+   the reserved height stays exactly two lines. */
+.ft-card--media .ft-card-copy{line-height:1.6;min-height:3.2em}
+@media(prefers-reduced-motion:reduce){
+  .ft-card--media:hover .ft-card-media img{transform:none}
+}
+
+/* ---------------- Chip ---------------- */
+.ft-chip{display:inline-block;font:500 var(--t-body-sm)/1 var(--font-ui);letter-spacing:.04em;text-transform:uppercase;padding:.45rem .7rem;border-radius:var(--r-sm);background:var(--chip-bg);border:1px solid var(--border);color:var(--fg-secondary)}
+.ft-chip--status{border-color:color-mix(in srgb,var(--ft-ok) 40%,transparent);color:var(--ft-ok);text-transform:none;letter-spacing:0}
+.ft-chip-row{display:flex;flex-wrap:wrap;gap:var(--sp-2)}
+
+/* ---------------- SectionHead ---------------- */
+/* Eyebrow as a pill badge: hugs its text, soft fill, hairline edge.
+   inline-block so it shrink-wraps and centres inside a .ft-center parent. */
+.ft-eyebrow{
+  display:inline-block;
+  font:500 var(--t-body-sm)/1.1 var(--font-ui);
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--fg-secondary);
+  background:var(--chip-bg);
+  border:0;
+  border-radius:var(--r-pill);
+  padding:.55rem 1.1rem;
+  margin:0 0 var(--sp-6);
+  max-width:none;
+}
+.ft-lead{font-size:var(--t-lead);line-height:1.45;letter-spacing:.002em;color:var(--fg-secondary);max-width:var(--container-text)}
+
+/* ---------------- Field ---------------- */
+.ft-field{display:flex;flex-direction:column;gap:7px;margin-bottom:var(--sp-4)}
+.ft-field label{font-size:var(--t-body-sm);color:var(--fg-secondary);font-weight:500}
+.ft-field input,.ft-field select,.ft-field textarea{background:var(--bg-raised);border:1px solid var(--border);border-radius:var(--r-md);min-height:52px;padding:0 var(--sp-4);color:var(--fg);font:400 16px var(--font-ui);width:100%;transition:border-color var(--dur-2) var(--ease-out),box-shadow var(--dur-2) var(--ease-out)}
+.ft-field textarea{padding:var(--sp-3) var(--sp-4);min-height:110px;resize:vertical}
+.ft-field input:focus,.ft-field select:focus,.ft-field textarea:focus{outline:none;border-color:var(--ring);box-shadow:0 0 0 3px rgba(255,77,61,.18)}
+.ft-field .ft-error{font-size:var(--t-body-sm);color:var(--ft-error);margin:0}
+
+/* ---------------- NavBar ---------------- */
+/* Light translucent chrome with a scroll edge effect instead of a hard 1px
+   rule: content dissolves under the bar rather than being cut off by a line. */
+.ft-nav{position:sticky;top:0;z-index:50;height:72px;display:flex;align-items:center;background:rgba(244,246,247,.82);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);transition:height var(--dur-2) var(--ease-out)}
+/* Over the hero the bar is just the marks on it; the background arrives with
+   the next section. */
+.ft-nav.is-over-hero{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
+/* Vibrancy: text over a translucent surface needs more contrast and a touch
+   more tracking than the same text on a solid ground. */
+.ft-nav-link{letter-spacing:.005em}
+.ft-nav-link:hover,.ft-nav-link[aria-current="page"]{color:var(--fg)}
+.ft-nav-inner{width:100%;max-width:var(--container);margin:0 auto;padding:0 var(--gutter);display:flex;align-items:center;gap:var(--sp-8)}
+.ft-nav-brand{font-family:var(--font-display);font-weight:600;font-size:16px;letter-spacing:-0.004em;text-decoration:none;display:flex;align-items:center;gap:10px}
+.ft-nav-brand:hover{color:var(--fg)}
+/* The full supplied lockup, shown at its native 800:164 ratio. Height drives
+   the size; width follows so the asset is never distorted. */
+.ft-nav-logo-wrap{position:relative;display:block;flex:0 0 auto;line-height:0}
+.ft-nav-logo{height:38px;width:auto;display:block;transition:opacity var(--dur-2) var(--ease-out)}
+/* Stacked on the ink lockup, so the pair occupies one lockup's worth of space
+   and the wrapper keeps its intrinsic size from the one still in flow. */
+.ft-nav-logo--light{position:absolute;left:0;top:0;opacity:0}
+.ft-nav.is-over-dark .ft-nav-logo--ink{opacity:0}
+.ft-nav.is-over-dark .ft-nav-logo--light{opacity:1}
+@media(max-width:600px){.ft-nav-logo{height:30px}}
+
+/* Light-on-dark set, for while a dark section is under the bar. The ground
+   goes transparent: the section behind it is already the colour the bar would
+   otherwise be painting. */
+.ft-nav.is-over-dark{
+  background:transparent;
+  backdrop-filter:none;-webkit-backdrop-filter:none;
+  border-bottom-color:transparent;
+}
+.ft-nav.is-over-dark .ft-nav-link{color:rgba(255,255,255,.74)}
+.ft-nav.is-over-dark .ft-nav-link:hover,
+.ft-nav.is-over-dark .ft-nav-link[aria-current="page"]{color:#fff;background:rgba(255,255,255,.14)}
+.ft-nav.is-over-dark .ft-nav-brand:hover{color:#fff}
+@media(prefers-reduced-motion:reduce){
+  .ft-nav-logo{transition:none}
+}
+.ft-nav-links{display:flex;gap:var(--sp-2);margin-left:auto;align-items:center}
+.ft-nav-link{font:500 13.5px var(--font-ui);color:var(--fg-secondary);text-decoration:none;padding:8px 12px;border-radius:var(--r-sm);transition:background var(--dur-2) var(--ease-out),color var(--dur-2) var(--ease-out);background:none;border:0;cursor:pointer;white-space:nowrap}
+.ft-nav-link:hover{background:var(--bg-card-hover);color:var(--fg)}
+.ft-nav-link[aria-current="page"]{color:var(--fg);background:var(--bg-card-hover)}
+@media(max-width:900px){
+  .ft-nav{height:auto}
+  .ft-nav-inner{flex-wrap:wrap;padding-top:10px;padding-bottom:10px;gap:var(--sp-4)}
+  .ft-nav-links{width:100%;margin-left:0;overflow-x:auto;scrollbar-width:none}
+  .ft-nav-links::-webkit-scrollbar{display:none}
+}
+
+/* ---------------- SiteFooter ---------------- */
+.ft-footer{background:var(--bg-raised);border-top:1px solid var(--border);padding:var(--sp-16) 0 var(--sp-8);font-size:var(--t-body-sm)}
+.ft-footer-inner{max-width:var(--container);margin:0 auto;padding:0 var(--gutter)}
+.ft-footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:var(--sp-8)}
+@media(max-width:860px){.ft-footer-grid{grid-template-columns:1fr 1fr}}
+.ft-footer h5{font:600 13px var(--font-display);letter-spacing:.04em;text-transform:uppercase;color:var(--fg-tertiary);margin:0 0 var(--sp-4)}
+.ft-footer-tag{color:var(--fg-secondary);max-width:340px;line-height:1.6}
+.ft-footer ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.ft-footer a{color:var(--fg-secondary);text-decoration:none;transition:color var(--dur-2) var(--ease-out)}
+.ft-footer a:hover{color:var(--fg)}
+.ft-footer-legal{margin-top:var(--sp-12);padding-top:var(--sp-6);border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:var(--sp-4);justify-content:space-between;color:var(--fg-tertiary);font-size:12.5px}
+.ft-footer-legal nav{display:flex;gap:var(--sp-4);flex-wrap:wrap}
+
+/* ---------------- ScrollGallery ---------------- */
+.ft-gallery{display:flex;gap:var(--sp-6);overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:var(--sp-2) 0 var(--sp-4)}
+.ft-gallery::-webkit-scrollbar{display:none}
+.ft-gallery>*{flex:0 0 min(78vw,var(--ft-item-w,420px));scroll-snap-align:center}
+.ft-paddle-row{display:flex;gap:var(--sp-2);justify-content:flex-end;margin-bottom:var(--sp-3)}
+.ft-paddle{width:40px;height:40px;border-radius:50%;background:var(--bg-card);border:1px solid var(--border);color:var(--fg);cursor:pointer;display:grid;place-items:center;font-size:15px;transition:background var(--dur-2) var(--ease-out),border-color var(--dur-2) var(--ease-out)}
+.ft-paddle:hover{background:var(--bg-card-hover);border-color:var(--border-strong)}
+/* ---------------- Ring field ----------------
+   The hero's detection rings, reused as a section backdrop with a mark
+   travelling each ring instead of sitting on it. The section that hosts it
+   needs position:relative and overflow:hidden; its own content needs to sit
+   above with z-index. */
+.ft-ringfield-host{position:relative;overflow:hidden;isolation:isolate}
+.ft-ringfield-host > .ft-shell{position:relative;z-index:1}
+.ft-field{
+  position:absolute;left:50%;top:50%;
+  /* Wide enough that the outer rings always leave the frame sideways. */
+  width:min(1700px,max(1100px,110%));
+  aspect-ratio:1;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  z-index:0;
+}
+.ft-field-rings{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.ft-field-ring{
+  fill:none;
+  stroke:rgba(14,16,18,.07);
+  stroke-width:2;
+  /* Keeps the hairline one pixel however far the box is scaled. */
+  vector-effect:non-scaling-stroke;
+}
+/* The layer spins; the dot just sits on it at its radius. Rotating one parent
+   is a single composited transform, where animating the dot's own left/top
+   would put two layout properties on the main thread every frame. */
+.ft-field-orbit{
+  position:absolute;inset:0;
+  animation:ft-orbit var(--dur,40s) linear infinite;
+  animation-delay:var(--delay,0s);
+  will-change:transform;
+}
+.ft-field-orbit--rev{animation-direction:reverse}
+.ft-field-dot{
+  position:absolute;
+  /* --r is unitless viewBox units, which are percentages of this square box. */
+  left:calc(50% + var(--r) * 1%);
+  top:50%;
+  width:8px;height:8px;
+  margin:-4px 0 0 -4px;
+  border-radius:50%;
+  background:var(--ft-red-brand);
+  box-shadow:0 0 0 4px rgba(235,10,22,.12);
+}
+@keyframes ft-orbit{to{transform:rotate(360deg)}}
+/* A dot circling forever is exactly the kind of persistent motion that gets
+   switched off: keep the rings and the marks, drop the travel. */
+@media(prefers-reduced-motion:reduce){
+  .ft-field-orbit{animation:none}
+}
+
+/* ---------------- Award seals ----------------
+   Certification marks, not photographs: each carries its own typography, so it
+   is contained at its own ratio and never cropped, tinted or set behind text. */
+.ft-award{
+  --seal:clamp(96px,12vw,132px);
+  display:flex;
+  gap:var(--sp-6);
+  align-items:center;
+  /* Fills its grid cell so the two cards match however long the copy runs. */
+  height:100%;
+}
+/* One fixed box for both seals, each contained inside it. The two marks are
+   different shapes — one is taller and narrower than the other — so sizing by
+   width alone left them at different heights, and sizing by height alone left
+   the text starting at a different x in each card. A shared box fixes both:
+   same footprint, same left edge for the copy, and neither mark distorted. */
+/* The slot holds the width so the copy starts at the same x in both cards; the
+   image inside hugs its own edges. That split is what lets the corners be
+   rounded at all — with the image stretched to the slot and contained inside
+   it, a radius would round the letterbox rather than the artwork. */
+.ft-award-sealbox{
+  flex:0 0 var(--seal);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.ft-award-seal{
+  display:block;
+  height:calc(var(--seal) * 1.3);
+  width:auto;
+  max-width:100%;
+  border-radius:var(--r-md);
+}
+.ft-award .ft-card-body{padding:0}
+/* No hairline on the cards in this section. Applied to every card inside the
+   ring-field host, not just the award pair: borderless awards sitting beside
+   bordered figures would read as an oversight. Kept as a transparent border
+   rather than border:0 so the box keeps its 2px and nothing shifts. */
+.ft-ringfield-host .ft-card{border-color:transparent}
+.ft-ringfield-host .ft-card:hover{border-color:transparent}
+/* Scoped to the award cards rather than to .ft-card h4, which would have
+   reweighted every card title on the site. */
+.ft-award .ft-card-body h4{font-weight:700}
+/* Same grey as the section's lead above it: the award name is the statement,
+   the line under it is the supporting note, and full ink made the two read
+   as equal weight. */
+.ft-award .ft-card-copy{color:var(--fg-secondary)}
+@media(max-width:520px){
+  .ft-award{flex-direction:column;align-items:flex-start;gap:var(--sp-4)}
+}
+
+/* ---------------- Editorial band ----------------
+   One photograph across a full-width section with the subject held to one side
+   and the copy set into the empty half beside it. The picture is an <img>
+   rather than a CSS background so it carries alt text and takes part in normal
+   loading — a background-image is invisible to a screen reader and to the
+   preload scanner alike. */
+.ft-band{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+}
+/* The two grounds. Everything above this point is layout and is shared; the
+   colour of a band lives entirely in these two blocks and the ones keyed off
+   them below, so a new band only has to pick a side. */
+.ft-band--dark{
+  background:#0a0c0e;
+  /* Local ground for anything inside that reads --bg. */
+  --bg:#0a0c0e;
+  color:#fff;
+}
+.ft-band--light{
+  background:var(--ft-paper);
+  --bg:var(--ft-paper);
+  color:var(--fg);
+}
+.ft-band-img{
+  position:absolute;inset:0;z-index:0;
+  width:100%;height:100%;
+  display:block;
+  object-fit:cover;
+  /* Holds the subject against its own edge as the section gets wider, so the
+     empty half they were lit against stays where the copy sits. */
+  object-position:left center;
+}
+.ft-band--flip .ft-band-img{object-position:right center}
+/* Insurance, not the main event: the right of the frame is already near-black
+   by design, but a crop at an extreme ratio can slide brighter pixels under
+   the copy. Transparent across the half the picture occupies. */
+.ft-band::after{
+  content:'';
+  position:absolute;inset:0;z-index:1;
+  pointer-events:none;
+}
+.ft-band--dark::after{
+  background:linear-gradient(to right,
+    rgba(10,12,14,0) 38%,
+    rgba(10,12,14,.45) 64%,
+    rgba(10,12,14,.72) 100%);
+}
+/* Mirrored, and fading to the light ground instead of the ink one. A high-key
+   photograph needs more of it than a low-key one: there is no deep shadow to
+   fall back on, so the wall behind the copy has to be lifted the rest of the
+   way to the page colour itself. */
+.ft-band--light.ft-band--flip::after{
+  /* Reaches a full 1 before the copy starts, not .92 at the very edge. A high-key
+     photograph gives the text nothing to sit against on its own: stopping short
+     left the body copy at 4.58:1 — over the line by 0.08 — and the red titles at
+     3.49, passing only because they are large. Carrying the scrim to the page
+     colour puts the copy on plain white and the whole block back to its designed
+     contrast. Nothing is lost: the half being covered is a blank wall. */
+  background:linear-gradient(to left,
+    rgba(255,255,255,0) 26%,
+    rgba(255,255,255,.55) 44%,
+    rgba(255,255,255,.92) 56%,
+    rgba(255,255,255,1) 66%);
+}
+.ft-band-inner{
+  position:relative;z-index:2;
+  display:flex;
+  justify-content:flex-end;
+  padding-block:clamp(5rem,13vw,11rem);
+  /* A full screen, like the hero. svh rather than vh so the mobile browser's
+     collapsing toolbar cannot push the foot of the band below the fold. */
+  min-height:100svh;
+  align-items:center;
+}
+.ft-band--flip .ft-band-inner{justify-content:flex-start}
+.ft-band-copy{width:min(100%,46ch)}
+/* On the dark band the pill goes solid white and takes the ink back for its
+   text — the chip's usual soft grey has almost nothing to sit against there.
+   On the light band the ordinary chip already works. */
+.ft-band--dark .ft-band-copy .ft-eyebrow{background:#fff;color:var(--fg)}
+/* White at the top falling to grey at the foot of the block. The paint is a
+   gradient clipped to the glyphs, so `color` no longer draws anything — which
+   is why the fallbacks below matter: anywhere the clip is unsupported or
+   overridden, transparent text would be invisible text. */
+.ft-band-copy h2{
+  color:#fff;
+  background:linear-gradient(180deg,#fff 0%,#fff 34%,rgba(255,255,255,.58) 100%);
+  --band-h2-fallback:#fff;
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  /* The gradient box is the line box; without this a descender can clip. */
+  padding-bottom:.06em;
+}
+/* No clip support: keep the solid white rather than a transparent hole. */
+@supports not ((background-clip:text) or (-webkit-background-clip:text)){
+  .ft-band-copy h2{background:none;-webkit-text-fill-color:var(--band-h2-fallback)}
+}
+/* Forced colours replace the background but not text-fill-color, which would
+   leave the headline invisible against the user's own ground. */
+@media(forced-colors:active){
+  .ft-band-copy h2{background:none;-webkit-text-fill-color:currentColor;color:CanvasText}
+}
+.ft-band-copy .ft-lead{max-width:none}
+.ft-band--dark .ft-band-copy .ft-lead{color:rgba(255,255,255,.82)}
+/* Light band: the headline runs ink to grey, the mirror of the dark one. */
+.ft-band--light .ft-band-copy h2{
+  color:var(--fg);
+  --band-h2-fallback:var(--fg);
+  background:linear-gradient(180deg,var(--fg) 0%,var(--fg) 34%,rgba(29,29,31,.55) 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.ft-band--light .ft-band-copy .ft-lead{color:var(--fg-secondary)}
+/* The promises sit straight on the band's own ground — no panel, no border,
+   no blur. The photograph is already dark and empty here, so a card would only
+   draw a box around something that needs no boxing. Spacing does the
+   separating that the panel edges used to. */
+.ft-band-list{display:grid;gap:clamp(1.4rem,2.4vw,2rem);margin-top:clamp(1.75rem,3vw,2.75rem)}
+/* Two up, for a band carrying six items rather than three: stacked they would
+   run past the foot of a full-screen section. Collapses back to one column
+   once a column would be narrower than the titles sitting in it. */
+.ft-band-list--split{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(1.5rem,2.6vw,2.5rem)}
+@media(max-width:640px){
+  .ft-band-list--split{grid-template-columns:1fr}
+}
+.ft-band-list .ft-card{
+  background:none;
+  border:0;
+  padding:0;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+}
+.ft-band-list .ft-card:hover{background:none;border:0;transform:none}
+/* The inset lives on the body, not on the card, so zeroing the card alone left
+   the promises indented from the eyebrow and headline above them. Flush now. */
+.ft-band-list .ft-card-body{padding:0}
+/* No hyphenation on these. The base heading rule turns it on for running
+   headlines, but these are short labels in a narrow column, and the block
+   carries lang="de" — so German hyphenation was breaking the English
+   translation mid-word ("Door inter-com systems"). They should break at spaces
+   instead; overflow-wrap is the safety net for a word wider than its column. */
+.ft-band-list .ft-card h4{font-weight:700;margin-bottom:.25em;hyphens:none;-webkit-hyphens:none;overflow-wrap:break-word}
+.ft-band--dark .ft-band-list .ft-card h4{color:var(--ft-signal-500)}
+.ft-band--light .ft-band-list .ft-card h4{color:var(--fg)}
+.ft-band--light .ft-band-list .ft-card .ft-card-copy{color:var(--fg-secondary)}
+/* The bare mark, no tile behind it. Sized to its own content rather than to a
+   fixed box: centred in a 38px square it would sit indented from the title
+   below, and the two are meant to share a left edge. Round caps and joins do
+   the softening now that there is no rounded tile to do it. */
+.ft-card-icon{
+  display:block;
+  width:max-content;
+  margin-bottom:.7rem;
+  color:rgba(255,255,255,.88);
+}
+/* The signal tint on the dark band, not the brand red. Brand red is mixed for
+   white grounds — its luminance is low, so on near-black it loses separation
+   and goes muddy rather than reading as red. Measured on the band it is
+   4.21:1 against the signal tint's 5.86:1. The light band takes ink instead:
+   red on white would read as a second accent competing with the call to
+   action, and the red is doing its work on the dark band already. */
+.ft-band--dark .ft-band-list .ft-card-icon{color:var(--ft-signal-500)}
+.ft-band--light .ft-band-list .ft-card-icon{color:var(--fg)}
+.ft-card-icon svg{display:block}
+.ft-band-list .ft-card .ft-card-copy{color:rgba(255,255,255,.74);font-size:var(--t-body-sm)}
+
+/* Stack whenever the band cannot show the whole width of the photograph.
+   `cover` crops on whichever axis has the surplus: once the band is taller in
+   proportion than the picture is, it crops horizontally — and what it takes
+   off is the right-hand side, which is precisely the empty half the copy sits
+   in. So the condition is not "is the screen narrow" but "is the band squarer
+   than 3:2", the picture's own ratio. Below that the words would be set over
+   the technician and the cabinet instead of over the shadow, and the contrast
+   collapses — measured, it fell to 2.2:1. Width alone cannot express that: a
+   1280x1024 desktop is wide but fails, a short wide laptop is narrow and
+   passes. */
+@media(max-width:900px),(max-aspect-ratio:3/2){
+  .ft-band{display:flex;flex-direction:column}
+  .ft-band-img{position:relative;inset:auto;height:auto;aspect-ratio:3 / 2;object-position:center}
+  .ft-band::after{display:none}
+  .ft-band-inner{
+    min-height:0;
+    padding-block:clamp(2.5rem,9vw,4rem);
+    justify-content:flex-start;
+    align-items:flex-start;
+  }
+  .ft-band-copy{width:100%}
+  .ft-band-inner{padding-bottom:clamp(3rem,10vw,5rem)}
+}
+
+/* Full-bleed rail. The inline padding is measured off this element's own
+   width rather than off the viewport, so it never has to guess at the
+   scrollbar: 100% here is the section's content box, which already excludes
+   it — 100vw does not, and overflows by its width. The first card lands on
+   the container's left edge, in line with the copy above; past the right
+   edge the cards simply keep going. */
+.ft-rail-bleed .ft-paddle-row{
+  padding-inline:max(var(--gutter),calc((100% - var(--container)) / 2));
+}
+/* Start padding lines the first card up with the copy; the end is only a
+   gutter. Padding both sides equally would leave a screen's worth of empty
+   space to scroll into on a wide display — the rail would still report itself
+   as scrollable with nothing left to show. Snapping to the start, with the
+   scroll padding matched to the inset, so a snapped card lands on the
+   container edge instead of drifting to the middle of a very wide screen. */
+.ft-rail-bleed .ft-gallery{
+  padding-inline-start:max(var(--gutter),calc((100% - var(--container)) / 2));
+  padding-inline-end:var(--gutter);
+  scroll-padding-inline-start:max(var(--gutter),calc((100% - var(--container)) / 2));
+}
+.ft-rail-bleed .ft-gallery>*{scroll-snap-align:start}
+/* The paddles keep the container's right edge while the rail runs past it.
+   Loose in the bleed they drift out to the screen edge, away from the heading
+   and the copy they steer — on a wide monitor that put them most of a column
+   clear of anything they belong to. Same expression as the rail's own leading
+   inset, mirrored. */
+.ft-rail-bleed .ft-paddle-row{
+  padding-inline-end:max(var(--gutter),calc((100% - var(--container)) / 2));
+}
+
+/* ---------------- Split rail ---------------- */
+/* The heading and the controls hold a column of their own on the left while
+   the cards run past the right edge of the screen. Stacked the ordinary way a
+   rail reads as a row that happens to be cut off; set beside the words that
+   introduce it, with the paddles directly under them, it reads as carrying on
+   — and the controls end up next to the thing they steer instead of floating
+   above it. */
+.ft-splitrail{
+  display:grid;
+  grid-template-columns:minmax(0,26rem) minmax(0,1fr);
+  column-gap:clamp(2rem,5vw,4.5rem);
+  align-items:start;
+  /* The left edge lands on the same column the rest of the page uses. The
+     right side is deliberately left open — that is the whole point. */
+  padding-left:max(var(--gutter),calc((100% - var(--container)) / 2));
+}
+/* ScrollGallery wraps its paddles and its rail in one div. Dissolving that
+   wrapper drops both of them into this grid directly, so the controls can sit
+   under the heading while the rail sits in the other column — without the
+   component needing to know anything about the layout around it. */
+.ft-splitrail > div{display:contents}
+.ft-splitrail > header{grid-column:1;grid-row:1}
+/* --t-h2 is sized for a line that has the page to run across; in a column this
+   narrow it breaks to about five characters. */
+.ft-splitrail > header h2{font-size:clamp(2rem,3vw,2.9rem);max-width:14ch}
+.ft-splitrail .ft-paddle-row{
+  grid-column:1;grid-row:2;
+  justify-content:flex-start;
+  margin:2.5rem 0 0;
+}
+.ft-splitrail-foot{grid-column:1;grid-row:3;margin-top:1.75rem}
+/* The rating eyebrow wears Google's own mark and star colour, so it reads as
+   the source's badge rather than as another section label. The kit's tracked
+   uppercase comes off: it would set "GOOGLE" in caps directly beside the logo
+   that spells it, and a rating is not a section heading. */
+.ft-splitrail > header .ft-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  text-transform:none;
+  letter-spacing:0;
+  font-size:var(--t-body-sm);
+}
+.ft-splitrail > header .ft-eyebrow svg{display:block;flex:0 0 auto}
+.ft-rating-score{font-weight:600;color:var(--fg)}
+/* Google's own review amber. Gold on a near-white chip is low contrast by
+   nature — it carries no information the ink beside it does not already
+   state, which is why the score and the source are the accessible pair and
+   the glyphs are hidden from the reader. */
+.ft-rating-stars{color:#f4b400;letter-spacing:1px;font-size:1.05em}
+.ft-rating-src{color:var(--fg-secondary)}
+/* Visually hidden. The kit had no such utility — .ft-skip parks itself
+   off-canvas but comes back on focus, which is not this. */
+.ft-vh{
+  position:absolute;width:1px;height:1px;
+  padding:0;margin:-1px;overflow:hidden;
+  clip-path:inset(50%);white-space:nowrap;border:0;
+}
+.ft-splitrail .ft-gallery{grid-column:2;grid-row:1 / span 3;padding-right:var(--gutter)}
+/* One column before the left one gets too narrow to hold the heading. The
+   paddles keep their place above the rail, which is where they started. */
+@media(max-width:880px){
+  .ft-splitrail{grid-template-columns:minmax(0,1fr);padding-left:var(--gutter)}
+  .ft-splitrail > header h2{max-width:none}
+  .ft-splitrail .ft-paddle-row{grid-column:1;grid-row:2;margin-top:2rem}
+  .ft-splitrail .ft-gallery{grid-column:1;grid-row:3;margin-top:1.5rem}
+  .ft-splitrail-foot{grid-row:4}
+}
+
+/* ---------------- Product card ---------------- */
+/* Borderless. The page ground does the separating, so each card is one white
+   plane with the product placed on it. A hairline round the outside PLUS a
+   rule under the render cut the same card into two stacked boxes, and the
+   render read as a framed picture sitting above a caption rather than as the
+   card's own subject. */
+.ft-pcard{
+  background:var(--bg-card);
+  border-radius:var(--r-xl);
+  display:flex;
+  flex-direction:column;
+  padding:var(--sp-4);
+  gap:var(--sp-4);
+  text-decoration:none;
+  transition:transform var(--dur-2) var(--ease-out),box-shadow var(--dur-2) var(--ease-out);
+}
+/* The whole card is the link, so it has to carry the affordances the removed
+   "Details ansehen" was carrying on its own. The lift is the button's, one
+   step further: --btn moves 1px because a finger is already on it, a card
+   moves 2px because the pointer is only passing over.
+   color:inherit undoes base.css's a:hover, which lands on the product name if
+   left alone — h4 is the one thing in the card that inherits its colour, the
+   kit's heading gradient covering h1-h3 only and every other line here setting
+   its own. The lift and the shadow are the whole answer to the pointer; the
+   copy holds still. */
+a.ft-pcard:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 32px rgba(14,16,18,.10);
+  color:inherit;
+}
+/* The global ring assumes a 4px corner; on a 28px card it cut across them. */
+a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border-radius:var(--r-xl)}
+/* The render is inset instead of bleeding to the card's edges, so the white
+   around it belongs to the card and reads as breathing room. Its own hairline
+   comes off for the reason the card's did — there is nothing left for it to
+   separate. Rounded a step tighter than the card so the two curves nest
+   instead of running parallel. */
+.ft-pcard .ft-media{border:0;border-radius:var(--r-lg)}
+.ft-pcard-body{display:flex;flex-direction:column;gap:8px;padding:0 var(--sp-2) var(--sp-3)}
+/* Sentence case, not the tracked caps the kit uses for eyebrows. Tracked caps
+   read as a SECTION label — they announce the block they sit on top of — and
+   on a card this is a tag on one product, sitting a few pixels above the name
+   it belongs to. Dropping the transform and the tracking is most of why the
+   reference block reads tighter than ours did.
+   --ft-signal-700, not --ft-red-brand: 5.5:1 on white, and the graphic-accent
+   tint stays clear of the brand red doing CTA work in the same viewport. */
+.ft-pcard-kind{
+  margin:0;
+  font:500 13px/1.3 var(--font-ui);
+  letter-spacing:0;
+  text-transform:none;
+  color:var(--ft-signal-700);
+}
+/* 600 against the kit's 500 for h4: on a card the name is the thing being
+   scanned, and at --t-h4 the lighter weight let the description crowd it.
+   Tighter leading with it — h4's 1.25 left a two-line name looking
+   double-spaced against a label sitting right above it. */
+.ft-pcard-body h4{margin:0;font-weight:700;line-height:1.15;letter-spacing:-0.004em}
+.ft-pcard-desc{margin:0;color:var(--fg-secondary);font-size:var(--t-body-sm)}
+/* Spec marks, not chips. No fill, no rule — just the mark and its word. The
+   pill treatment was doing enclosure work the card no longer needs: five
+   bordered pills under a card that had just given up its own border read as
+   the busiest thing on it. A list, because that is what it is; the bullets go
+   because the marks are the bullets. Row gap smaller than column gap so a
+   wrapped pair still reads as one group rather than two lines. */
+.ft-pcard-specs{
+  list-style:none;
+  margin:var(--sp-2) 0 0;
+  padding:0;
+  display:flex;flex-wrap:wrap;
+  gap:var(--sp-2) var(--sp-4);
+}
+.ft-pcard-spec{
+  display:inline-flex;align-items:center;gap:6px;
+  font:500 12px/1.2 var(--font-ui);
+  letter-spacing:.01em;
+  color:var(--fg-secondary);
+}
+/* The mark sits a step back from its word: at 12px the two competing at the
+   same weight made the row read as noise rather than as a list of facts. */
+.ft-pcard-spec svg{display:block;flex:0 0 auto;color:var(--fg-tertiary)}
+/* The catalogue tile is the same plane with no render to carry, so its copy
+   sits at the foot where the product copy sits and the set still reads as one.
+   gap:0 — this one spaces itself with margins. */
+.ft-pcard--cta{
+  gap:0;
+  justify-content:flex-end;
+  align-items:flex-start;
+  padding:var(--sp-8);
+  min-height:420px;
+}
+
+/* ---------------- Placeholder (image slots) ---------------- */
+.ft-ph{
+  width:100%;height:100%;display:grid;place-items:center;text-align:center;
+  background:
+    repeating-linear-gradient(45deg,transparent,transparent 9px,rgba(14,16,18,.022) 9px,rgba(14,16,18,.022) 18px),
+    var(--ft-paper-92);
+  color:var(--fg-tertiary);
+  font:500 12.5px/1.5 var(--font-ui);
+  letter-spacing:.02em;padding:var(--sp-6);
+}
+.ft-ph span{max-width:34ch}
+
+/* ---------------- Scroll patterns ---------------- */
+[data-rev]{opacity:0;transform:translateY(28px);transition:opacity var(--dur-4) var(--ease-out),transform var(--dur-4) var(--ease-out)}
+[data-rev].is-in{opacity:1;transform:none}
+[data-spy]{opacity:.35;transition:opacity var(--dur-3) var(--ease-out)}
+[data-spy].spy-in{opacity:1}
+
+.pin-stack{position:relative}
+.pin-stage{position:sticky;top:0;height:100vh;overflow:hidden}
+/* One render per panel, cross-faded in place, with the step's words along the
+   foot of the frame. */
+.pin-panel{position:absolute;inset:0;display:flex;align-items:flex-end}
+.pin-panel-img{
+  position:absolute;inset:0;z-index:0;
+  width:100%;height:100%;
+  display:block;
+  object-fit:cover;
+}
+/* ONE gradient for the whole stage, not one per panel. Per-panel it was painted
+   twice whenever two frames were mid-crossfade, and the pair of them stacked and
+   dimmed the picture — the dip read as the panels dimming independently rather
+   than as one continuous scene. On the stage it is painted once, always, and
+   sits above every render and below every word. */
+.pin-stage::after{
+  content:'';
+  position:absolute;inset:0;z-index:1;
+  pointer-events:none;
+  /* Anchored at the bottom-left corner and falling off in every direction from
+     it, rather than running as a straight diagonal. A `to top right` line
+     darkens the whole lower-left SIDE of its axis, which includes the top-left
+     corner — so the sky above the building was being dimmed along with the
+     copy. Pinned to the corner, the shadow stays where the words are and the
+     top of the frame is left alone. */
+  background:radial-gradient(115% 85% at 0% 100%,
+    rgba(10,12,14,.96) 0%,
+    rgba(10,12,14,.92) 26%,
+    rgba(10,12,14,.74) 46%,
+    rgba(10,12,14,.36) 66%,
+    rgba(10,12,14,0) 88%);
+}
+/* Sampled from the renders below, not chosen: their sky reads #e2e1e6 along the
+   top edge on every one of the five, so the section hands over to the first
+   frame without a seam. The ramp handles the other edge — the page grey above
+   met the sampled colour as a hard line, so the band eases out of one and lands
+   exactly on the other. Two joins, neither of them visible. */
+.ft-pin-head-section{
+  background:linear-gradient(180deg,
+    var(--bg) 0%,
+    #ecebef 45%,
+    #e2e1e6 100%);
+}
+/* The lead's trailing margin lives inside the header, so equal padding still
+   left 18px more space below the text than above it. Dropping it centres the
+   block optically rather than just arithmetically. */
+.ft-pin-head-section header > :last-child{margin-bottom:0}
+/* No rule across this join. The header section hands straight into the first
+   render on a matched colour, and .ft-section--raised's own hairline was
+   drawing a line right through it — the earlier seam rule only fires between
+   two raised sections, and the header's is not one. */
+.ft-pin-section{
+  padding-top:0;
+  border-top:0;
+  /* Containing block for the hand-off gradient at its foot. Does not disturb
+     the sticky stage: sticky resolves against the scrolling ancestor, not a
+     positioned one. */
+  position:relative;
+  /* The same sampled sky as the header band above. --raised paints this white,
+     and the stage is sticky — any sliver where it has not yet covered, or a
+     sub-pixel rounding line at the join, showed as a pale edge against the
+     grey. Matching the ground means there is nothing left to show. */
+  background:#e2e1e6;
+}
+/* The renders hand over to the dark CTA below instead of stopping dead against
+   it. The stage is sticky, so a fade anchored inside it would ride the bottom
+   of the viewport for the whole sequence and darken the foot of every panel —
+   this sits on the SECTION's foot, which is off-screen until the stack is spent
+   and only arrives as the last frame gives way. z-index clears the stage:
+   position:sticky makes that a stacking context of its own, so the fade has to
+   be a sibling above it rather than anything inside.
+   Ends on the CTA's exact ink, and starts on the same channels at zero alpha —
+   fading from `transparent` would interpolate through transparent BLACK and
+   put a grey cast across the join, the same trap the band scrims avoid. */
+.ft-pin-section::after{
+  content:'';
+  position:absolute;
+  left:0;right:0;bottom:0;
+  height:clamp(14rem,28vh,24rem);
+  z-index:3;
+  pointer-events:none;
+  background:linear-gradient(180deg,
+    rgba(10,12,14,0) 0%,
+    rgba(10,12,14,.55) 45%,
+    rgba(10,12,14,.88) 76%,
+    #0a0c0e 100%);
+}
+.pin-panel-copy{
+  position:relative;z-index:2;
+  width:100%;
+  max-width:var(--container);
+  margin:0 auto;
+  padding:0 clamp(2rem,5vw,3rem) clamp(2.5rem,6vh,4.5rem);
+  color:#fff;
+}
+.pin-panel-copy .ft-num{color:rgba(255,255,255,.8)}
+/* White falling to grey, the same clipped-gradient treatment as the band
+   headline — and the same three fallbacks, because once the paint is a
+   background the text has no colour of its own to fall back on. */
+.pin-panel-copy h3{
+  color:#fff;
+  /* Statement size, not subhead size. These sit at the foot of a full-screen
+     render with the frame to themselves, and --t-h3 read as a caption under
+     the picture rather than as the beat of the sequence. --t-h2 is what the
+     band uses for the same job, and h2's tighter metrics come with it: at 72px
+     h3's 1.15/-0.006em is loose enough to look unset. The measure comes in as
+     the type goes up so the lines still break two or three to a heading. */
+  font-size:var(--t-h2);
+  line-height:1.08;
+  letter-spacing:-0.010em;
+  max-width:18ch;
+  background:linear-gradient(180deg,#fff 0%,#fff 38%,rgba(255,255,255,.62) 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  padding-bottom:.06em;
+}
+@supports not ((background-clip:text) or (-webkit-background-clip:text)){
+  .pin-panel-copy h3{background:none;-webkit-text-fill-color:#fff}
+}
+@media(forced-colors:active){
+  .pin-panel-copy h3{background:none;-webkit-text-fill-color:currentColor;color:CanvasText}
+}
+.pin-panel-copy p{color:rgba(255,255,255,.86);max-width:62ch}
+.pin-panel-copy .ft-list{color:rgba(255,255,255,.82);max-width:62ch}
+
+/* ---------------- Dark closing CTA (6.8c) ---------------- */
+/* The ask the five layers lead to. Same ink as .ft-band--dark, not a second
+   near-miss black: the page has one dark and this is it. */
+.ft-cta-dark{
+  background:#0a0c0e;
+  /* Local ground for anything inside that reads --bg or --border. The paper
+     values resolve to nothing here: --border is 10% ink, invisible on this. */
+  --bg:#0a0c0e;
+  --border:rgba(255,255,255,.14);
+  color:#fff;
+  /* Taller than the house rhythm on purpose. Coming off five full-screen
+     frames, a standard --section pad (clamp(5rem,7vw,9rem)) read as a caption
+     under them rather than as the ask they build to. Symmetric, unlike the
+     version that hung off the foot of the pin section with a short top and a
+     long bottom — as its own slab it has two edges to answer to, not one. */
+  padding:clamp(7rem,12vw,11rem) 0;
+}
+/* No rule above it. --raised gives .ft-pin-section a bottom hairline in the
+   ink border colour, and a dark slab needs no help announcing where it starts
+   — the same reasoning as the seam rule between two raised sections. */
+.ft-section--raised:has(+ .ft-cta-dark){border-bottom:0}
+/* Solid white pill taking the ink back for its text, the same swap the dark
+   band makes: the chip's usual 3.5%-ink fill has nothing to sit against here.
+   16.8:1 for the label. */
+.ft-cta-dark .ft-eyebrow{background:#fff;color:var(--fg)}
+/* 13.1:1 on the ink ground, matching the band's lead. Not --fg-secondary: that
+   slate is meant for paper and lands at 3.3:1 here, under AA — which is why it
+   came off the markup as an inline colour rather than being overridden here.
+   :not() because the eyebrow is a <p> too and keeps its own ink. */
+.ft-cta-dark p:not(.ft-eyebrow){color:rgba(255,255,255,.82)}
+/* Headings are painted site-wide with an INK gradient clipped to the glyphs
+   (see the h1,h2,h3 @supports block below), so `color:#fff` on the section
+   does nothing here — text-fill-color is transparent and the paint underneath
+   is near-black. Re-declare it in white, the same treatment .pin-panel-copy h3
+   and .ft-band-copy h2 need for the same reason. 19.6:1 at the cap falling to
+   7.8:1 at the baseline. padding-bottom keeps the clip off the descenders. */
+.ft-cta-dark h2{
+  color:#fff;
+  background:linear-gradient(180deg,#fff 0%,#fff 38%,rgba(255,255,255,.62) 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  padding-bottom:.06em;
+}
+/* No clip support: solid white rather than a transparent hole. */
+@supports not ((background-clip:text) or (-webkit-background-clip:text)){
+  .ft-cta-dark h2{background:none;-webkit-text-fill-color:#fff}
+}
+/* Forced colours replace the background but not text-fill-color, which would
+   leave the heading invisible; hand it back to the system pair. */
+@media(forced-colors:active){
+  .ft-cta-dark h2{background:none;-webkit-text-fill-color:currentColor;color:CanvasText}
+}
+/* The global rule answers prefers-contrast by resetting headings to --fg, and
+   --fg is paper ink — on this ground that is the invisible case again. */
+@media(prefers-contrast:more){
+  .ft-cta-dark h2{background:none;-webkit-text-fill-color:#fff;color:#fff}
+}
+
+@media(max-width:760px),(prefers-reduced-motion:reduce){
+  .pin-stack{height:auto!important}
+  .pin-stage{position:static!important;height:auto!important;overflow:visible!important}
+  /* Relative, not static: the render is absolutely positioned inside the
+     panel, so the panel has to stay a containing block and carry a height
+     of its own once the stage stops being a sticky viewport. */
+  .pin-panel{position:relative!important;min-height:78vh;opacity:1!important;transform:none!important;pointer-events:auto!important;margin-bottom:48px}
+  /* The scroll driver bails out here, so the inline opacities it would have
+     set never arrive: show every frame and every block of copy. */
+  .pin-panel-img{opacity:1!important}
+  .pin-panel-copy{opacity:1!important;transform:none!important}
+  /* One gradient per stage no longer works once the panels stack vertically;
+     each panel carries its own again. */
+  .pin-stage::after{display:none}
+  .pin-panel::after{
+    content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:radial-gradient(115% 85% at 0% 100%,
+      rgba(10,12,14,.96) 0%,rgba(10,12,14,.92) 26%,rgba(10,12,14,.74) 46%,
+      rgba(10,12,14,.36) 66%,rgba(10,12,14,0) 88%);
+  }
+}
+/* Reduced motion is a gentler equivalent, not the absence of feedback:
+   drop the translate (vestibular trigger), keep a short opacity cross-fade so
+   sections still read as arriving. */
+@media(prefers-reduced-motion:reduce){
+  [data-rev]{transform:none;transition:opacity 200ms ease}
+  [data-spy]{opacity:1;transition:none}
+}
+
+/* Translucency is a preference, not a given — frost the chrome to solid and
+   drop the blur when the viewer has asked for less transparency. */
+@media(prefers-reduced-transparency:reduce){
+  .ft-nav,.ft-nav.is-over-hero{background:var(--ft-paper-96);backdrop-filter:none;-webkit-backdrop-filter:none;border-bottom:1px solid var(--border)}
+  .ft-nav::after{display:none}
+}
+
+/* High contrast: near-solid surfaces with defined borders. */
+@media(prefers-contrast:more){
+  .ft-nav{background:var(--ft-paper);backdrop-filter:none;-webkit-backdrop-filter:none;border-bottom:1px solid var(--fg)}
+  .ft-nav::after{display:none}
+  .ft-card,.ft-chip,.ft-field input,.ft-field select,.ft-field textarea{border-color:var(--border-strong)}
+  .ft-btn--secondary{border-color:var(--fg)}
+  .ft-lead,.ft-card p{color:var(--fg)}
+}
+
+/* ---------------- Heading gradient ----------------
+   Subtle vertical fade on display headings: --fg at the cap line easing to a
+   mid-grey at the baseline. Guarded by @supports so browsers without
+   background-clip:text keep solid --fg rather than rendering invisible text.
+   h4 is deliberately excluded — at 20–26px the fade is imperceptible and only
+   risks muddying small type. */
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+  h1, h2, h3 {
+    background-image: linear-gradient(180deg, var(--ft-ink-text) 0%, var(--ft-ink-grad-end) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    /* keep a real colour for selection + forced-colors */
+    -webkit-text-fill-color: transparent;
+  }
+  /* Selection and high-contrast must not inherit transparent text. */
+  h1::selection, h2::selection, h3::selection { -webkit-text-fill-color: #fff; color: #fff; }
+  @media (forced-colors: active), (prefers-contrast: more) {
+    h1, h2, h3 { background-image: none; color: var(--fg); -webkit-text-fill-color: currentColor; }
+  }
+}
+
+/* ---------------- Utilities ---------------- */
+/* Centring container. text-align alone is not enough: base.css caps every <p>
+   at --container-text and headings carry their own max-width, so a capped
+   block stays left-anchored inside a centred parent. Auto margins fix that. */
+.ft-center{text-align:center}
+.ft-center > p,
+.ft-center > h1,
+.ft-center > h2,
+.ft-center > h3,
+.ft-center > h4{margin-left:auto;margin-right:auto}
+.ft-center > div{justify-content:center}
+
+.ft-prose{max-width:var(--container-text)}
+.ft-prose p{color:var(--fg-secondary)}
+.ft-list{margin:0;padding-left:1.1rem;color:var(--fg-secondary);font-size:var(--t-body-sm);display:flex;flex-direction:column;gap:6px}
+.ft-num{font-family:var(--font-mono);color:var(--fg-tertiary);font-size:14px;margin:0 0 .8rem}
+.ft-quiet-link{color:var(--fg-secondary);font:500 var(--t-body-sm) var(--font-ui);text-decoration:none}
+.ft-quiet-link:hover{color:var(--fg)}
+.ft-skip{position:absolute;left:-9999px;top:0;background:var(--fg);color:var(--bg);padding:12px 18px;border-radius:var(--r-sm);z-index:100}
+.ft-skip:focus{left:var(--gutter);top:8px}
+
+/* ---------------- Hero detection field ----------------
+   Rings radiating from the camera at the foot of the hero, with a
+   handful of detection marks sitting on them. The layer is one square
+   box centred on the camera: a square keeps every ring a true circle
+   and lets a mark be placed from plain percentages, since 1% across
+   and 1% down are the same distance. */
+/* The hero sits inside one screen: the copy takes the height it needs and
+   the camera gets whatever is left, contain-fitted, so nothing runs past the
+   fold. The height has to be definite — with only a min-height the flex
+   children have no leftover to divide and the camera falls back to its own
+   intrinsic size, which is square and taller than the screen. */
+.hero{
+  /* White ground. The torch cover reads --bg to hide the photograph, so the
+     local override is what keeps the two the same colour: set only the
+     background and the cover would stay grey, showing as a patch. */
+  background:var(--ft-paper);
+  --bg:var(--ft-paper);
+  /* Same colour as the ground above, as channels. The foot-of-section fade
+     needs a transparent stop *of this colour*: fading to plain `transparent`
+     interpolates through transparent black and greys out mid-way. Change this
+     with the background or the fade will not match. */
+  --hero-ground:255,255,255;
+  --nav-h:72px;
+  /* Breathing room above the eyebrow and below the camera. The top value is
+     added to --nav-h, so it describes the gap between the bar and the copy,
+     not the distance from the top of the page. */
+  --hero-pad-top:clamp(2.75rem,7vh,5rem);
+  --hero-pad-bottom:clamp(4rem,11vh,9rem);
+  /* How far the foot fade reaches back up over the camera. Kept separate from
+     the padding so the two can be tuned independently: see .hero::after. */
+  --hero-fade:clamp(90px,16vh,220px);
+  position:relative;overflow:hidden;isolation:isolate;
+  /* Pulled up under the sticky bar so the section starts at the very top of
+     the page and the bar sits inside it, with no strip of page colour above.
+     The bar stays in flow, so only this section is affected; its own top
+     padding puts the copy back below it. */
+  margin-top:calc(var(--nav-h) * -1);
+  /* At least a full screen, but free to grow: the camera sits low and must
+     not be sliced off where the next section begins. The media box sizes
+     itself from its own width and ratio, so an open-ended height here does
+     not let the picture fall back to its intrinsic size. */
+  min-height:100svh;
+  padding:calc(var(--nav-h) + var(--hero-pad-top)) 0 var(--hero-pad-bottom);
+  display:flex;
+}
+.hero > .ft-shell{position:relative;display:flex;flex-direction:column;flex:1;min-height:0}
+.hero .ft-center{position:relative;z-index:1;flex:0 0 auto}
+
+/* Takes the leftover height. The rings are absolutely positioned in here, so
+   they centre on the camera whatever that height turns out to be. */
+/* Sized by its own ratio rather than by the leftover height, so the camera
+   stays large and simply runs past the foot of the section — the hero still
+   ends at the fold, the cutout is just cropped by it. The rings are absolute
+   in here, so they keep centring on the camera wherever it lands. */
+.hero-media-wrap{
+  position:relative;z-index:0;
+  flex:0 0 auto;
+  width:min(100%,clamp(340px,52vw,820px));
+  aspect-ratio:16 / 10;
+  /* A flex item's min-height defaults to its content, and the cutout is
+     square: without this the picture wins and the ratio above is ignored. */
+  min-height:0;
+  /* Sits lower in the section. Only the offset changes: the width and ratio
+     above still set the size, so the cutout keeps its scale and the foot of
+     it is simply cropped by the fold. */
+  margin:clamp(3rem,16vh,12rem) auto 0;
+}
+/* Positioned so it paints in front of the rings. The field is absolutely
+   positioned inside the same box, and a positioned element wins over a
+   static one at the same z-index — which was putting the ring glow, a white
+   radial, straight over the camera and washing it out. */
+.hero-media{position:relative;z-index:1;width:100%;height:100%;min-height:0}
+
+/* Too short or too narrow to fit one screen without squashing the type: let
+   the section grow again and give the camera its ratio back. */
+@media(max-width:860px),(max-height:620px){
+  /* The bar wraps to its own height down here, so --nav-h no longer describes
+     it: put the section back below the bar rather than guessing. */
+  .hero{margin-top:0;padding-top:var(--hero-pad-top);height:auto;min-height:0;display:block}
+  .hero > .ft-shell{display:block}
+  .hero-media-wrap{display:block}
+  .hero-media{height:auto;aspect-ratio:16 / 10}
+}
+
+.hero-field{
+  /* Wide enough that the outer rings always leave the frame sideways, and
+     capped so an ultrawide display does not blow the geometry apart. */
+  --hero-field-size:min(1700px,max(1150px,92vw));
+  --hero-ring-w:2;
+  --hero-ring-ink:rgba(14,16,18,.09);
+  position:absolute;left:50%;top:50%;
+  width:var(--hero-field-size);height:var(--hero-field-size);
+  transform:translate(-50%,-50%);
+  pointer-events:none;z-index:0;
+}
+
+/* Lifts the camera off the paper without tinting it. */
+.hero-field-glow{
+  position:absolute;inset:12%;border-radius:50%;
+  background:radial-gradient(circle,var(--ft-paper) 0%,rgba(255,255,255,0) 68%);
+}
+
+/* The rings reach up past the headline, so fade them out towards the top of
+   the field: copy always wins, and the sweep still reads underneath it. The
+   marks are deliberately outside this mask so a detection stays crisp. */
+.hero-field-rings{
+  position:absolute;inset:0;width:100%;height:100%;overflow:visible;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.28) 14%,#000 34%);
+  mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.28) 14%,#000 34%);
+}
+.hero-ring{fill:none;vector-effect:non-scaling-stroke}
+/* One weight, one grey, drawn once. Nothing on the sweep is emphasised: red
+   is spent on the detection dot alone, so the eye goes to what was picked up
+   rather than to the ring it sits on. Width and tone are the two dials. */
+.hero-ring{stroke:var(--hero-ring-ink);stroke-width:var(--hero-ring-w)}
+
+/* ---- detection mark ---- */
+.hero-mark{position:absolute;width:0;height:0;display:block}
+.hero-mark-dot,.hero-mark-halo{
+  position:absolute;top:0;left:0;border-radius:50%;
+  transform:translate(-50%,-50%);
+}
+.hero-mark-dot{
+  width:7px;height:7px;background:var(--ft-red-brand);
+  box-shadow:0 0 0 3px rgba(235,10,22,.12);
+}
+.hero-mark-halo{
+  width:34px;height:34px;border:1px solid var(--ft-red-brand);opacity:0;
+  animation:ft-detect 3.6s var(--ease-soft) infinite;
+  animation-delay:var(--mark-delay,0s);
+}
+@keyframes ft-detect{
+  0%{transform:translate(-50%,-50%) scale(.28);opacity:.5}
+  70%{transform:translate(-50%,-50%) scale(1);opacity:0}
+  100%{transform:translate(-50%,-50%) scale(1);opacity:0}
+}
+
+/* Below the shell's breakpoint the rings crowd the copy: keep the sweep,
+   drop the marks that would land on top of the text. */
+/* Two mark sets, one shown at a time: see the note on MARKS in hero-field.jsx. */
+.hero-mark--compact{display:none}
+
+@media(max-width:1100px){
+  .hero-field{--hero-field-size:max(900px,150vw)}
+  .hero-mark--wide{display:none}
+  .hero-mark--compact{display:block}
+  /* Less room to be quiet in: thin the lines further. */
+  .hero-ring{--hero-ring-ink:rgba(14,16,18,.07)}
+  .hero-mark-halo{width:26px;height:26px}
+}
+/* A detection that never stops pulsing is motion for its own sake: hold the
+   halo still and let the dot carry the meaning. */
+@media(prefers-reduced-motion:reduce){
+  .hero-mark-halo{animation:none;opacity:.22;transform:translate(-50%,-50%) scale(.62)}
+}
+
+/* ---------------- Hero torch reveal ----------------
+   The photograph spans the whole hero and is then covered by a sheet
+   painted in the page colour, so the section looks ordinary until a
+   pointer sweeps it and cuts a hole in that sheet. Masking the cover
+   rather than the image keeps a single bitmap on the page and lets the
+   beam edge stay soft. */
+@property --beam-r{syntax:'<length>';inherits:true;initial-value:0px}
+
+.hero-scene{
+  --beam-x:50%;--beam-y:50%;
+  --beam-r:0px;
+  --beam-open:clamp(230px,30vw,520px);
+  position:absolute;inset:0;z-index:0;
+  pointer-events:none; /* the CTAs sit above this and must stay clickable */
+  transition:--beam-r var(--dur-3) var(--ease-out);
+}
+.hero-scene.is-lit{--beam-r:var(--beam-open)}
+.hero-scene-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.hero-scene-cover,.hero-scene-glow{position:absolute;inset:0}
+
+/* Opaque in the page colour: the photograph is invisible until the hole
+   opens over it.
+
+   The stops ease rather than run straight from clear to solid. Two stops
+   give a linear ramp, and a linear ramp against a flat colour reads as a
+   distinct ring at the point it starts — the edge you can see rather than a
+   torch falling off. These approximate a smoothstep instead. */
+.hero-scene-cover{
+  --beam-falloff:transparent 0%,transparent 30%,rgba(0,0,0,.06) 44%,rgba(0,0,0,.22) 56%,
+    rgba(0,0,0,.46) 68%,rgba(0,0,0,.70) 78%,rgba(0,0,0,.88) 88%,rgba(0,0,0,.97) 95%,#000 100%;
+  background:var(--bg);
+  -webkit-mask-image:radial-gradient(circle var(--beam-r) at var(--beam-x) var(--beam-y),var(--beam-falloff));
+  mask-image:radial-gradient(circle var(--beam-r) at var(--beam-x) var(--beam-y),var(--beam-falloff));
+}
+/* A little warmth inside the beam so it reads as a torch, not a cut-out.
+   It has to die out well inside the cover's own falloff, or its outer edge
+   lands on a different circle and draws a second ring. */
+.hero-scene-glow{
+  background:radial-gradient(circle var(--beam-r) at var(--beam-x) var(--beam-y),
+    rgba(255,238,206,.10) 0%,rgba(255,238,206,.05) 30%,rgba(255,238,206,.01) 48%,transparent 60%);
+}
+
+/* Rings sit above the cover so the sweep stays visible; the shell above
+   both, so copy and buttons are never dimmed or blocked. */
+.hero-scene{z-index:0}
+.hero > .ft-shell{z-index:2}
+
+/* No hover, no torch. Leave the hero exactly as it reads today rather than
+   half-revealing a photograph a touch user cannot control. */
+@media(hover:none),(pointer:coarse){
+  .hero-scene{display:none}
+}
+/* The beam follows the pointer directly, which is fine, but it should not
+   also animate open. */
+@media(prefers-reduced-motion:reduce){
+  .hero-scene{transition:none}
+}
+
+/* The teardown block.
+
+   Clip and copy share one grid cell so they stack: the picture turns behind,
+   one caption at a time holds the foot of the screen. Both are pinned and
+   neither adds flow height, so the run of scroll has to be stated. Without
+   the min-height the block would be one screen tall and the clip would jump
+   from first frame to last.
+
+   The clip sits inside this track rather than beside it, which is what keeps
+   it clear of the section header above. */
+.ft-teardown{
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:clamp(2rem,4vw,4rem);
+  margin-top:clamp(2.5rem,9vh,7rem);
+}
+.ft-teardown-copy{
+  display:grid;
+  grid-template-rows:auto auto;
+  gap:clamp(1.5rem,4vh,3rem);
+}
+.ft-teardown-copy > * {max-width:42ch}
+
+/* One caption at a time, arriving on the beat of the clip rather than at its
+   own place on the page. They share a cell so they occupy the same spot. */
+.ft-teardown-step{
+  grid-area:1 / 1;
+  opacity:0;
+  transform:translateY(22px) scale(.97);
+  transition:opacity var(--dur-3) var(--ease-out),transform var(--dur-4) var(--ease-out);
+  pointer-events:none;
+}
+.ft-teardown-step.is-on{opacity:1;transform:none;pointer-events:auto}
+.ft-teardown-cta{grid-area:2 / 1;align-self:start}
+
+@media(min-width:900px){
+  .ft-teardown{min-height:220svh;gap:0}
+  /* One pinned stage holds both, stacked in a column and centred as a group.
+     Positioning them separately meant the space between them was whatever was
+     left over after each had been placed against the screen, so it drifted
+     with the window height. Here it is simply the gap. */
+  .ft-teardown-stage{
+    position:sticky;top:0;
+    height:100svh;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    gap:clamp(1rem,3.5vh,2.75rem);
+  }
+  /* Sized by its own ratio and capped, so there is always room for the copy
+     underneath even on a short window. */
+  .ft-scrollvideo--fill{
+    position:static;
+    width:100%;height:auto;
+    aspect-ratio:854 / 480;
+    max-height:62svh;
+    flex:0 1 auto;
+  }
+  .ft-scrollvideo--fill .ft-scrollvideo-el{object-position:center}
+  .ft-teardown-copy{
+    position:static;height:auto;width:100%;
+    justify-items:center;
+    text-align:center;
+    padding:0;
+  }
+  .ft-teardown-copy > * {max-width:56ch;margin-inline:auto}
+  .ft-teardown-step h3{font-size:var(--t-h4);line-height:1.2;letter-spacing:-0.002em}
+  .ft-teardown-step p{font-size:var(--t-body-sm);line-height:1.55}
+}
+
+/* Below that the two stack in order, nothing is pinned, and every caption
+   simply reads. */
+@media(max-width:899px){
+  .ft-teardown-step{position:static;opacity:1;transform:none}
+  .ft-teardown-copy{grid-template-rows:none}
+  .ft-teardown-step,.ft-teardown-cta{grid-area:auto}
+}
+
+/* ---------------- Scroll-scrubbed video ----------------
+   Sits where the sticky product shot used to.
+
+   No poster. The only still to hand was the square product cutout, which
+   contains to a different size than the 854x480 footage, so it filled the
+   frame by height and then jumped the moment the first frame painted. The
+   frame simply stays empty for the moment before that. */
+.ft-teardown-section{position:relative;overflow:clip}
+.ft-teardown-section > .ft-shell{position:relative;z-index:1}
+
+/* contain, not cover: the teardown spreads sideways and cover would crop the
+   outer parts straight off. The clip's own ground is white like the section,
+   so the letterboxing it leaves is invisible. The frame is already the
+   footage's ratio, so there is nothing to letterbox in practice. */
+.ft-scrollvideo-el{
+  width:100%;height:100%;display:block;object-fit:contain;
+  background:transparent;
+}
+
+/* Arriving is the point, so keep the fade; drop the travel, which is the part
+   that triggers motion sensitivity. */
+@media(prefers-reduced-motion:reduce){
+  .ft-teardown-step{transform:none;transition:opacity 200ms ease}
+}
+
+/* Craft pledge: one measure for the whole block. The base rule caps every <p>
+   at the reading measure, which left the paragraphs far narrower than the
+   headline above them; here they wrap to the same width. */
+.ft-pledge{max-width:min(100%,1100px)}
+.ft-pledge p{max-width:none}
+/* The last line is the point of the whole block. One step up the scale and a
+   heading weight so it lands, instead of trailing off as more body copy. */
+.ft-pledge-close{font-size:var(--t-h4);font-weight:600;line-height:1.35;letter-spacing:-0.002em;margin-top:2.25rem}
+
+/* The hero clips the rings dead flat at its foot, and the raised section that
+   follows drew a rule right on that cut, so the two read as one hard line.
+   The rule goes, and the rings dissolve into the section edge instead.
+
+   The fade sits above the rings but below the shell, so the camera cutout
+   stays crisp while the sweep behind it falls away. */
+.hero + .ft-section--raised{border-top:0}
+/* The camera dissolves into the foot of the hero rather than ending on a
+   line, so the section below needs a deeper head than the standard rhythm:
+   at the usual 7vw its eyebrow still reads as part of the hero. */
+.hero + .ft-section{padding-top:clamp(8rem,13vw,15rem)}
+.hero::after{
+  content:'';
+  position:absolute;left:0;right:0;bottom:0;
+  /* Tall enough to cover the foot padding as well, so the rings that run on
+     below the camera are covered rather than clipped at full strength. */
+  height:calc(var(--hero-fade) + var(--hero-pad-bottom));
+  /* The opaque stop is a length, not a percentage: white lands exactly
+     --hero-fade down from the top of this box, which is the foot of the
+     camera. The camera therefore dissolves over the same distance however
+     deep the padding below it gets — with a percentage the dissolve would
+     stretch and thin out every time the foot grew. */
+  background:linear-gradient(to bottom,rgba(var(--hero-ground),0) 0,rgba(var(--hero-ground),1) var(--hero-fade));
+  pointer-events:none;
+  z-index:1;
+}
+
+/* ---------------- Product catalogue cards ---------------- */
+/* Three fixed columns rather than an auto-fill track. The catalogue is a
+   browsing surface, not a bento: at auto-fill the column count changed with
+   the viewport, so the same 18 SKUs formed a different shape on every
+   monitor and the eye had to re-learn the grid. Three holds the card wide
+   enough for the spec row to stay on two lines at most. */
+.ft-prod-grid{grid-template-columns:repeat(3,1fr);gap:var(--sp-6)}
+@media(max-width:980px){.ft-prod-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){.ft-prod-grid{grid-template-columns:1fr}}
+
+/* The card carries no border. On --bg (paper-96) a white panel already
+   separates itself, and 18 outlined boxes in a grid read as a table. The
+   image sits inset on the same white rather than bleeding to the card edge
+   under a divider rule: a product cutout needs air around it, and the rule
+   was doing the work the whitespace does better. */
+.ft-prod-card{
+  background:var(--bg-card);border-radius:var(--r-xl);border:0;
+  padding:var(--sp-4);display:flex;flex-direction:column;
+  transition:transform var(--dur-2) var(--ease-out),box-shadow var(--dur-2) var(--ease-out);
+}
+.ft-prod-card:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(14,16,18,.07)}
+.ft-prod-media .ft-media{border:0;border-radius:var(--r-md)}
+/* Render, then copy, then specs. min-height on the description holds three
+   lines so the spec rows start at the same y across a row even though the
+   sentences differ in length; the foot is pushed down by auto margin so the
+   buttons still line up when one description runs to four. */
+.ft-prod-head{padding:var(--sp-4) var(--sp-3) 0;display:flex;flex-direction:column;gap:var(--sp-2)}
+.ft-prod-foot{padding:var(--sp-4) var(--sp-3) var(--sp-2);margin-top:auto;display:flex;flex-direction:column}
+/* Red and sentence case. The tracked grey caps read as a section label, and
+   this is the product's category — the one place on the card where the
+   accent earns its keep. */
+.ft-prod-kind{margin:0;color:var(--ft-red-brand);font:500 var(--t-body-sm) var(--font-ui);letter-spacing:0;text-transform:none}
+.ft-prod-name{margin:0;font-weight:600;line-height:1.15;letter-spacing:-0.004em}
+.ft-prod-desc{margin:0;color:var(--fg-secondary);font-size:var(--t-body-sm);line-height:1.6;min-height:calc(3 * 1.6em)}
+
+/* Specs as icon + label, not as pills. Eight bordered chips per card was the
+   loudest thing in the grid and pushed the cards to wildly unequal heights;
+   an icon carries the same category signal at a fraction of the weight. */
+/* Two columns rather than a wrapping row. Wrapped, the specs broke at
+   whatever width the text happened to run out at, so no two cards in a row
+   agreed on where the second line started; on a fixed pair they read down as
+   well as across. The render above already separates them, so the rule that
+   used to sit on top comes off. */
+.ft-spec-row{
+  list-style:none;margin:0;padding:0;
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:var(--sp-2) var(--sp-3);
+}
+.ft-spec{display:flex;align-items:center;gap:6px;min-width:0;color:var(--fg-secondary);font:500 var(--t-body-sm) var(--font-ui);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ft-spec svg{flex:0 0 auto;display:block;color:var(--fg-tertiary)}
+.ft-prod-cta{margin-top:var(--sp-6);width:100%}
+@media(prefers-reduced-motion:reduce){
+  .ft-prod-card,.ft-prod-card:hover{transition:none;transform:none}
+}
+
+/* ---------------- Product detail page (PDP) ---------------- */
+/* A jump bar rather than a table of contents: the page is long and the two
+   things a specifier actually wants — the numbers and the datasheet — are at
+   the bottom of it. Sticky under the nav so it survives the scroll. */
+.ft-pdp-nav{
+  position:sticky;top:0;z-index:5;
+  display:flex;gap:var(--sp-6);flex-wrap:wrap;
+  padding:var(--sp-3) 0;margin-top:var(--sp-8);
+  background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:saturate(180%) blur(12px);
+  border-bottom:1px solid var(--border);
+}
+.ft-pdp-nav a{color:var(--fg-secondary);text-decoration:none;font:500 var(--t-body-sm) var(--font-ui)}
+.ft-pdp-nav a:hover{color:var(--fg)}
+
+/* Six one-line claims, each with the spec that backs it. Two columns so the
+   set reads as a block to scan rather than a list to work through. */
+.ft-hl{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--sp-4) var(--sp-8)}
+@media(max-width:720px){.ft-hl{grid-template-columns:1fr}}
+.ft-hl li{display:flex;gap:var(--sp-3);align-items:flex-start;color:var(--fg-secondary);line-height:1.6}
+.ft-hl svg{flex:0 0 auto;margin-top:.25em;color:var(--ft-red-brand)}
+
+/* The three numbers a lens is judged on, set large enough to be read across
+   the room and captioned so they are not just decoration. */
+.ft-figs{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-6);margin-top:var(--sp-8)}
+@media(max-width:620px){.ft-figs{grid-template-columns:1fr;gap:var(--sp-4)}}
+.ft-fig strong{display:block;font-family:var(--font-display);font-size:var(--t-h3);font-weight:600;line-height:1.05;letter-spacing:-0.01em}
+.ft-fig span{display:block;margin-top:.4rem;color:var(--fg-tertiary);font-size:var(--t-body-sm);line-height:1.5}
+
+/* Two modes side by side. The camera does one job two ways after dark, and
+   the pair says that faster than a paragraph about switching thresholds. */
+.ft-modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--sp-6);margin-top:var(--sp-8)}
+@media(max-width:720px){.ft-modes{grid-template-columns:1fr}}
+.ft-mode{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--sp-6);display:flex;flex-direction:column;gap:var(--sp-2)}
+.ft-mode h3{margin:0;font-size:var(--t-h4);font-weight:600;line-height:1.2}
+.ft-mode p{margin:0;color:var(--fg-secondary);font-size:var(--t-body-sm);line-height:1.6}
+
+/* The qualifications, kept on the page instead of in a brochure nobody
+   reads. Small, but present: every figure above has conditions attached. */
+.ft-notes{list-style:none;margin:var(--sp-8) 0 0;padding:var(--sp-6) 0 0;border-top:1px solid var(--border)}
+.ft-notes li{color:var(--fg-tertiary);font-size:13px;line-height:1.7;margin-bottom:.5rem;padding-left:1rem;text-indent:-1rem}
+
+/* ---------------- Product hero band ---------------- */
+/* The product photographed where it ends up, at the size it deserves, with
+   the copy set into the empty half of the picture rather than beside it in a
+   column. The cutout-on-white treatment says "catalogue"; this says "this is
+   what it looks like on your building". */
+.ft-phero{
+  position:relative;isolation:isolate;overflow:hidden;
+  display:flex;align-items:center;
+  /* One screen, less the sticky bar above it — .ft-nav is 72px, and --nav-h is
+     scoped to the home page hero so it cannot be borrowed here. svh rather
+     than vh so a mobile browser's collapsing URL bar does not make the band
+     taller than the screen it is supposed to match. */
+  min-height:calc(100svh - 72px);
+}
+.ft-phero-img{
+  position:absolute;inset:0;z-index:-2;
+  width:100%;height:100%;object-fit:cover;
+  /* Held right so the camera keeps its place as the band narrows — the empty
+     half of the photograph is the part that may be cropped away. */
+  object-position:76% center;
+}
+/* A scrim, not a panel: the picture's own left is already near-white, so this
+   only has to carry the last of it to the page's ground and hold the type. */
+.ft-phero::before{
+  content:'';position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(to right,
+    var(--bg) 0%, var(--bg) 20%,
+    color-mix(in srgb,var(--bg) 78%,transparent) 40%,
+    color-mix(in srgb,var(--bg) 20%,transparent) 56%,
+    transparent 68%);
+}
+.ft-phero-inner{width:100%}
+.ft-phero-copy{max-width:min(46ch,52%)}
+.ft-phero-copy h1{margin:0}
+
+/* Below the fold of a phone the overlay stops working: the copy would sit on
+   the camera. Stack instead — picture, then words. */
+@media(max-width:860px){
+  .ft-phero{display:block;min-height:0}
+  .ft-phero-img{position:static;height:auto;aspect-ratio:16 / 9;object-position:72% center}
+  .ft-phero::before{display:none}
+  .ft-phero-copy{max-width:none}
+  .ft-phero-inner{padding-top:var(--sp-8)}
+}
+
+/* ---------------- Feature bento ---------------- */
+/* Four claims, sized by how much they have to show rather than dealt out in
+   equal columns: the night shot needs height to read, the compliance line
+   needs none at all. The words are real text over the picture, not baked into
+   it — they stay selectable, translatable and sharp on any display. */
+.ft-bento{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--sp-4)}
+.ft-bento-tile{
+  position:relative;isolation:isolate;overflow:hidden;
+  border-radius:var(--r-xl);
+  display:flex;flex-direction:column;justify-content:flex-start;
+  padding:clamp(1.5rem,2.4vw,2.25rem);
+  min-height:230px;
+}
+/* The tall one carries the night shot down the left of the block. Its words
+   sit at the foot rather than the head: the camera and the lit IR ring are in
+   the upper half of that photograph, and copy laid over the top was covering
+   the one thing the tile exists to show. */
+.ft-bento-tile--tall{grid-row:span 2;min-height:clamp(420px,46vw,560px);justify-content:flex-end}
+/* The last one runs the full width. Held to the right so the connector stays
+   in frame as the band is cropped to a letterbox. */
+.ft-bento-tile--wide{grid-column:1 / -1;min-height:clamp(220px,22vw,300px)}
+.ft-bento-tile--wide .ft-bento-img{object-position:right center}
+.ft-bento-img{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover}
+.ft-bento-tile--dark{background:var(--ft-ink-900);color:#fff}
+.ft-bento-tile--light{background:var(--ft-paper-96)}
+/* A scrim only where words sit, so the picture keeps its contrast elsewhere. */
+.ft-bento-tile--dark::before,
+.ft-bento-tile--photo::before{
+  content:'';position:absolute;inset:0;z-index:-1;
+}
+.ft-bento-tile--dark::before{background:linear-gradient(180deg,rgba(8,9,10,.72) 0%,rgba(8,9,10,.30) 46%,rgba(8,9,10,0) 78%)}
+/* Copy at the foot means the scrim runs the other way. */
+.ft-bento-tile--tall.ft-bento-tile--dark::before{background:linear-gradient(0deg,rgba(8,9,10,.82) 0%,rgba(8,9,10,.38) 44%,rgba(8,9,10,0) 76%)}
+.ft-bento-tile--photo::before{background:linear-gradient(180deg,rgba(255,255,255,.94) 0%,rgba(255,255,255,.90) 34%,rgba(255,255,255,.68) 56%,rgba(255,255,255,0) 84%)}
+.ft-bento-tile h3{margin:0;font-size:var(--t-h4);font-weight:600;line-height:1.2;max-width:20ch}
+.ft-bento-tile p{margin:.5rem 0 0;font-size:var(--t-body-sm);line-height:1.6;max-width:34ch;color:var(--fg-secondary)}
+/* Headings are painted site-wide with an INK gradient clipped to the glyphs,
+   so `color:#fff` alone does nothing here — text-fill-color is transparent and
+   the paint underneath is near-black, which on a night photograph is very
+   nearly invisible. Re-declare it in white, exactly the treatment
+   .ft-cta-dark h2 and .pin-panel-copy h3 need for the same reason. */
+.ft-bento-tile--dark h3{
+  color:#fff;
+  background:linear-gradient(180deg,#fff 0%,#fff 42%,rgba(255,255,255,.70) 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  padding-bottom:.06em;
+}
+/* No clip support: solid white rather than a transparent hole. */
+@supports not ((background-clip:text) or (-webkit-background-clip:text)){
+  .ft-bento-tile--dark h3{background:none;-webkit-text-fill-color:#fff}
+}
+/* Forced colours replace the background but not text-fill-color, which would
+   leave the heading invisible; hand it back to the system pair. */
+@media(forced-colors:active){
+  .ft-bento-tile--dark h3{background:none;-webkit-text-fill-color:currentColor;color:CanvasText}
+}
+/* The global rule answers prefers-contrast by resetting headings to --fg, and
+   --fg is paper ink — on this ground that is the invisible case again. */
+@media(prefers-contrast:more){
+  .ft-bento-tile--dark h3{background:none;-webkit-text-fill-color:#fff;color:#fff}
+}
+.ft-bento-tile--dark p{color:rgba(255,255,255,.82)}
+@media(max-width:760px){
+  .ft-bento{grid-template-columns:1fr}
+  .ft-bento-tile--tall{grid-row:auto;min-height:340px}
+  .ft-bento-tile--wide{grid-column:auto}
+}
