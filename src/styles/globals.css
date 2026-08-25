@@ -2259,20 +2259,32 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
    screen's height and nothing else. */
 @media(max-width:600px){
   .hero{--hero-pad-top:clamp(1.75rem,4.5vh,3rem)}
+  /* One screen, with the copy taking what it needs and the camera taking the
+     rest. A fixed height could only ever be right on the phone it was measured
+     on: capped in pixels it stops growing on a tall screen and leaves dead
+     space under the camera, and sized in svh alone it ignores how many lines
+     the headline actually wrapped to. Letting the leftover size it is the same
+     arrangement the desktop hero uses, and it needs no numbers. */
+  .hero{min-height:100svh;display:flex}
+  .hero > .ft-shell{display:flex;flex-direction:column;flex:1;min-height:0}
+  .hero .ft-center{flex:0 0 auto}
   .hero-media-wrap{
-    /* Sits lower than the copy needs it to, so the camera reads as its own
-       thing rather than as the foot of the button row. */
-    margin-top:clamp(1.75rem,5.5vh,3rem);
+    /* Takes the leftover. min-height keeps it from vanishing where the copy
+       alone is taller than the screen — a short phone shows what it can and
+       the rest is a scroll away, which is better than a sliver. */
+    flex:1 1 auto;
+    min-height:150px;
+    height:auto;
+    margin-top:clamp(1rem,3.5vh,2.25rem);
     width:min(100%,460px);
-    height:min(27svh,230px);
     aspect-ratio:auto;
     /* How much further down the camera goes, and how much larger, past what
        this box measures. Kept on the wrapper as two dials rather than folded
        into the box itself: the box is what the torch handle is centred on, so
        growing it would carry the handle along, and the handle is meant to
        stay where the thumb last found it. */
-    --cam-drop:46px;
-    --cam-scale:1.16;
+    --cam-drop:clamp(1rem,4vh,3rem);
+    --cam-scale:1.14;
   }
   /* Fills the box the wrapper measured, then leaves it — the transform is
      painted, so the camera can grow and drop without moving the handle, the
