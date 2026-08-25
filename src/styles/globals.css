@@ -1932,27 +1932,42 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
   .ft-phero--short{display:block;min-height:0}
   /* The plate is 2400x1018 and its left half is blown-out morning light; the
      camera it is here to show sits right. ~72vw keeps that crop on any phone. */
-  .ft-phero{--phero-img-h:min(72vw,360px)}
+  .ft-phero{--phero-img-h:min(104vw,470px)}
   .ft-phero-img{
     position:absolute;inset:0 0 auto;z-index:-2;
     width:100%;height:var(--phero-img-h);
     aspect-ratio:auto;
     object-fit:cover;object-position:72% center;
   }
+  /* The words sit on the picture, not under it, so the scrim has to be a
+     working ground and not just a soft landing: it is clear over the top half,
+     where there is nothing but photograph, and near-solid by the line the
+     eyebrow starts on. What is left of the picture behind the type is texture
+     rather than image, which is the point — the section reads as one thing. */
   .ft-phero::before{
     display:block;
     inset:0 0 auto;height:var(--phero-img-h);z-index:-1;
     background:linear-gradient(to bottom,
-      rgba(244,246,247,0) 42%,
-      rgba(244,246,247,.34) 66%,
-      rgba(244,246,247,.80) 86%,
-      var(--bg) 100%);
+      rgba(244,246,247,0) 24%,
+      rgba(244,246,247,.24) 42%,
+      rgba(244,246,247,.80) 55%,
+      rgba(244,246,247,.96) 66%,
+      var(--bg) 78%);
   }
+  /* The badge carries its own ground here. It is the one piece of copy that
+     sits high enough to still have picture under it, and measured against the
+     darker part of that picture its ink came out at 3.88:1 — under the line.
+     A chip is a chip: it can be opaque without pretending to be anything else,
+     and then the ink is on the page colour wherever it lands. */
+  .ft-phero-copy .ft-eyebrow{background:var(--bg)}
   /* Two classes, to out-rank the --short rule rather than hope for it. */
   .ft-phero .ft-phero-copy,
   .ft-phero--short .ft-phero-copy{max-width:none}
   .ft-phero-copy h1{max-width:none}
-  .ft-phero-inner{padding-top:calc(var(--phero-img-h) - .5rem)}
+  /* Starts inside the picture, at the point the scrim has already closed over
+     it. Below the picture the section carries on in the page's own ground, so
+     there is no seam to place the copy against. */
+  .ft-phero-inner{padding-top:calc(var(--phero-img-h) * .52)}
 }
 
 /* ---------------- Feature bento ---------------- */
