@@ -213,7 +213,10 @@ export function ScrollGallery({ itemWidth = 420, label = 'Galerie', paddles = tr
   const by = (d) => ref.current?.scrollBy({ left: d * (itemWidth + 24), behavior: 'smooth' })
 
   return (
-    <div>
+    /* Named so the paddles can be ordered against the rail without touching
+       this markup. Inside .ft-splitrail it stays display:contents, so its two
+       children go on being placed by that grid directly. */
+    <div className="ft-rail">
       {paddles && (
         <div className="ft-paddle-row">
           <button className="ft-paddle" aria-label="Zurück" onClick={() => by(-1)} type="button">

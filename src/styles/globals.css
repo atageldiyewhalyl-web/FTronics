@@ -437,9 +437,13 @@ html{font-optical-sizing:auto}
    never clipped — it just sits wherever the rail happens to have scrolled it,
    and stretches the document to reach. That is a horizontal scrollbar on the
    whole page, produced by a 1px visually-hidden span in the third card. */
-.ft-gallery{position:relative;display:flex;gap:var(--sp-6);overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:var(--sp-2) 0 var(--sp-4)}
+.ft-gallery{position:relative;display:flex;gap:var(--sp-6);overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;padding:var(--sp-2) 0 var(--sp-4)}
 .ft-gallery::-webkit-scrollbar{display:none}
 .ft-gallery>*{flex:0 0 min(78vw,var(--ft-item-w,420px));scroll-snap-align:center}
+/* The rail clips vertically now, so a card cannot arrive by sliding up through
+   that edge — the reveal's 22px offset was scrollable overflow inside the rail,
+   which is the stray vertical drag. Inside a rail the cards fade in place. */
+.ft-gallery [data-rev]{transform:none}
 .ft-paddle-row{display:flex;gap:var(--sp-2);justify-content:flex-end;margin-bottom:var(--sp-3)}
 .ft-paddle{width:40px;height:40px;border-radius:50%;background:var(--bg-card);border:1px solid var(--border);color:var(--fg);cursor:pointer;display:grid;place-items:center;font-size:15px;transition:background var(--dur-2) var(--ease-out),border-color var(--dur-2) var(--ease-out)}
 .ft-paddle:hover{background:var(--bg-card-hover);border-color:var(--border-strong)}
@@ -836,8 +840,20 @@ html{font-optical-sizing:auto}
 @media(max-width:880px){
   .ft-splitrail{grid-template-columns:minmax(0,1fr);padding-left:var(--gutter)}
   .ft-splitrail > header h2{max-width:none}
-  .ft-splitrail .ft-paddle-row{grid-column:1;grid-row:2;margin-top:2rem}
-  .ft-splitrail .ft-gallery{grid-column:1;grid-row:3;margin-top:1.5rem}
+  /* Rail first, then its controls. Above the cards the arrows read as part of
+     the heading; under them, centred, they read as belonging to the thing they
+     move — and the thumb is already down there. */
+  .ft-splitrail .ft-gallery{grid-column:1;grid-row:2;margin-top:1.75rem}
+  /* One review at a time, whole. The sliver of the next card was the only
+     thing saying the rail continued; the arrows underneath say it now, and
+     say it better, so the width goes to the words instead. Scoped to this
+     rail — the product galleries are pictures, where a peek is an invitation
+     rather than a truncated paragraph. */
+  .ft-splitrail .ft-gallery>*{flex-basis:100%}
+  /* The track carries the gutter on its left only, because the rail bleeds
+     off the right edge. Give the row that gutter back on its right so its
+     centre is the screen's centre and not the track's. */
+  .ft-splitrail .ft-paddle-row{grid-column:1;grid-row:3;justify-content:center}
   .ft-splitrail-foot{grid-row:4}
 }
 
@@ -2315,4 +2331,42 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
   .hero-cta{margin-bottom:.5rem}
   /* No room to spend down here: the camera stays where the box puts it. */
   .hero-media-wrap{margin-top:clamp(.75rem,2.5vh,1.25rem);height:min(22svh,180px);--cam-drop:0px;--cam-scale:1}
+}
+
+/* ---------------- Craft pledge picture ----------------
+   The plate is 2200x943 and its right half is blank rendered wall, so at
+   21/9 the work sat small in the middle of a lot of nothing. Cropping in
+   costs no pixels — the frame is only ever painted through object-fit:cover
+   — and the height that was going into the wall goes to the technician and
+   the camera he is setting instead.
+
+   object-position is derived, not guessed. Cover scales this plate by height
+   at any ratio narrower than 2.33, so the visible slice is 943 x (the box's
+   aspect) native pixels wide; the percentage is where that slice has to start
+   for the subject, which spans roughly x340 to x1330, to sit centred in it. */
+.pledge-media{aspect-ratio:16 / 9}
+.pledge-media .ft-media-img{object-position:0% center}
+@media(max-width:900px){
+  /* Tight on the pair. 5/4 shows 1179 native px, and 24% puts them in
+     the middle of it with the hedge and the far wall left outside. */
+  .pledge-media{aspect-ratio:5 / 4}
+  .pledge-media .ft-media-img{object-position:24% center}
+}
+
+/* ---------------- Rail controls on a phone ----------------
+   Above the cards and hard against the right edge, the paddles read as part
+   of whatever heading precedes them. Underneath and centred they read as
+   belonging to the rail they move, and they sit where the thumb already is.
+   The markup puts them first, so the order is done here rather than by
+   rearranging a component that is right for a wide screen. */
+@media(max-width:880px){
+  .ft-rail{display:flex;flex-direction:column}
+  .ft-rail > .ft-gallery{order:1}
+  .ft-rail > .ft-paddle-row{order:2;justify-content:center;margin:1.25rem 0 0}
+  /* The split rail places these two itself, on its own grid. Its track carries
+     the gutter on the left only — the cards bleed off the right edge — so the
+     row needs that gutter back on its right to sit on the screen's centre
+     rather than the track's. */
+  .ft-splitrail .ft-rail{display:contents}
+  .ft-splitrail .ft-paddle-row{margin-right:var(--gutter)}
 }

@@ -310,8 +310,9 @@ export default function Startseite() {
 
           <div data-rev style={{ margin: '3rem 0' }}>
             <Media
-              ratio="21 / 9"
+              ratio={null}
               fit="cover"
+              className="pledge-media"
               src="/pledge-installation.webp"
               alt="Techniker der FT Sicherheitstechnik setzt eine Dome-Kamera in die Holzverkleidung des Dachüberstands ein, die Zuleitung liegt unsichtbar dahinter"
             />
