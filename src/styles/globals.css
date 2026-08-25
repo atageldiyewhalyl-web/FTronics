@@ -575,9 +575,19 @@ html{font-optical-sizing:auto}
   color:#fff;
 }
 .ft-band--light{
-  background:var(--ft-paper);
-  --bg:var(--ft-paper);
+  /* Sampled off the wall in this band's own photograph, which is what makes
+     the picture surface out of the section instead of sitting on it. Kept as
+     a hex and as its channels, because the scrims below have to fade to this
+     exact colour and rgba() cannot take a hex through a custom property. */
+  --band-paper:#e3ded9;
+  --band-paper-rgb:227,222,217;
+  background:var(--band-paper);
+  --bg:var(--band-paper);
   color:var(--fg);
+  /* The ground is 0.74 luminance rather than 1, which costs the secondary ink
+     the AA margin it had on white: #5c656c measures 4.45:1 here, just under.
+     Two steps darker restores it to 4.86 without reading as a different grey. */
+  --fg-secondary:#575f66;
 }
 .ft-band-img{
   position:absolute;inset:0;z-index:0;
@@ -615,10 +625,10 @@ html{font-optical-sizing:auto}
      colour puts the copy on plain white and the whole block back to its designed
      contrast. Nothing is lost: the half being covered is a blank wall. */
   background:linear-gradient(to left,
-    rgba(255,255,255,0) 26%,
-    rgba(255,255,255,.55) 44%,
-    rgba(255,255,255,.92) 56%,
-    rgba(255,255,255,1) 66%);
+    rgba(var(--band-paper-rgb),0) 26%,
+    rgba(var(--band-paper-rgb),.55) 44%,
+    rgba(var(--band-paper-rgb),.92) 56%,
+    rgba(var(--band-paper-rgb),1) 66%);
 }
 .ft-band-inner{
   position:relative;z-index:2;
@@ -2415,4 +2425,44 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
   }
   /* The copy starts just inside the solid end of that fade. */
   .ft-band--dark .ft-band-inner{padding-top:calc(var(--band-photo-h) - 1.5rem)}
+}
+
+/* ---------------- Leistungen band, phone ----------------
+   The same idea as the dark band, upside down. Here the words come first —
+   the section is a heading and a list of services, and putting a picture
+   above them would make the reader scroll past a photograph to find out what
+   the section is. So the copy sits at the top on plain paper and the
+   photograph arrives underneath it, fading up out of the ground rather than
+   starting at an edge.
+
+   Same crop maths, mirrored: ~104vw shows about 1400 of this plate's 2200
+   pixels, and the subject is on its right — so the window is pinned to that
+   edge and the blank half of wall he is standing beside, which is the side
+   that was showing, falls outside it entirely. */
+@media(max-width:900px){
+  .ft-band--light.ft-band--flip{--band-photo-h:min(104vw,620px)}
+  .ft-band--light.ft-band--flip .ft-band-img{
+    position:absolute;inset:auto 0 0;
+    width:100%;height:var(--band-photo-h);
+    aspect-ratio:auto;
+    object-fit:cover;
+    object-position:right center;
+  }
+  /* Paper at the top of the picture easing to nothing partway down, so the
+     photograph surfaces out of the section instead of being pasted onto it. */
+  .ft-band--light.ft-band--flip::after{
+    display:block;
+    inset:auto 0 0;
+    height:var(--band-photo-h);
+    background:linear-gradient(to bottom,
+      var(--band-paper) 0%,
+      rgba(var(--band-paper-rgb),.95) 7%,
+      rgba(var(--band-paper-rgb),.72) 18%,
+      rgba(var(--band-paper-rgb),.30) 38%,
+      rgba(var(--band-paper-rgb),0) 60%);
+  }
+  /* Reserves the picture's height beneath the copy. */
+  .ft-band--light.ft-band--flip .ft-band-inner{
+    padding-bottom:calc(var(--band-photo-h) - 1.5rem);
+  }
 }
