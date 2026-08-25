@@ -223,6 +223,7 @@ export default function Startseite() {
         {/* Hidden behind the page colour until a pointer sweeps the hero. */}
         <HeroScene
           src="/szene-morgen.jpg"
+          srcMobile="/szene-morgen-mobil.webp"
           alt="Wohnhaus am Morgen: eine Person mit Hund auf der Einfahrt, erfasst von der Überwachungskamera"
         />
         <div className="ft-shell">

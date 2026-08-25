@@ -2269,11 +2269,15 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
   .hero > .ft-shell{display:flex;flex-direction:column;flex:1;min-height:0}
   .hero .ft-center{flex:0 0 auto}
   .hero-media-wrap{
-    /* Takes the leftover. min-height keeps it from vanishing where the copy
-       alone is taller than the screen — a short phone shows what it can and
-       the rest is a scroll away, which is better than a sliver. */
+    /* Takes the leftover — but never less than a real share of the screen.
+       On an actual phone the browser chrome eats ~230px, so 100svh is far
+       shorter than the panel: the copy leaves almost nothing over, and a
+       fixed floor read as a sliver with dead space under it. A floor in svh
+       keeps the camera large on every device; where it exceeds the leftover
+       the hero simply grows past one screen and the fold crops the base of
+       the housing, which is the composition the desktop hero has always had. */
     flex:1 1 auto;
-    min-height:150px;
+    min-height:max(160px,38svh);
     height:auto;
     margin-top:clamp(1rem,3.5vh,2.25rem);
     width:min(100%,460px);

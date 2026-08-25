@@ -22,7 +22,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-export function HeroScene({ src, alt }) {
+export function HeroScene({ src, srcMobile, alt }) {
   const ref = useRef(null)
   const [lit, setLit] = useState(false)
   /* Which driver the beam gets, decided after mount so the server and client
@@ -172,7 +172,17 @@ export function HeroScene({ src, alt }) {
 
   return (
     <div ref={ref} className={`hero-scene${lit ? ' is-lit' : ''}`}>
-      <img className="hero-scene-img" src={src} alt={alt} width="2048" height="1152" />
+      {/* A phone shows a narrow upright slice of this frame — object-fit:cover
+          crops a 16:9 photograph hard against a portrait box, and everything
+          either side of that slice is decoded and thrown away. The mobile
+          source is that slice and nothing else, so it costs a fifth as much
+          while painting the same pixels at the same scale. No width/height on
+          the <img> here: the two sources have different intrinsic sizes, and a
+          fixed pair would give the wrong aspect to whichever one lost. */}
+      <picture>
+        {srcMobile && <source media="(max-width:600px)" srcSet={srcMobile} type="image/webp" />}
+        <img className="hero-scene-img" src={src} alt={alt} />
+      </picture>
       <span className="hero-scene-cover" />
       <span className="hero-scene-glow" />
     </div>
