@@ -1157,26 +1157,69 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
   .ft-cta-dark h2{background:none;-webkit-text-fill-color:#fff;color:#fff}
 }
 
-@media(max-width:760px),(prefers-reduced-motion:reduce){
-  .pin-stack{height:auto!important}
-  .pin-stage{position:static!important;height:auto!important;overflow:visible!important}
-  /* Relative, not static: the render is absolutely positioned inside the
-     panel, so the panel has to stay a containing block and carry a height
-     of its own once the stage stops being a sticky viewport. */
-  .pin-panel{position:relative!important;min-height:78vh;opacity:1!important;transform:none!important;pointer-events:auto!important;margin-bottom:48px}
-  /* The scroll driver bails out here, so the inline opacities it would have
-     set never arrive: show every frame and every block of copy. */
-  .pin-panel-img{opacity:1!important}
-  .pin-panel-copy{opacity:1!important;transform:none!important}
-  /* One gradient per stage no longer works once the panels stack vertically;
-     each panel carries its own again. */
-  .pin-stage::after{display:none}
-  .pin-panel::after{
-    content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
-    background:radial-gradient(115% 85% at 0% 100%,
-      rgba(10,12,14,.96) 0%,rgba(10,12,14,.92) 26%,rgba(10,12,14,.74) 46%,
-      rgba(10,12,14,.36) 66%,rgba(10,12,14,0) 88%);
+/* The sequence on a phone. It used to collapse to five stacked panels here,
+   because a full-bleed render with the words laid over its foot needs a frame
+   wider than it is tall to leave them anywhere to sit. So the frame stops
+   being full-bleed: the plate is 1800x1344, and at its own 4:3 across the
+   width of the screen it takes the top third and leaves the rest for the
+   words. The beat is the same one the wide layout has — the same crossfade,
+   driven by the same scroll. */
+@media(max-width:760px){
+  /* svh, not vh: the pinned stage has to be the height the browser actually
+     leaves, or the last panel is still arriving as the stack lets go. */
+  .pin-stage{
+    /* Pinned under the bar, not behind it. At top:0 the frame slid beneath the
+       chrome and the sequence began with its own top edge already hidden — so
+       it holds where it first comes to rest, which is where the reader last
+       saw it move. */
+    top:var(--ft-nav-h);
+    height:calc(100svh - var(--ft-nav-h));
+    /* The plate's own ratio, capped so a tablet-ish width does not hand the
+       picture the whole screen. Everything below is measured off it. */
+    --pin-img-h:min(75vw,400px);
+    background:#0a0c0e;
   }
+  .pin-panel{display:block}
+  .pin-panel-img{
+    position:absolute;inset:0 0 auto;
+    width:100%;height:var(--pin-img-h);
+  }
+  /* The picture dissolves into the ground at its own foot rather than ending
+     on a line, so the words below sit on the same dark the frame fades to. */
+  .pin-stage::after{
+    background:linear-gradient(to bottom,
+      rgba(10,12,14,0) 0,
+      rgba(10,12,14,0) calc(var(--pin-img-h) - 130px),
+      rgba(10,12,14,.70) calc(var(--pin-img-h) - 34px),
+      #0a0c0e var(--pin-img-h));
+  }
+  /* Centred in what the picture leaves rather than dropped to the foot of the
+     frame. At the foot it was right for a full-bleed render, where the words
+     sit on the picture; with the picture holding only the top third it left a
+     void between the two and the words read as belonging to whatever came
+     next. */
+  .pin-panel-copy{
+    position:absolute;inset:var(--pin-img-h) 0 0;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:clamp(1rem,3vh,1.75rem) var(--gutter);
+  }
+  /* Statement size was written for a frame with a full screen to itself. Under
+     a picture that has taken the top third it only has to out-rank the body,
+     so it comes down to where five bullets and a paragraph still fit. */
+  .pin-panel-copy h3{font-size:clamp(1.45rem,6.4vw,2rem);line-height:1.12;margin-bottom:.5em}
+  .pin-panel-copy p{font-size:var(--t-body-sm);line-height:1.5}
+  .pin-panel-copy .ft-list{font-size:var(--t-body-sm);line-height:1.45}
+  .pin-panel-copy .ft-num{font-size:12px}
+}
+/* A short phone has no room to give: at 320x568 the stage is 496 tall, and a
+   picture at 75vw leaves 256 for copy that wants 314. The picture gives some
+   back and the words come down a step, so the longest panel still lands
+   inside the frame instead of being clipped by it. */
+@media(max-width:760px) and (max-height:660px){
+  .pin-stage{--pin-img-h:min(58vw,240px)}
+  .pin-panel-copy h3{font-size:clamp(1.15rem,5.2vw,1.45rem)}
+  .pin-panel-copy p,.pin-panel-copy .ft-list{font-size:13px;line-height:1.42}
+  .pin-panel-copy p{margin-bottom:.7em}
 }
 /* Reduced motion is a gentler equivalent, not the absence of feedback:
    drop the translate (vestibular trigger), keep a short opacity cross-fade so

@@ -102,8 +102,19 @@ export function PinStack({ panels, children }) {
 
   useEffect(() => {
     const stack = stackRef.current
-    if (!stack || reduced()) return
-    if (window.matchMedia('(max-width: 760px)').matches) return
+    if (!stack) return
+
+    /* The sequence runs everywhere now. It used to bail on a narrow screen —
+       the panels were laid out on top of a full-bleed render there and the
+       words had nowhere to go — but the phone layout puts the picture at the
+       top and the words underneath it, so there is a frame to cross-fade and
+       a place for the copy to be.
+
+       Reduced motion keeps the sequence and loses the travel: the crossfade
+       is opacity, which is not what the preference is about, while the copy's
+       parallax lift is. Bailing out entirely used to leave five stacked
+       panels and no beat at all. */
+    const still = reduced()
 
     const els = [...stack.querySelectorAll('[data-panel]')]
     let raf = 0
@@ -124,20 +135,24 @@ export function PinStack({ panels, children }) {
       // those two frames solid and leaves every crossfade in between exactly
       // as it was. It also agrees with the opacity:1 the first panel is
       // server-rendered with, so the driver no longer dims it on first paint.
-      // The copy keeps the raw position: its words should still arrive and
-      // leave on schedule — only the pictures are held.
-      const imgPos = Math.min(n - 0.5, Math.max(0.5, pos))
+      // The words are held with them. Left on the raw position they faded up
+      // from nothing as the stack was still being approached — so the sequence
+      // opened on a picture with no caption and the reader had to scroll to
+      // find out it had one — and the last panel's words faded back out while
+      // its picture stayed, which read as the section emptying rather than
+      // ending. First and last are now solid at the ends; every crossfade
+      // between them is unchanged.
+      const holdPos = Math.min(n - 0.5, Math.max(0.5, pos))
 
       els.forEach((p, i) => {
-        const d = Math.abs(pos - (i + 0.5))
-        const imgD = Math.abs(imgPos - (i + 0.5))
+        const d = Math.abs(holdPos - (i + 0.5))
         // The picture fades, not the panel. Fading the panel would make each one
         // a stacking context, which traps its copy inside it — and the scrim has
         // to sit between the pictures and the words, on the stage, so that there
         // is exactly one of it. Two panels mid-crossfade used to carry a scrim
         // each, and the pair of them stacked and dimmed the whole frame.
         const img = p.querySelector('[data-panel-img]')
-        if (img) img.style.opacity = Math.min(1, Math.max(0, 1.6 - imgD * 1.6))
+        if (img) img.style.opacity = Math.min(1, Math.max(0, 1.6 - d * 1.6))
         p.style.pointerEvents = d < 0.5 ? 'auto' : 'none'
         // The lift goes on the copy, not on the panel. Panels cross-fade two at
         // a time, so translating the panel held the outgoing and incoming frames
@@ -148,7 +163,7 @@ export function PinStack({ panels, children }) {
         // that does not move.
         const copy = p.querySelector('[data-panel-copy]')
         if (copy) {
-          copy.style.transform = `translateY(${(pos - (i + 0.5)) * -40}px)`
+          copy.style.transform = still ? 'none' : `translateY(${(holdPos - (i + 0.5)) * -40}px)`
           // The words leave faster than the picture does. Two renders of the same
           // building can lie on top of each other and just look like equipment
           // fading in, but two different paragraphs cannot — overlapped they are
