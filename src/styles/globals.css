@@ -2371,3 +2371,48 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
   .ft-splitrail .ft-rail{display:contents}
   .ft-splitrail .ft-paddle-row{margin-right:var(--gutter)}
 }
+
+/* ---------------- Hand-made band, phone ----------------
+   The picture goes back to being the section's ground instead of a block with
+   an edge — but only across the top of it. The reason it was ever a block
+   still holds: set the words over the technician and the contrast falls to
+   2.2:1. Here they sit below the photograph on solid black, so the picture is
+   a ground without ever being a backdrop for type.
+
+   Height is tied to width, not chosen: cover scales this 2200x1476 plate by
+   whichever axis binds, so only a fixed relationship between the two keeps the
+   same crop on every phone. ~104vw shows about 1400 of the 2200 native pixels,
+   which is the technician and his cabinet and almost none of the empty half
+   he was lit against — the side that was showing. 18% slides that window off
+   the left edge so he sits inside it. */
+@media(max-width:900px){
+  /* Width only. The block layout above also answers (max-aspect-ratio:3/2),
+     which a 1280x900 desktop satisfies — and at that width there is no crop
+     left to make, the plate simply spans the screen. Wide-but-short displays
+     keep the layout they had. */
+  .ft-band--dark{--band-photo-h:min(104vw,620px)}
+  .ft-band--dark .ft-band-img{
+    position:absolute;inset:0 0 auto;
+    width:100%;height:var(--band-photo-h);
+    aspect-ratio:auto;
+    object-fit:cover;
+    object-position:18% center;
+  }
+  /* The transition, on the layer that already exists for it. Transparent over
+     the top half so the picture is untouched, then to the band's own black by
+     the foot — so there is no edge, only the point where you stop being able
+     to tell there was a photograph. */
+  .ft-band--dark::after{
+    display:block;
+    inset:0 0 auto;
+    height:var(--band-photo-h);
+    background:linear-gradient(to bottom,
+      rgba(10,12,14,0) 40%,
+      rgba(10,12,14,.30) 63%,
+      rgba(10,12,14,.72) 83%,
+      rgba(10,12,14,.95) 94%,
+      #0a0c0e 100%);
+  }
+  /* The copy starts just inside the solid end of that fade. */
+  .ft-band--dark .ft-band-inner{padding-top:calc(var(--band-photo-h) - 1.5rem)}
+}
