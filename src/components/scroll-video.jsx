@@ -25,7 +25,7 @@ import { useEffect, useRef, useState } from 'react'
 // The clip is 854x480. Boxing it at 4/5 the way the old product shot was
 // letterboxed it badly: `contain` shrank it to the box width and left deep
 // empty bands above and below. The frame matches the footage instead.
-export function ScrollVideo({ src, label, stickyTop = 96, ratio = '854 / 480', fill = false, onProgress }) {
+export function ScrollVideo({ src, label, stickyTop = 96, ratio = '854 / 480', fill = false, onProgress, reducedStops }) {
   const wrapRef = useRef(null)
   const videoRef = useRef(null)
   const [ready, setReady] = useState(false)
@@ -62,7 +62,20 @@ export function ScrollVideo({ src, label, stickyTop = 96, ratio = '854 / 480', f
     // The sticky column's parent is the run of scroll the clip maps onto.
     const track = wrap?.closest('[data-scrollvideo-track]') || wrap?.parentElement?.parentElement
     if (!wrap || !video || !track) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    /* Reduced motion must not switch the section off. Bailing out here used
+       to kill the progress callbacks along with the seeks, and the captions
+       ride on those callbacks — so a reader with the setting got the pinned
+       stage, a frozen first frame, and two screens of scroll during which
+       nothing happened at all. The preference asks for less motion, not less
+       content: the captions still arrive (their entry is already a plain fade
+       under the same media query), and the clip steps between still frames —
+       one per caption beat — instead of playing scrubbed motion. */
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    // 0 joins whatever beats are handed in: the caption stops begin a third
+    // of the way through the clip, and without it the section would open on
+    // a camera already coming apart rather than on the closed one.
+    const stops = reducedStops?.length ? [0, ...reducedStops] : [0, 0.25, 0.5, 0.75, 1]
 
     let frame = 0
     let want = 0
@@ -78,7 +91,12 @@ export function ScrollVideo({ src, label, stickyTop = 96, ratio = '854 / 480', f
       frame = 0
       const duration = video.duration
       if (!duration || Number.isNaN(duration)) return
-      const t = want * duration
+      // Under reduced motion the clip snaps to the nearest beat, so the reader
+      // sees a sequence of stills rather than footage running under the thumb.
+      const pos = still
+        ? stops.reduce((a, b) => (Math.abs(b - want) < Math.abs(a - want) ? b : a))
+        : want
+      const t = pos * duration
       if (Math.abs(video.currentTime - t) < 1 / 60) return
       if (video.seeking) {
         // Busy: come back next frame rather than dropping this position. The

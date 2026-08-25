@@ -65,6 +65,9 @@ export function Teardown({ captions, ctaHref, ctaLabel, head, src = '/camera-vid
             src={src}
             label={head.mediaLabel}
             onProgress={setProgress}
+            // Under reduced motion the clip steps between these rather than
+            // scrubbing — the same beats the captions arrive on.
+            reducedStops={marks}
           />
           <div className="ft-teardown-copy">
             {captions.map(([h, p, chips], i) => (
