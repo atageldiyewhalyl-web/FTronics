@@ -1911,20 +1911,48 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
 }
 .ft-phero-inner{width:100%}
 .ft-phero-copy{max-width:min(46ch,52%)}
-.ft-phero-copy h1{margin:0}
+.ft-phero-copy h1{margin:0;max-width:18ch}
 /* Header-sized rather than screen-sized: on the catalogue the picture
    introduces the range and then gives way to the grid. */
 .ft-phero--short{min-height:clamp(360px,46vh,520px)}
 .ft-phero--short .ft-phero-copy{max-width:min(58ch,60%)}
 
-/* Below the fold of a phone the overlay stops working: the copy would sit on
-   the camera. Stack instead — picture, then words. */
+/* Below the fold of a phone the side-by-side overlay stops working: the copy
+   would sit on the camera. The picture becomes the head of the section
+   instead — full width, cropped to the camera, dissolving into the page's own
+   ground so it has no edge — and the words take the whole column underneath
+   it rather than the 60% they were left holding.
+
+   That 60% is the bug this fixes. .ft-phero--short .ft-phero-copy is two
+   classes and lives outside this query, so a one-class max-width:none in here
+   never beat it: the catalogue's heading was breaking over three lines inside
+   215px of a 390px screen. */
 @media(max-width:860px){
-  .ft-phero{display:block;min-height:0}
-  .ft-phero-img{position:static;height:auto;aspect-ratio:16 / 9;object-position:72% center}
-  .ft-phero::before{display:none}
-  .ft-phero-copy{max-width:none}
-  .ft-phero-inner{padding-top:var(--sp-8)}
+  .ft-phero,
+  .ft-phero--short{display:block;min-height:0}
+  /* The plate is 2400x1018 and its left half is blown-out morning light; the
+     camera it is here to show sits right. ~72vw keeps that crop on any phone. */
+  .ft-phero{--phero-img-h:min(72vw,360px)}
+  .ft-phero-img{
+    position:absolute;inset:0 0 auto;z-index:-2;
+    width:100%;height:var(--phero-img-h);
+    aspect-ratio:auto;
+    object-fit:cover;object-position:72% center;
+  }
+  .ft-phero::before{
+    display:block;
+    inset:0 0 auto;height:var(--phero-img-h);z-index:-1;
+    background:linear-gradient(to bottom,
+      rgba(244,246,247,0) 42%,
+      rgba(244,246,247,.34) 66%,
+      rgba(244,246,247,.80) 86%,
+      var(--bg) 100%);
+  }
+  /* Two classes, to out-rank the --short rule rather than hope for it. */
+  .ft-phero .ft-phero-copy,
+  .ft-phero--short .ft-phero-copy{max-width:none}
+  .ft-phero-copy h1{max-width:none}
+  .ft-phero-inner{padding-top:calc(var(--phero-img-h) - .5rem)}
 }
 
 /* ---------------- Feature bento ---------------- */

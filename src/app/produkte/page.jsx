@@ -25,7 +25,9 @@ export default function Produkte() {
         <div className="ft-shell ft-phero-inner">
           <div className="ft-phero-copy" data-rev-group>
             <p className="ft-eyebrow" data-rev>FTronics Eigenmarke</p>
-            <h1 data-rev style={{ maxWidth: '18ch' }}>FTronics: Unsere Eigenmarke</h1>
+            {/* The measure lives in CSS: an inline one cannot be widened for a
+                phone, where the copy has the whole column rather than half of it. */}
+            <h1 data-rev>FTronics: Unsere Eigenmarke</h1>
             <p
               data-rev
               style={{
