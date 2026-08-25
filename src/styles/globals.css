@@ -2466,3 +2466,11 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
     padding-bottom:calc(var(--band-photo-h) - 1.5rem);
   }
 }
+
+/* Four short facts, paired. auto-fit gives them one column on a phone —
+   its 200px floor cannot fit two in 343px — so they run down the screen as
+   four separate claims. Stated as two columns they read as one block of
+   four and take a quarter of the scroll. */
+@media(max-width:600px){
+  .ft-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}

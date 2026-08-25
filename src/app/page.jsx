@@ -442,7 +442,7 @@ export default function Startseite() {
               </div>
             </div>
           </div>
-          <div data-rev-group className="ft-grid ft-grid--auto-xs" style={{ marginTop: '1.25rem' }}>
+          <div data-rev-group className="ft-grid ft-grid--auto-xs ft-stat-grid" style={{ marginTop: '1.25rem' }}>
             {stats.map(([n, l, mark]) => (
               <div data-rev key={l}>
                 <Card variant="stat" className="ft-card--stat-compact" icon={marks[mark]} title={n}>
