@@ -1937,7 +1937,12 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
     position:absolute;inset:0 0 auto;z-index:-2;
     width:100%;height:var(--phero-img-h);
     aspect-ratio:auto;
-    object-fit:cover;object-position:72% center;
+    object-fit:cover;
+    /* 88, not 72. At 72 the window closed at native x2089 while the camera on
+       the detail plate runs to 2187 — the side of the dome was being cut, and
+       311px of the plate's right edge went unused to do it. Far enough right
+       that the subject clears the frame with room, on both plates. */
+    object-position:88% center;
   }
   /* The words sit on the picture, not under it, so the scrim has to be a
      working ground and not just a soft landing: it is clear over the top half,
