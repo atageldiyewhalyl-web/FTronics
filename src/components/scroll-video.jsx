@@ -125,6 +125,36 @@ export function ScrollVideo({ src, label, stickyTop = 96, ratio = '854 / 480', f
       if (!frame) frame = requestAnimationFrame(apply)
     }
 
+    /* WebKit will not paint a seeked frame on a video that has never played.
+       It accepts the currentTime, fires `seeked`, reports the new position —
+       and leaves the element showing its first frame. That is the whole of
+       this bug: on iOS the teardown sat on the assembled camera while the
+       captions and the pinning worked perfectly, and Chrome, which repaints a
+       seek on an idle element, scrubbed it normally.
+
+       A muted inline play, paused as soon as it starts, gives the decoder the
+       state it wants. Nothing is seen and nothing is heard: the element is
+       already showing this frame, and the seek that follows puts it back
+       wherever the scroll says. */
+    let primed = false
+    const settle = () => {
+      primed = true
+      video.pause()
+      window.removeEventListener('touchstart', prime)
+      apply() // put the picture back where the scroll wants it
+    }
+    const prime = () => {
+      if (primed) return
+      const p = video.play()
+      // Older WebKit returns nothing from play(); there is no promise to wait
+      // on, and the element is already playing by the time this line runs.
+      if (!p || typeof p.then !== 'function') return settle()
+      p.then(settle).catch(() => {
+        /* Low Power Mode refuses a play no gesture asked for. `primed` stays
+           false so the touch listener, which is a gesture, can try again. */
+      })
+    }
+
     const start = () => {
       setReady(true)
       onScroll()
@@ -132,7 +162,12 @@ export function ScrollVideo({ src, label, stickyTop = 96, ratio = '854 / 480', f
 
     video.addEventListener('seeked', onSeeked)
     video.addEventListener('loadedmetadata', start)
+    // canplay, not loadedmetadata: at metadata there may be no frame to decode
+    // yet and the play() would resolve into nothing worth pausing.
+    video.addEventListener('canplay', prime)
+    window.addEventListener('touchstart', prime, { passive: true })
     if (video.readyState >= 1) start()
+    if (video.readyState >= 3) prime()
 
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onScroll, { passive: true })
@@ -140,6 +175,8 @@ export function ScrollVideo({ src, label, stickyTop = 96, ratio = '854 / 480', f
       cancelAnimationFrame(frame)
       video.removeEventListener('seeked', onSeeked)
       video.removeEventListener('loadedmetadata', start)
+      video.removeEventListener('canplay', prime)
+      window.removeEventListener('touchstart', prime)
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onScroll)
     }
