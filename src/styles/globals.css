@@ -1446,17 +1446,90 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
 .hero-scene{z-index:0}
 .hero > .ft-shell{z-index:2}
 
-/* A touch device gets the same reveal, driven by scroll rather than by a
+/* A touch device gets the same reveal, aimed by a finger rather than by a
    pointer it does not have — so the rule that used to hide it here is gone.
-   The beam is a little wider down here: it is walking the scene on its own
-   rather than being aimed, so it has to cover more of the frame to read. */
+   The beam is wider down here: a fingertip is a blunter instrument than a
+   cursor, and it covers its own aim, so the lit area has to reach past it. */
 @media(hover:none),(pointer:coarse){
   .hero-scene{--beam-open:clamp(280px,64vw,520px)}
 }
-/* Only once a hold has been recognised. Declaring touch-action:none up front
-   would take vertical scrolling away from the whole camera — a large target
-   near the top of the page — for a gesture most readers will never make. */
-.hero-media-wrap.is-gripped{touch-action:none}
+/* The torch handle. Desktop has a pointer to sweep the scene with and needs
+   no handle, so it is not drawn there at all. */
+.hero-torch{display:none}
+@media(hover:none),(pointer:coarse){
+  .hero-torch{
+    position:absolute;left:50%;top:50%;z-index:2;
+    width:76px;height:76px;margin:-38px 0 0 -38px;
+    display:grid;place-items:center;
+    border-radius:50%;
+    border:1.5px solid rgba(14,16,18,.20);
+    background:rgba(255,255,255,.42);
+    backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+    /* Small enough to hold this outright. That is the whole reason the handle
+       exists: the gesture is never handed to the scroller, so there is no
+       hold-timer racing the platform's own long-press. */
+    touch-action:none;
+    -webkit-touch-callout:none;-webkit-user-select:none;user-select:none;
+    transform:translate3d(var(--tx,0),var(--ty,0),0);
+    transition:transform var(--dur-3) var(--ease-out),
+               border-color var(--dur-2) var(--ease-out),
+               background var(--dur-2) var(--ease-out);
+  }
+  /* The mark at its centre, the same red the detections on the rings use. */
+  .hero-torch i{
+    width:9px;height:9px;border-radius:50%;
+    background:var(--ft-red-brand);
+    box-shadow:0 0 0 5px rgba(235,10,22,.12);
+  }
+  /* While it is being carried the ring follows the finger with no easing —
+     a transition here would leave it trailing behind the fingertip. */
+  .hero-torch.is-held{
+    border-color:var(--ft-red-brand);
+    background:rgba(255,255,255,.18);
+    transition:border-color var(--dur-2) var(--ease-out),
+               background var(--dur-2) var(--ease-out);
+  }
+  /* A slow breath, so a still page still offers the gesture. */
+  .hero-torch::after{
+    content:'';position:absolute;inset:-1.5px;border-radius:50%;
+    border:1.5px solid var(--ft-red-brand);
+    animation:ft-torch-invite 3.2s var(--ease-soft) infinite;
+  }
+  .hero-torch.is-held::after{animation:none;opacity:0}
+}
+@keyframes ft-torch-invite{
+  0%,70%,100%{opacity:0;transform:scale(1)}
+  35%{opacity:.5;transform:scale(1.14)}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero-torch::after{animation:none;opacity:.28}
+  .hero-torch{transition:none}
+}
+/* Nothing scrolls while the handle is being carried — pointer capture holds
+   the finger that started it, this holds any other. */
+.ft-torch-lock,.ft-torch-lock body{touch-action:none;overscroll-behavior:none}
+
+/* A long press on a photograph is the platform's gesture before it is ours:
+   iOS raises the save/copy callout and Android its own menu, and either one
+   cancels the pointer stream the drag is built on — so the hold never became
+   a drag, it became a save sheet. Unlike touch-action these cannot wait for
+   the hold to be recognised: the platform decides at touch-down, so they are
+   declared up front for the whole hero. Selection goes with them; a drag
+   across a headline would otherwise start highlighting it. */
+@media(hover:none),(pointer:coarse){
+  .hero{
+    -webkit-user-select:none;user-select:none;
+    -webkit-touch-callout:none;
+  }
+  /* The pictures are decorative and neither is a link, so nothing is lost by
+     making them untargetable — and it puts the touch on .hero-media-wrap,
+     which is the element listening for it. */
+  .hero img{
+    -webkit-user-drag:none;
+    -webkit-touch-callout:none;
+    pointer-events:none;
+  }
+}
 /* The beam follows the pointer directly, which is fine, but it should not
    also animate open. */
 @media(prefers-reduced-motion:reduce){
@@ -2162,9 +2235,13 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
 @media(max-width:600px){
   .hero{--hero-pad-top:clamp(1.75rem,4.5vh,3rem)}
   .hero-media-wrap{
-    margin-top:clamp(.5rem,1.5vh,1rem);
+    /* Sits lower than the copy needs it to, so the camera reads as its own
+       thing rather than as the foot of the button row. What the gap takes,
+       the height gives back — the box is measured against the fold, and the
+       camera has to finish above it. */
+    margin-top:clamp(1.75rem,5.5vh,3rem);
     width:min(100%,460px);
-    height:min(30svh,260px);
+    height:min(27svh,230px);
     aspect-ratio:auto;
   }
   /* Fills the box the wrapper just measured. The ≤860 rule hands the media
@@ -2183,5 +2260,5 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
   .hero .ft-eyebrow{margin-bottom:var(--sp-3)}
   .hero-lead{margin:.75rem auto 1rem}
   .hero-cta{margin-bottom:.5rem}
-  .hero-media-wrap{margin-top:.25rem;height:min(24svh,190px)}
+  .hero-media-wrap{margin-top:clamp(.75rem,2.5vh,1.25rem);height:min(22svh,180px)}
 }

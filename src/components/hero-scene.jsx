@@ -26,20 +26,16 @@ export function HeroScene({ src, alt }) {
   const ref = useRef(null)
   const [lit, setLit] = useState(false)
   /* Which driver the beam gets, decided after mount so the server and client
-     markup stay identical. 'pointer' is the torch above; 'scroll' is the same
-     reveal for a device that has no pointer to sweep with — the beam walks
-     down the scene as the hero is scrolled away, so the photograph is still
-     uncovered by something the reader is doing rather than on a timer. null
-     means neither, and nothing renders — including the image request. */
+     markup stay identical. 'pointer' is the torch above; 'drag' is the same
+     torch for a device with no pointer to sweep with, aimed by a finger. Both
+     leave the scene covered until the reader does something — the hero reads
+     as perfectly ordinary until then, which is the whole trick. null means
+     neither, and nothing renders — including the image request. */
   const [driver, setDriver] = useState(null)
-  // True while a finger is sweeping the beam. The scroll driver checks it:
-  // a drag outranks scroll position, or the two fight over the same two
-  // custom properties and the beam jitters between them.
-  const dragging = useRef(false)
 
   useEffect(() => {
     const hover = window.matchMedia('(hover: hover) and (pointer: fine)').matches
-    setDriver(hover ? 'pointer' : 'scroll')
+    setDriver(hover ? 'pointer' : 'drag')
   }, [])
 
   useEffect(() => {
@@ -82,137 +78,92 @@ export function HeroScene({ src, alt }) {
     }
   }, [driver])
 
-  /* The scroll driver. The hero sits at the top of the document, so its own
-     travel past the top edge is the whole of the range — measuring it against
-     the viewport instead would start the beam half way down before a finger
-     had touched anything. */
+  /* The torch handle. A visible ring over the camera that the reader takes
+     hold of and moves; the beam goes where it goes.
+
+     A handle rather than the camera itself, because the camera is a large
+     target near the top of the page and taking touch-action from it means
+     taking scrolling from it. That forced a hold-timer, and a hold-timer
+     races the platform: the OS wants the same press for its own menu, and
+     whichever wins, one of them is wrong. The handle is small enough to own
+     touch-action outright, so the gesture is never the scroller's to lose —
+     no timer, no race, and the ring says the gesture is there at all. */
   useEffect(() => {
-    if (driver !== 'scroll') return
+    if (driver !== 'drag') return
     const layer = ref.current
     const host = layer?.closest('.hero')
-    if (!host) return
+    const knob = host?.querySelector('.hero-torch')
+    if (!layer || !host || !knob) return
 
-    // Reduced motion keeps the reveal but not the travel: the scene is lit at
-    // one fixed point, so nothing moves under a reader who asked for stillness.
-    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-    let frame = 0
-    const write = () => {
-      frame = 0
-      if (dragging.current) return
-      const r = host.getBoundingClientRect()
-      const past = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height)))
-      layer.style.setProperty('--beam-x', '50%')
-      layer.style.setProperty('--beam-y', still ? '52%' : `${20 + past * 62}%`)
-      // Lit while any of the hero is still on screen. Switching off as it
-      // leaves means the sheet is closed again on the way back up, so the
-      // reveal replays rather than being spent once.
-      setLit(r.bottom > 0 && r.top < window.innerHeight)
-    }
-
-    const onScroll = () => {
-      if (!frame) frame = requestAnimationFrame(write)
-    }
-    write()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onScroll, { passive: true })
-    return () => {
-      cancelAnimationFrame(frame)
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onScroll)
-    }
-  }, [driver])
-
-  /* Hold the camera and drag to sweep the beam by hand. A touch device has no
-     hover to light the scene with, and the scroll driver only ever walks the
-     beam straight down — this hands the reader the same aiming a pointer gets,
-     and the camera is the obvious thing to take hold of.
-
-     The press has to be held first. A swipe that starts on the camera is far
-     more likely to be someone scrolling the page, and stealing that would make
-     the hero feel broken. Nothing has moved while the timer runs, so the
-     browser has not begun a scroll either — which is the only moment
-     touch-action can still be taken away in time for the drag to be ours. */
-  useEffect(() => {
-    if (driver !== 'scroll') return
-    const layer = ref.current
-    const host = layer?.closest('.hero')
-    const grip = host?.querySelector('.hero-media-wrap')
-    if (!layer || !host || !grip) return
-
-    const HOLD_MS = 320
-    const SLOP = 10 // a press that wanders this far was on its way to a scroll
-
-    let timer = 0
+    let active = false
     let pointerId = null
     let sx = 0
     let sy = 0
 
-    // The beam is measured against the hero, not the camera: the finger can
-    // leave the cutout and keep lighting the section it is dragged across.
+    // The beam is measured against the hero, so the handle can be carried off
+    // the camera and keep lighting whatever it is dragged across.
     const aimAt = (x, y) => {
       const r = host.getBoundingClientRect()
       layer.style.setProperty('--beam-x', `${((x - r.left) / r.width) * 100}%`)
       layer.style.setProperty('--beam-y', `${((y - r.top) / r.height) * 100}%`)
     }
 
-    const stop = () => {
-      if (timer) {
-        clearTimeout(timer)
-        timer = 0
-      }
-      if (dragging.current) {
-        dragging.current = false
-        grip.classList.remove('is-gripped')
-        if (pointerId !== null) {
-          try { grip.releasePointerCapture(pointerId) } catch {}
-        }
-        // Hand the beam back to where the page is actually scrolled to, rather
-        // than leaving it wherever the finger happened to lift.
-        window.dispatchEvent(new Event('scroll'))
-      }
-      pointerId = null
+    const home = () => {
+      knob.style.setProperty('--tx', '0px')
+      knob.style.setProperty('--ty', '0px')
     }
 
     const down = (e) => {
-      if (e.pointerType === 'mouse') return
+      active = true
       pointerId = e.pointerId
       sx = e.clientX
       sy = e.clientY
-      timer = window.setTimeout(() => {
-        timer = 0
-        dragging.current = true
-        grip.classList.add('is-gripped')
-        try { grip.setPointerCapture(pointerId) } catch {}
-        aimAt(sx, sy)
-        setLit(true)
-      }, HOLD_MS)
+      try { knob.setPointerCapture(pointerId) } catch {}
+      knob.classList.add('is-held')
+      // Nothing else on the page moves while the handle is being carried —
+      // including a second finger, which pointer capture alone would not stop.
+      document.documentElement.classList.add('ft-torch-lock')
+      aimAt(e.clientX, e.clientY)
+      setLit(true)
     }
 
     const move = (e) => {
-      if (dragging.current) {
-        e.preventDefault() // the page must not scroll out from under the beam
-        aimAt(e.clientX, e.clientY)
-        return
-      }
-      if (timer && Math.hypot(e.clientX - sx, e.clientY - sy) > SLOP) {
-        clearTimeout(timer)
-        timer = 0
-        pointerId = null
-      }
+      if (!active) return
+      e.preventDefault()
+      knob.style.setProperty('--tx', `${e.clientX - sx}px`)
+      knob.style.setProperty('--ty', `${e.clientY - sy}px`)
+      aimAt(e.clientX, e.clientY)
     }
 
-    grip.addEventListener('pointerdown', down)
-    grip.addEventListener('pointermove', move, { passive: false })
-    grip.addEventListener('pointerup', stop)
-    grip.addEventListener('pointercancel', stop)
+    const stop = () => {
+      if (!active) return
+      active = false
+      if (pointerId !== null) {
+        try { knob.releasePointerCapture(pointerId) } catch {}
+      }
+      pointerId = null
+      knob.classList.remove('is-held')
+      document.documentElement.classList.remove('ft-torch-lock')
+      // The handle rides back to the camera and the sheet closes behind it.
+      home()
+      setLit(false)
+    }
+
+    const menu = (e) => e.preventDefault()
+
+    knob.addEventListener('pointerdown', down)
+    knob.addEventListener('pointermove', move, { passive: false })
+    knob.addEventListener('pointerup', stop)
+    knob.addEventListener('pointercancel', stop)
+    knob.addEventListener('contextmenu', menu)
     window.addEventListener('blur', stop)
     return () => {
       stop()
-      grip.removeEventListener('pointerdown', down)
-      grip.removeEventListener('pointermove', move)
-      grip.removeEventListener('pointerup', stop)
-      grip.removeEventListener('pointercancel', stop)
+      knob.removeEventListener('pointerdown', down)
+      knob.removeEventListener('pointermove', move)
+      knob.removeEventListener('pointerup', stop)
+      knob.removeEventListener('pointercancel', stop)
+      knob.removeEventListener('contextmenu', menu)
       window.removeEventListener('blur', stop)
     }
   }, [driver])

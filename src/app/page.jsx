@@ -257,6 +257,11 @@ export default function Startseite() {
               src="/fc-8d-pro-main.png"
               alt="FTronics FC-8D Pro: 4K Dome-Kamera mit Sony IMX415 Sensor"
             />
+            {/* The torch handle, shown only where there is no pointer to sweep
+                with. Hidden from assistive tech: it reveals a photograph that
+                carries no information the copy does not already give, and it
+                has no keyboard equivalent to offer. */}
+            <span className="hero-torch" aria-hidden="true"><i /></span>
           </div>
         </div>
       </section>
