@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Button, Media, Placeholder } from '@/components/ui'
 import { markFor } from '@/components/spec-marks'
 import { cta } from '@/lib/site'
@@ -160,8 +160,35 @@ const products = [
  */
 export function ProductCatalogue() {
   const [active, setActive] = useState('alle')
+  /* The picker, on a phone. A row of four chips cannot show four chips in
+     343px, so it scrolled — which hides the categories behind a gesture and
+     pushes the count off the end of the same scroll. One control that names
+     the current filter, and the count where it can always be read. */
+  const [open, setOpen] = useState(false)
+  const pickerRef = useRef(null)
+
   const shown = (p) => active === 'alle' || p.cat === active
   const count = products.filter(shown).length
+  const activeLabel = filters.find(([id]) => id === active)?.[1] ?? 'Alle'
+
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        setOpen(false)
+        pickerRef.current?.querySelector('.ft-filter-btn')?.focus()
+      }
+    }
+    const onDown = (e) => {
+      if (!pickerRef.current?.contains(e.target)) setOpen(false)
+    }
+    document.addEventListener('keydown', onKey)
+    document.addEventListener('pointerdown', onDown)
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.removeEventListener('pointerdown', onDown)
+    }
+  }, [open])
 
   return (
     <>
@@ -173,31 +200,62 @@ export function ProductCatalogue() {
           borderBottom: '1px solid var(--border)',
         }}
       >
-        <div
-          className="ft-shell"
-          style={{ display: 'flex', gap: 8, overflowX: 'auto', padding: '.9rem var(--gutter)' }}
-          role="group"
-          aria-label="Produktkategorien filtern"
-        >
-          {filters.map(([id, label]) => (
-            <Button
-              key={id}
-              size="sm"
-              variant={active === id ? 'primary' : 'secondary'}
-              aria-pressed={active === id}
-              onClick={() => setActive(id)}
-              style={{ whiteSpace: 'nowrap' }}
+        <div className="ft-shell ft-catbar" role="group" aria-label="Produktkategorien filtern">
+          {/* Wide enough for the chips: they stay, and stay the fastest way to
+              switch when there is room to show them all at once. */}
+          <div className="ft-catbar-chips">
+            {filters.map(([id, label]) => (
+              <Button
+                key={id}
+                size="sm"
+                variant={active === id ? 'primary' : 'secondary'}
+                aria-pressed={active === id}
+                onClick={() => setActive(id)}
+                style={{ whiteSpace: 'nowrap' }}
+              >
+                {label}
+              </Button>
+            ))}
+          </div>
+
+          {/* The same four categories on a phone, behind one control. */}
+          <div className="ft-catbar-picker" ref={pickerRef}>
+            <button
+              type="button"
+              className="ft-filter-btn"
+              aria-expanded={open}
+              aria-controls="ft-filter-menu"
+              onClick={() => setOpen((o) => !o)}
             >
-              {label}
-            </Button>
-          ))}
-          <span
-            aria-live="polite"
-            style={{
-              marginLeft: 'auto', alignSelf: 'center', whiteSpace: 'nowrap',
-              color: 'var(--fg-tertiary)', fontSize: 'var(--t-body-sm)',
-            }}
-          >
+              <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true" focusable="false">
+                <path d="M2 4h12M4.5 8h7M7 12h2" fill="none" stroke="currentColor"
+                  strokeWidth="1.6" strokeLinecap="round" />
+              </svg>
+              <span>{activeLabel}</span>
+              <svg className="ft-filter-caret" viewBox="0 0 10 6" width="10" height="6"
+                aria-hidden="true" focusable="false">
+                <path d="M1 1.5 5 5 9 1.5" fill="none" stroke="currentColor"
+                  strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            {/* Left mounted and hidden with visibility, so it leaves the tab
+                order while closed and can still fade both ways. */}
+            <div className="ft-filter-menu" id="ft-filter-menu" data-open={open ? 'true' : undefined}>
+              {filters.map(([id, label]) => (
+                <button
+                  key={id}
+                  type="button"
+                  className="ft-filter-opt"
+                  aria-current={active === id ? 'true' : undefined}
+                  onClick={() => { setActive(id); setOpen(false) }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <span className="ft-catbar-count" aria-live="polite">
             {count} {count === 1 ? 'Produkt' : 'Produkte'}
           </span>
         </div>

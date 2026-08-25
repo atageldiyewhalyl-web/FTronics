@@ -2560,3 +2560,54 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
 @media(max-width:600px){
   .ft-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+
+/* ---------------- Catalogue filter bar ----------------
+   Chips while all four fit; one picker once they do not. Scrolling the
+   categories sideways hid three of the four behind a gesture and carried the
+   count off the end of the same scroll, so neither could be read at a glance. */
+.ft-catbar{display:flex;align-items:center;gap:var(--sp-2);padding:.9rem var(--gutter)}
+.ft-catbar-chips{display:flex;gap:8px;min-width:0}
+.ft-catbar-count{margin-left:auto;white-space:nowrap;color:var(--fg-tertiary);font-size:var(--t-body-sm)}
+.ft-catbar-picker{display:none;position:relative}
+
+@media(max-width:720px){
+  .ft-catbar-chips{display:none}
+  .ft-catbar-picker{display:block}
+  .ft-filter-btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:.5rem .85rem;
+    border:1px solid var(--border-strong);border-radius:var(--r-pill);
+    background:var(--bg-raised);color:var(--fg);
+    font:500 var(--t-body-sm) var(--font-ui);
+    cursor:pointer;white-space:nowrap;
+    transition:border-color var(--dur-2) var(--ease-out);
+  }
+  .ft-filter-btn:hover{border-color:var(--fg)}
+  .ft-filter-caret{transition:transform var(--dur-2) var(--ease-out);opacity:.7}
+  .ft-filter-btn[aria-expanded="true"] .ft-filter-caret{transform:rotate(180deg)}
+  .ft-filter-menu{
+    position:absolute;top:calc(100% + 8px);left:0;z-index:2;min-width:200px;
+    display:flex;flex-direction:column;gap:2px;padding:var(--sp-2);
+    background:var(--bg-raised);border:1px solid var(--border);
+    border-radius:var(--r-md);box-shadow:0 12px 32px rgba(14,16,18,.12);
+    opacity:0;visibility:hidden;transform:translateY(-6px);
+    transition:opacity var(--dur-2) var(--ease-out),transform var(--dur-2) var(--ease-out),visibility 0s linear var(--dur-2);
+  }
+  .ft-filter-menu[data-open]{
+    opacity:1;visibility:visible;transform:none;
+    transition:opacity var(--dur-2) var(--ease-out),transform var(--dur-2) var(--ease-out),visibility 0s;
+  }
+  .ft-filter-opt{
+    text-align:left;padding:9px 12px;border:0;border-radius:var(--r-sm);
+    background:none;color:var(--fg-secondary);
+    font:500 var(--t-body-sm) var(--font-ui);cursor:pointer;white-space:nowrap;
+    transition:background var(--dur-2) var(--ease-out),color var(--dur-2) var(--ease-out);
+  }
+  .ft-filter-opt:hover{background:var(--chip-bg);color:var(--fg)}
+  /* The one in force reads as chosen, not merely hovered. */
+  .ft-filter-opt[aria-current]{background:var(--chip-bg);color:var(--fg)}
+}
+@media(prefers-reduced-motion:reduce){
+  .ft-filter-caret{transition:none}
+  .ft-filter-menu,.ft-filter-menu[data-open]{transform:none;transition:opacity 200ms ease,visibility 0s}
+}
