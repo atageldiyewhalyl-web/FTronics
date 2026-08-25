@@ -1459,12 +1459,16 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
 @media(hover:none),(pointer:coarse){
   .hero-torch{
     position:absolute;left:50%;top:50%;z-index:2;
-    width:76px;height:76px;margin:-38px 0 0 -38px;
+    /* --knob-lift raises it off the box's centre line. The camera is dropped
+       and scaled inside this same box, so dead centre is no longer the middle
+       of the dome — this puts the ring back where a thumb would reach for it. */
+    --knob-lift:22px;
+    width:64px;height:64px;
+    margin:calc(-32px - var(--knob-lift)) 0 0 -32px;
     display:grid;place-items:center;
     border-radius:50%;
     border:1.5px solid rgba(14,16,18,.20);
-    background:rgba(255,255,255,.42);
-    backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+    background:rgba(255,255,255,.20);
     /* Small enough to hold this outright. That is the whole reason the handle
        exists: the gesture is never handed to the scroller, so there is no
        hold-timer racing the platform's own long-press. */
@@ -1485,10 +1489,31 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
      a transition here would leave it trailing behind the fingertip. */
   .hero-torch.is-held{
     border-color:var(--ft-red-brand);
-    background:rgba(255,255,255,.18);
+    background:rgba(255,255,255,.30);
     transition:border-color var(--dur-2) var(--ease-out),
                background var(--dur-2) var(--ease-out);
   }
+  /* Names the gesture, since a ring on its own only hints at one. Sits above
+     the handle and rides with it, and takes no pointer events — a label the
+     finger could catch would be a hole in the middle of the drag surface. */
+  .hero-torch-hint{
+    position:absolute;bottom:100%;left:50%;
+    transform:translateX(-50%);
+    margin-bottom:20px;
+    padding:.3rem .6rem;
+    border-radius:var(--r-pill);
+    background:rgba(14,16,18,.72);
+    color:#fff;
+    font:500 11px/1.2 var(--font-ui);
+    letter-spacing:.02em;
+    white-space:nowrap;
+    pointer-events:none;
+    transition:opacity var(--dur-2) var(--ease-out);
+  }
+  /* Out of the way once the gesture is under way: by then it has been read,
+     and it would only sit between the eye and what the beam is uncovering. */
+  .hero-torch.is-held .hero-torch-hint{opacity:0}
+
   /* A slow breath, so a still page still offers the gesture. */
   .hero-torch::after{
     content:'';position:absolute;inset:-1.5px;border-radius:50%;
@@ -2236,17 +2261,29 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
   .hero{--hero-pad-top:clamp(1.75rem,4.5vh,3rem)}
   .hero-media-wrap{
     /* Sits lower than the copy needs it to, so the camera reads as its own
-       thing rather than as the foot of the button row. What the gap takes,
-       the height gives back — the box is measured against the fold, and the
-       camera has to finish above it. */
+       thing rather than as the foot of the button row. */
     margin-top:clamp(1.75rem,5.5vh,3rem);
     width:min(100%,460px);
     height:min(27svh,230px);
     aspect-ratio:auto;
+    /* How much further down the camera goes, and how much larger, past what
+       this box measures. Kept on the wrapper as two dials rather than folded
+       into the box itself: the box is what the torch handle is centred on, so
+       growing it would carry the handle along, and the handle is meant to
+       stay where the thumb last found it. */
+    --cam-drop:46px;
+    --cam-scale:1.16;
   }
-  /* Fills the box the wrapper just measured. The ≤860 rule hands the media
-     its own ratio back, which would size it independently of that height. */
-  .hero-media{height:100%;aspect-ratio:auto}
+  /* Fills the box the wrapper measured, then leaves it — the transform is
+     painted, so the camera can grow and drop without moving the handle, the
+     rings, or the foot of the section. What passes the fold is the base of
+     the housing, a plain cylinder, which is also what the desktop hero has
+     always let the fold crop. */
+  .hero-media{
+    height:100%;aspect-ratio:auto;
+    transform:translateY(var(--cam-drop)) scale(var(--cam-scale));
+    transform-origin:50% 0;
+  }
 }
 
 /* Short phones. The copy above the camera is a fixed number of lines however
@@ -2260,5 +2297,6 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
   .hero .ft-eyebrow{margin-bottom:var(--sp-3)}
   .hero-lead{margin:.75rem auto 1rem}
   .hero-cta{margin-bottom:.5rem}
-  .hero-media-wrap{margin-top:clamp(.75rem,2.5vh,1.25rem);height:min(22svh,180px)}
+  /* No room to spend down here: the camera stays where the box puts it. */
+  .hero-media-wrap{margin-top:clamp(.75rem,2.5vh,1.25rem);height:min(22svh,180px);--cam-drop:0px;--cam-scale:1}
 }

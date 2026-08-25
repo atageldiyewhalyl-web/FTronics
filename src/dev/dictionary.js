@@ -132,6 +132,7 @@ export const de2en = {
   "Fällt das Licht darunter, schaltet Smart IR zu: 18 SMD-LEDs bis 30 m, adaptiv geregelt. Wer dicht an der Kamera steht, wird nicht zur weißen Fläche — der Nahbereich bleibt zeichnungsfähig.": "Below that, Smart IR cuts in: 18 SMD LEDs out to 30 m, adaptively controlled. Anyone standing close to the camera does not become a white blur — the near field keeps its detail.",
   "Fällt das Licht darunter, übernimmt Smart IR: 18 SMD-LEDs bis 30 m, adaptiv geregelt, damit der Nahbereich nicht zur weißen Fläche wird.": "Below that, Smart IR takes over: 18 SMD LEDs out to 30 m, adaptively controlled so the near field never blows out to white.",
   "Gewerbekunden": "Business customers",
+  "Halten & ziehen": "Hold & drag",
   "Hafenbahnstr. 15, 68305 Mannheim": "Hafenbahnstr. 15, 68305 Mannheim",
   "Hauptnavigation": "Main navigation",
   "Horizontales Sichtfeld, vertikal rund 58°": "Horizontal field of view, roughly 58° vertical",

@@ -261,7 +261,10 @@ export default function Startseite() {
                 with. Hidden from assistive tech: it reveals a photograph that
                 carries no information the copy does not already give, and it
                 has no keyboard equivalent to offer. */}
-            <span className="hero-torch" aria-hidden="true"><i /></span>
+            <span className="hero-torch" aria-hidden="true">
+              <i />
+              <span className="hero-torch-hint">Halten &amp; ziehen</span>
+            </span>
           </div>
         </div>
       </section>

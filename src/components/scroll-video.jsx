@@ -65,17 +65,27 @@ export function ScrollVideo({ src, label, stickyTop = 96, ratio = '854 / 480', f
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
     let frame = 0
-    let seeking = false
     let want = 0
 
+    /* Asks the element whether it is busy rather than tracking that here.
+       A flag set before the seek and cleared by the `seeked` event is only
+       as reliable as the event: seek into a range the decoder has not
+       buffered, or issue one that supersedes another in flight, and the
+       event may never arrive — leaving the flag stranded true and every
+       later frame returning early. The clip then freezes on whatever it was
+       last showing, which is a stall the further you are from the file. */
     const apply = () => {
       frame = 0
-      if (seeking) return // let the decoder finish before asking for another
       const duration = video.duration
       if (!duration || Number.isNaN(duration)) return
       const t = want * duration
       if (Math.abs(video.currentTime - t) < 1 / 60) return
-      seeking = true
+      if (video.seeking) {
+        // Busy: come back next frame rather than dropping this position. The
+        // loop ends as soon as the picture agrees with the scroll.
+        frame = requestAnimationFrame(apply)
+        return
+      }
       video.currentTime = t
     }
 
@@ -91,9 +101,9 @@ export function ScrollVideo({ src, label, stickyTop = 96, ratio = '854 / 480', f
       if (!frame) frame = requestAnimationFrame(apply)
     }
 
+    // The scroll may have moved on while that seek was in flight; picking it
+    // up here saves a frame over waiting for the next scroll event.
     const onSeeked = () => {
-      seeking = false
-      // The scroll may have moved on while that seek was in flight.
       if (!frame) frame = requestAnimationFrame(apply)
     }
 
