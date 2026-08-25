@@ -308,7 +308,7 @@ export default function Startseite() {
             </p>
           </div>
 
-          <div data-rev style={{ margin: '3rem 0' }}>
+          <div data-rev className="pledge-figure">
             <Media
               ratio={null}
               fit="cover"

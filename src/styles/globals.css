@@ -844,12 +844,6 @@ html{font-optical-sizing:auto}
      the heading; under them, centred, they read as belonging to the thing they
      move — and the thumb is already down there. */
   .ft-splitrail .ft-gallery{grid-column:1;grid-row:2;margin-top:1.75rem}
-  /* One review at a time, whole. The sliver of the next card was the only
-     thing saying the rail continued; the arrows underneath say it now, and
-     say it better, so the width goes to the words instead. Scoped to this
-     rail — the product galleries are pictures, where a peek is an invitation
-     rather than a truncated paragraph. */
-  .ft-splitrail .ft-gallery>*{flex-basis:100%}
   /* The track carries the gutter on its left only, because the rail bleeds
      off the right edge. Give the row that gutter back on its right so its
      centre is the screen's centre and not the track's. */
@@ -2344,6 +2338,13 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
    at any ratio narrower than 2.33, so the visible slice is 943 x (the box's
    aspect) native pixels wide; the percentage is where that slice has to start
    for the subject, which spans roughly x340 to x1330, to sit centred in it. */
+/* The rail that follows is the same thought continued — the picture is the
+   claim and the cards are the evidence — so on a phone they sit close enough
+   to read as one block rather than two sections that happen to be adjacent. */
+.pledge-figure{margin:3rem 0}
+@media(max-width:900px){
+  .pledge-figure{margin:2rem 0 1rem}
+}
 .pledge-media{aspect-ratio:16 / 9}
 .pledge-media .ft-media-img{object-position:0% center}
 @media(max-width:900px){
