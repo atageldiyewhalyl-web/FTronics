@@ -159,7 +159,7 @@ details.job h4{margin:0 0 .3em}
 details.job .job-meta{color:var(--fg-tertiary);font-size:var(--t-body-sm)}
 details.job .chev{margin-left:auto;color:var(--fg-tertiary);transition:transform var(--dur-2) var(--ease-out)}
 details.job[open] .chev{transform:rotate(180deg)}
-.job-cols{margin-top:1.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem}
+.job-cols{margin-top:1.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:1.5rem}
 .job-label{font:500 12px var(--font-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--fg-tertiary);margin:0 0 .6em}
 `
 
@@ -191,7 +191,7 @@ export default function Karriere() {
         <div
           className="ft-shell"
           style={{
-            display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))',
+            display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(300px,100%),1fr))',
             gap: 'clamp(2rem,4vw,4rem)', alignItems: 'center',
           }}
         >
@@ -201,7 +201,7 @@ export default function Karriere() {
             <p
               data-rev
               style={{
-                fontSize: 'var(--t-lead)', lineHeight: 1.45,
+                fontSize: 'var(--t-lead)', lineHeight: 'var(--t-lead-lh)',
                 color: 'var(--fg-secondary)', margin: '1rem 0 1.6rem',
               }}
             >
@@ -228,7 +228,7 @@ export default function Karriere() {
             data-rev-group
             className="ft-grid"
             style={{
-              gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))',
+              gridTemplateColumns: 'repeat(auto-fit,minmax(min(240px,100%),1fr))',
               marginTop: '2.5rem',
             }}
           >
@@ -287,7 +287,7 @@ export default function Karriere() {
             data-rev-group
             className="ft-grid"
             style={{
-              gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))',
+              gridTemplateColumns: 'repeat(auto-fit,minmax(min(260px,100%),1fr))',
               marginTop: '2.5rem',
             }}
           >

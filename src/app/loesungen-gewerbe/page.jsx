@@ -120,7 +120,7 @@ export default function LoesungenGewerbe() {
             <p
               data-rev
               style={{
-                fontSize: 'var(--t-lead)', lineHeight: 1.45, color: 'var(--fg-secondary)',
+                fontSize: 'var(--t-lead)', lineHeight: 'var(--t-lead-lh)', color: 'var(--fg-secondary)',
                 maxWidth: 680, margin: '1rem 0 1.5rem',
               }}
             >

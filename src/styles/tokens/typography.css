@@ -8,6 +8,7 @@
   --t-body-sm:clamp(0.88rem,0.15vw + 0.84rem,0.95rem); /* @kind other */
   --t-body:clamp(1.00rem,0.25vw + 0.94rem,1.15rem); /* @kind other */
   --t-lead:1.125rem; /* @kind other */ /* flat 18px */
+  --t-lead-lh:1.45; /* @kind other */ /* leading, so it can move with the size */
   --t-h4:clamp(1.25rem,0.45vw + 1.14rem,1.60rem); /* @kind other */
   --t-h3:clamp(1.60rem,1.00vw + 1.35rem,2.40rem); /* @kind other */
   --t-h2:clamp(2.50rem,6vw,4.50rem); /* @kind other */ /* 40 → 72px */

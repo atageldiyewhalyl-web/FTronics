@@ -107,20 +107,20 @@ const ORBITS = [
 
 export function RingField() {
   return (
-    <div className="ft-field" aria-hidden="true">
-      <svg className="ft-field-rings" viewBox="0 0 100 100" focusable="false">
+    <div className="ft-ringfield" aria-hidden="true">
+      <svg className="ft-ringfield-rings" viewBox="0 0 100 100" focusable="false">
         {RINGS.map((r) => (
-          <circle key={r} className="ft-field-ring" cx="50" cy="50" r={r} />
+          <circle key={r} className="ft-ringfield-ring" cx="50" cy="50" r={r} />
         ))}
       </svg>
 
       {ORBITS.map(({ r, dur, delay, reverse }, i) => (
         <span
           key={`orbit-${i}`}
-          className={`ft-field-orbit${reverse ? ' ft-field-orbit--rev' : ''}`}
+          className={`ft-ringfield-orbit${reverse ? ' ft-ringfield-orbit--rev' : ''}`}
           style={{ '--r': r, '--dur': `${dur}s`, '--delay': `${delay}s` }}
         >
-          <i className="ft-field-dot" />
+          <i className="ft-ringfield-dot" />
         </span>
       ))}
     </div>

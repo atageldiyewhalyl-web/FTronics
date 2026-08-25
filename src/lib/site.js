@@ -33,10 +33,22 @@ export const site = {
   insurer: 'andsafe Aktiengesellschaft, Provinzial-Allee 1, 48159 Münster',
 }
 
-/** Primary navigation — matches the handoff NavBar. */
+/** Primary navigation — matches the handoff NavBar.
+    `children` makes an item a menu rather than a link: the label opens the
+    submenu instead of navigating, because the two Lösungen routes are the
+    whole of it and there is no overview page above them to point at.
+    `match` lists the routes that count as "you are here" for such an item,
+    since it has no href of its own to test the pathname against. */
 export const navItems = [
   { label: 'Startseite', href: '/' },
-  { label: 'Lösungen', href: '/loesungen-privat' },
+  {
+    label: 'Lösungen',
+    match: ['/loesungen-privat', '/loesungen-gewerbe'],
+    children: [
+      { label: 'Privatkunden', href: '/loesungen-privat' },
+      { label: 'Gewerbekunden', href: '/loesungen-gewerbe' },
+    ],
+  },
   { label: 'Produkte', href: '/produkte' },
   { label: 'Kontakt', href: '/kontakt' },
   { label: 'Konfigurator', href: '/konfigurator' },

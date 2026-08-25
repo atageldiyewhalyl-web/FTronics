@@ -48,7 +48,7 @@ export default function Kontakt() {
             <p
               data-rev
               style={{
-                fontSize: 'var(--t-lead)', lineHeight: 1.45,
+                fontSize: 'var(--t-lead)', lineHeight: 'var(--t-lead-lh)',
                 color: 'var(--fg-secondary)', margin: '1rem 0 0',
               }}
             >
@@ -58,7 +58,10 @@ export default function Kontakt() {
 
           <div
             style={{
-              display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(320px,1fr))',
+              /* min(320px,100%), not a bare 320px: a bare minimum is a floor the track
+                 keeps even when the column is narrower than it, so on a 320px screen
+                 the 288px of usable width still had to hold a 320px track. */
+              display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(320px,100%),1fr))',
               gap: 'clamp(1.5rem,3vw,3rem)', marginTop: '3rem', alignItems: 'start',
             }}
           >

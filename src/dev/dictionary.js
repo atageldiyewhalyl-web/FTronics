@@ -95,29 +95,66 @@ export const neutral = new Set([
 ])
 
 export const de2en = {
-
   /* ---- Navigation, footer and other chrome shared across pages --- */
+  "* 120 dB bezieht sich auf True WDR über zwei Belichtungen, nicht auf digitale Kontrastanhebung.": "* 120 dB refers to true WDR across two exposures, not to digital contrast enhancement.",
+  "* Ab Werk 2,8 mm Festbrennweite. 3,6 mm und 6 mm sind auf Anfrage lieferbar und ändern Sichtfeld und Erkennungsreichweite entsprechend.": "* 2.8 mm fixed focal length as standard. 3.6 mm and 6 mm are available on request and change the field of view and detection range accordingly.",
+  "* Lux- und Reichweitenangaben sind Herstellerwerte unter Laborbedingungen. Die tatsächliche Nachtsicht hängt von Reflexionsgrad, Fremdlicht und Verschmutzung des Sichtglases ab.": "* Lux and range figures are manufacturer values under laboratory conditions. Actual night vision depends on reflectance, ambient light and how dirty the viewing glass is.",
+  "* NDAA-konform im Sinne von Section 889 — einsetzbar auch bei Behörden und KRITIS-Betreibern.": "* NDAA-compliant within the meaning of Section 889 — usable by public authorities and critical-infrastructure operators.",
   ". Alle Rechte vorbehalten. USt-IdNr:": ". All rights reserved. VAT ID:",
+  "1/2,8″ Back-Illuminated CMOS, 3840 × 2160 bei 30 fps, 120 dB True WDR gegen Gegenlicht am Tor.": "1/2.8″ back-illuminated CMOS, 3840 × 2160 at 30 fps, 120 dB true WDR against backlight at the gate.",
+  "3840 × 2160 echte Bildpunkte, nicht hochgerechnet": "3840 × 2160 real pixels, not upscaled",
   "AGB": "Terms & Conditions",
   "Alarmanlagen": "Alarm systems",
+  "Aluminium-Druckguss mit gehärtetem Sichtglas — gebaut für Werkstore und Außenanlagen, nicht für die Veranda.": "Die-cast aluminium with hardened viewing glass — built for factory gates and outdoor installations, not for the porch.",
   "Anfrage starten": "Start enquiry",
+  "Bei 0,003 Lux noch in Farbe.": "Still in colour at 0.003 lux.",
+  "Betriebshof bei Tageslicht, aufgenommen von der FC-8D Pro": "The yard in daylight, captured by the FC-8D Pro",
   "Brandschutz": "Fire protection",
   "Datenschutz": "Privacy policy",
+  "Der Sony Starvis IMX415 ist kein Smartphone-Sensor. Er ist ein 1/2,8\" Back-Illuminated CMOS-Sensor, entwickelt für professionelle Überwachung in Industrieanlagen, Logistik-Zentren und kritischer Infrastruktur. Das Ergebnis: gestochen scharfes 4K bei Tag, brillante Farben bei Dämmerung und sauberes, rauscharmes Bild auch bei minimaler Beleuchtung. Wo andere Kameras blind werden, sieht die FC-8D Pro weiter.": "The Sony Starvis IMX415 is not a smartphone sensor. It is a 1/2.8\" back-illuminated CMOS sensor, developed for professional surveillance in industrial plants, logistics centres and critical infrastructure. The result: razor-sharp 4K by day, brilliant colour at dusk and a clean, low-noise image even in minimal light. Where other cameras go blind, the FC-8D Pro keeps seeing.",
+  "Der Starvis-Sensor hält das Farbbild bis hinunter zu 0,003 Lux. Solange noch Restlicht da ist — eine Straßenlaterne, ein Hoftor-Strahler — bleiben Kleidung, Fahrzeugfarbe und Kennzeichen unterscheidbar.": "The Starvis sensor holds the colour image all the way down to 0.003 lux. As long as any light remains — a street lamp, a floodlight over the gate — clothing, vehicle colour and number plates stay distinguishable.",
+  "Derselbe Betriebshof bei Nacht — Fahrzeugfarbe, Poller und Hecke bleiben unterscheidbar": "The same yard at night — vehicle colour, bollards and hedge stay distinguishable",
+  "Die FC-8D Pro bei Nacht, der Infrarot-Ring im Dome leuchtet schwach rot": "The FC-8D Pro at night, the infrared ring inside the dome glowing faintly red",
+  "Die FC-8D Pro im Starkregen unter einem Betonvorsprung, Wasser perlt an der Kuppel ab": "The FC-8D Pro in heavy rain under a concrete overhang, water beading off the dome",
+  "Die FTronics FC-8D Pro, montiert unter dem Dachüberstand eines hellen Gebäudes": "The FTronics FC-8D Pro, mounted under the eaves of a pale building",
+  "Die integrierte KI-Engine unterscheidet zwischen Person, Fahrzeug und harmlosem Bewegungsereignis. Fehlalarme durch Blätter, Tiere oder Lichtwechsel? Vorbei. Sie alarmiert nur dann, wenn es relevant ist — in Echtzeit, direkt auf dem Gerät, ohne Cloud-Abhängigkeit.": "The built-in AI engine tells the difference between a person, a vehicle and a harmless movement event. False alarms from leaves, animals or changing light? Gone. It raises an alarm only when it matters — in real time, directly on the device, with no cloud dependency.",
+  "Ein einzelnes Netzwerkkabel mit RJ45-Stecker": "A single network cable with an RJ45 plug",
+  "Eine Kamera, die nachts nur noch Silhouetten liefert, dokumentiert einen Vorfall, statt ihn aufzuklären. Die FC-8D Pro hält das Farbbild so lange wie physikalisch möglich und schaltet erst dann auf Infrarot, wenn wirklich nichts mehr da ist.": "A camera that delivers nothing but silhouettes at night documents an incident instead of solving it. The FC-8D Pro holds the colour image for as long as physics allows, and switches to infrared only when there is genuinely nothing left.",
+  "Eine Person überquert nachts einen Betriebshof, von der Kamera erkannt und mit einem Erkennungsrahmen markiert": "A person crossing a yard at night, detected by the camera and marked with a detection frame",
+  "Einsetzbar auch bei Behörden und KRITIS-Betreibern. Bild und Strom laufen über PoE nach IEEE 802.3af, bei unter 7 Watt.": "Approved for public authorities and critical-infrastructure operators too. Picture and power both run over PoE to IEEE 802.3af, at under 7 watts.",
   "FAQ": "FAQ",
+  "Farbe, solange es geht": "Colour, for as long as it lasts",
   "FT Sicherheitstechnik": "FT Sicherheitstechnik",
   "FT Sicherheitstechnik: Beratung, Verkauf, Service, Schulung": "FT Sicherheitstechnik: consulting, sales, service, training",
   "FT Sicherheitstechnik: zur Startseite": "FT Sicherheitstechnik: to the homepage",
+  "FTronics FC-8D Pro: Explosionsansicht der sechs Bauteile": "FTronics FC-8D Pro: exploded view of the six components",
   "FTronics Produkte": "FTronics products",
+  "Fällt das Licht darunter, schaltet Smart IR zu: 18 SMD-LEDs bis 30 m, adaptiv geregelt. Wer dicht an der Kamera steht, wird nicht zur weißen Fläche — der Nahbereich bleibt zeichnungsfähig.": "Below that, Smart IR cuts in: 18 SMD LEDs out to 30 m, adaptively controlled. Anyone standing close to the camera does not become a white blur — the near field keeps its detail.",
+  "Fällt das Licht darunter, übernimmt Smart IR: 18 SMD-LEDs bis 30 m, adaptiv geregelt, damit der Nahbereich nicht zur weißen Fläche wird.": "Below that, Smart IR takes over: 18 SMD LEDs out to 30 m, adaptively controlled so the near field never blows out to white.",
   "Gewerbekunden": "Business customers",
   "Hafenbahnstr. 15, 68305 Mannheim": "Hafenbahnstr. 15, 68305 Mannheim",
   "Hauptnavigation": "Main navigation",
+  "Horizontales Sichtfeld, vertikal rund 58°": "Horizontal field of view, roughly 58° vertical",
   "Impressum": "Legal notice",
   "info@ftst.eu": "info@ftst.eu",
+  "Infrarot, wenn nicht": "Infrared, when it doesn't",
+  "IP67. IK10. −30 °C bis +60 °C.": "IP67. IK10. −30 °C to +60 °C.",
+  "Kameraansicht: ein Transporter am Tor mit Erkennungsrahmen": "Camera view: a van at the gate with a detection frame",
+  "Kameraansicht: eine Person mit Erkennungsrahmen auf dem Hof": "Camera view: a person on the yard with a detection frame",
+  "Kameraansicht: eine virtuelle Schutzlinie über den Hof, eine Person überschreitet sie": "Camera view: a virtual protection line across the yard, with a person crossing it",
   "Karriere": "Careers",
+  "KI-Erkennung": "AI detection",
   "Konfigurator": "Configurator",
   "Kontakt": "Contact",
   "Kontakt aufnehmen": "Get in touch",
+  "Lichtstarke Festoptik für Dämmerung und Restlicht": "Fast fixed optics for dusk and residual light",
   "Lösungen": "Solutions",
+  "Makroaufnahme eines rückwärtig belichteten CMOS-Bildsensors mit Golddrahtkontakten": "Macro shot of a back-illuminated CMOS image sensor with gold bond wires",
+  "Makroaufnahme eines rückwärtig belichteten CMOS-Bildsensors mit Golddrahtkontakten auf einer Platine": "Macro shot of a back-illuminated CMOS image sensor with gold bond wires on a circuit board",
+  "Menü öffnen": "Open menu",
+  "Menü schließen": "Close menu",
+  "Nacht": "Night",
+  "NDAA-konform. Und ein Kabel genügt.": "NDAA-compliant. And one cable is enough.",
   "Partner": "Partners",
   "Privatkunden": "Private customers",
   "Produkte": "Products",
@@ -125,14 +162,18 @@ export const de2en = {
   "Rechtliches": "Legal",
   "Smart Home": "Smart home",
   "Smarte Sicherheitstechnik nach Ihren Ansprüchen. Seit über 15 Jahren Ihr Partner für Alarmanlagen, Videoüberwachung und Smart Home in der Metropolregion Rhein-Neckar.": "Smart security technology built around your requirements. For over 15 years your partner for alarm systems, video surveillance and smart home in the Rhine-Neckar metropolitan region.",
+  "Sony Starvis IMX415.": "Sony Starvis IMX415.",
   "Startseite": "Home",
   "Support": "Support",
   "System-Konfigurator": "System configurator",
+  "Tag": "Day",
+  "Tag gegen Nacht vergleichen": "Compare day against night",
+  "Vergleich derselben Szene:": "Comparison of the same scene:",
+  "Wenn das Licht geht, hört sie nicht auf zu arbeiten.": "When the light goes, it doesn't stop working.",
   "Über uns": "About us",
   "Unternehmen": "Company",
   "Videoüberwachung": "Video surveillance",
   "Zum Inhalt springen": "Skip to content",
-
   /* ---- Home ------------------------------------------------------ */
   "1/2,8″ Back-Illuminated CMOS: gestochen scharfes 4K bei Tag, rauscharmes Bild bei minimaler Beleuchtung.": "1/2.8″ back-illuminated CMOS: razor-sharp 4K by day, low-noise images in minimal light.",
   "18 Produkte im Katalog": "18 products in the catalogue",
@@ -274,7 +315,6 @@ export const de2en = {
   "Zurück": "Back",
   "Zutrittskontrolle": "Access control",
   "Zutrittskontrolle für Tor & Schranken": "Access control for gates & barriers",
-
   /* ---- Solutions — private customers ----------------------------- */
   "4K Kameras mit Nachtsicht": "4K cameras with night vision",
   "Ajax Alarmanlage: Installationsfoto": "Ajax alarm system: installation photo",
@@ -319,7 +359,6 @@ export const de2en = {
   "Video-Türsprechanlage mit HD-Kamera": "Video door intercom with HD camera",
   "Vor-Ort-Service": "On-site service",
   "Wir kommen zu Ihnen und analysieren Ihre Situation, unverbindlich und kostenfrei.": "We come to you and assess your situation, free and without obligation.",
-
   /* ---- Solutions — business customers ---------------------------- */
   "4K-Kameras mit KI-Videoanalyse": "4K cameras with AI video analytics",
   "Alle Standorte jederzeit im Blick: per App, Browser oder Leitstelle.": "Every site in view at any time: via app, browser or control centre.",
@@ -374,7 +413,6 @@ export const de2en = {
   "Zeit- und zonenbasierte Berechtigungen": "Time- and zone-based permissions",
   "Zeiterfassung": "Time tracking",
   "Zentrale Verwaltung mehrerer Standorte": "Central management of multiple sites",
-
   /* ---- Product catalogue ----------------------------------------- */
   "16 Kanäle": "16 channels",
   "16-Kanal 4K NVR": "16-channel 4K NVR",
@@ -456,7 +494,6 @@ export const de2en = {
   "Vielseitiger Hybrid-XVR für TVI, AHD, CVI und IP mit 4K HDMI-Ausgang und KI-Erkennung.": "Versatile hybrid XVR for TVI, AHD, CVI and IP with 4K HDMI output and AI detection.",
   "Wir beraten Sie gerne und erstellen Ihnen ein individuelles Angebot.": "We are happy to advise you and prepare an individual quote.",
   "Zubehör": "Accessories",
-
   /* ---- Product — FC-8D Pro --------------------------------------- */
   "−30 °C bis +60 °C": "−30 °C to +60 °C",
   "−30 °C bis +60 °C Betriebstemperatur. IP67 gegen Staub und Strahlwasser. IK10 gegen mechanische Einwirkung. Diese Kamera ist nicht für die Veranda gemacht. Sie wurde für Werkstore, Außenanlagen und exponierte Standorte entwickelt, an denen normale Kameras längst aufgegeben hätten.": "−30 °C to +60 °C operating temperature. IP67 against dust and jet water. IK10 against mechanical impact. This camera was not made for the porch. It was developed for factory gates, outdoor installations and exposed locations where ordinary cameras would have given up long ago.",
@@ -556,7 +593,6 @@ export const de2en = {
   "Vollständig": "Complete",
   "Wetterfest": "Weatherproof",
   "Wir zerlegen die FC-8D Pro bis auf die Schraube und zeigen, warum jedes Detail Industrie-Standard ist, nicht Smart-Home-Spielerei.": "We take the FC-8D Pro apart down to the screw and show why every detail is industrial standard, not smart-home gimmickry.",
-
   /* ---- Product — FB-8A Pro --------------------------------------- */
   "−20 °C bis +60 °C": "−20 °C to +60 °C",
   "1-5m · min. 12px – max. 1000px": "1-5m · min. 12px – max. 1000px",
@@ -630,7 +666,6 @@ export const de2en = {
   "Weit mehr als Videoüberwachung.": "Far more than video surveillance.",
   "Wetterfest · 4000V Blitzschutz": "Weatherproof · 4000V surge protection",
   "Zieltypen": "Target types",
-
   /* ---- Configurator ---------------------------------------------- */
   "Bereiche": "Areas",
   "Büro": "Office",
@@ -648,7 +683,6 @@ export const de2en = {
   "Sicherheitssystem-Konfigurator | FT Sicherheitstechnik Mannheim": "Security System Configurator | FT Sicherheitstechnik Mannheim",
   "Was möchten Sie schützen?": "What would you like to protect?",
   "Wohnung": "Flat",
-
   /* ---- Contact --------------------------------------------------- */
   "● Antwort innerhalb von 24 Stunden": "● Reply within 24 hours",
   "Adresse": "Address",
@@ -672,7 +706,6 @@ export const de2en = {
   "Sprechen Sie mit uns": "Talk to us",
   "Telefon": "Phone",
   "Wir beraten Sie persönlich und unverbindlich. Antwort innerhalb von 24 Stunden garantiert.": "We advise you personally and without obligation. A reply within 24 hours, guaranteed.",
-
   /* ---- FAQ ------------------------------------------------------- */
   "Alle Antworten auf einen Blick": "Every answer at a glance",
   "Bei unserer Wartung prüfen wir systematisch: Übertragungswege und Aufschaltung, Signalgeber, Bedienelemente, Energieversorgung und Batterie, Scharf-/Unscharfschaltung, Beschädigungen und Verschmutzung, Bewegungsmelder (Gehtests) sowie Softwareupdates. So stellen wir die einwandfreie Funktion Ihrer Anlage sicher.": "During our maintenance we check systematically: transmission paths and monitoring connection, signalling devices, controls, power supply and battery, arming/disarming, damage and soiling, motion detectors (walk tests) and software updates. That is how we make sure your system works flawlessly.",
@@ -745,7 +778,6 @@ export const de2en = {
   "Wie oft sollte eine Alarmanlage gewartet werden?": "How often should an alarm system be serviced?",
   "Wie wird eine moderne Alarmanlage bedient?": "How is a modern alarm system operated?",
   "Wir empfehlen mindestens eine jährliche Wartung, das entspricht dem gängigen Branchenstandard. Bei besonders sicherheitsrelevanten Objekten empfehlen wir halbjährliche Inspektionen. Alle Wartungsarbeiten werden in Protokollen dokumentiert, die wir Ihnen aushändigen.": "We recommend annual maintenance as a minimum, that matches the common industry standard. For particularly security-critical properties we recommend six-monthly inspections. All maintenance work is documented in reports that we hand over to you.",
-
   /* ---- Guides ---------------------------------------------------- */
   "5 Tipps gegen Einbruch: so schützen Sie Ihr Zuhause": "5 tips against burglary: how to protect your home",
   "Aktuelle Zahlen aus Mannheim, Checkliste sowie Tipps zu Alarmanlage, Videoüberwachung und KfW-Förderung für ein sicheres Zuhause.": "Current figures from Mannheim, a checklist and tips on alarm systems, video surveillance and KfW funding for a secure home.",
@@ -782,7 +814,6 @@ export const de2en = {
   "Weiterlesen →": "Read more →",
   "Welche Kamera für welchen Einsatz? Ein Überblick": "Which camera for which job? An overview",
   "Wissen & Ratgeber": "Knowledge & guides",
-
   /* ---- Support --------------------------------------------------- */
   "AnyDesk herunterladen": "Download AnyDesk",
   "Aufnahmen anschauen": "Viewing recordings",
@@ -820,7 +851,6 @@ export const de2en = {
   "Video-Tutorials": "Video tutorials",
   "Videos abspielen": "Playing videos",
   "Zeiteinstellung": "Setting the time",
-
   /* ---- Partners -------------------------------------------------- */
   "ABUS": "ABUS",
   "Ajax Systems": "Ajax Systems",
@@ -858,7 +888,6 @@ export const de2en = {
   "Wir finden die passende Technologie für Ihr Objekt. Kostenlose Erstberatung vor Ort in der Metropolregion Rhein-Neckar.": "We will find the right technology for your property. A free initial consultation on site in the Rhine-Neckar metropolitan region.",
   "Wir sind keinem einzelnen Hersteller verpflichtet. Unsere Empfehlung basiert immer auf Ihren Anforderungen: objektiv, transparent und technisch fundiert.": "We are not tied to any single manufacturer. Our recommendation is always based on your requirements: objective, transparent and technically grounded.",
   "Zertifizierte Installation": "Certified installation",
-
   /* ---- About us -------------------------------------------------- */
   "Alles begann mit einem Polizeiauto": "It all began with a police car",
   "Der Computermarkt auf der Industriestraße": "The computer market on Industriestraße",
@@ -897,7 +926,6 @@ export const de2en = {
   "Wie aus kindlicher Neugier und unternehmerischem Geist ein preisgekröntes Sicherheitsunternehmen entstand.": "How childhood curiosity and an entrepreneurial spirit grew into an award-winning security company.",
   "Wochenende für Wochenende mit dem Vater auf dem Mannheimer Computermarkt, zwischen Platinen, Gehäusen und Ersatzteilen.": "Weekend after weekend at the Mannheim computer market with his father, among circuit boards, cases and spare parts.",
   "Wofür wir stehen": "What we stand for",
-
   /* ---- Careers --------------------------------------------------- */
   "Abwechslungsreiche Projekte": "Varied projects",
   "Aktuelle Positionen": "Current positions",
@@ -959,7 +987,6 @@ export const de2en = {
   "Wir melden uns zeitnah bei dir und laden dich zu einem persönlichen Gespräch ein, entspannt und auf Augenhöhe.": "We will get back to you promptly and invite you to a personal conversation, relaxed and as equals.",
   "Zukunftssichere Branche": "A future-proof industry",
   "Zuverlässigkeit und Teamfähigkeit": "Reliability and teamwork",
-
   /* ---- Legal notice ---------------------------------------------- */
   ". Unsere E-Mail-Adresse finden Sie oben im Impressum.": ". You will find our email address in the legal notice above.",
   "48159 Münster": "48159 Münster",
@@ -983,7 +1010,6 @@ export const de2en = {
   "Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz:": "VAT identification number pursuant to § 27 a of the German VAT Act:",
   "Verbraucherstreitbeilegung / Universalschlichtungsstelle": "Consumer dispute resolution / universal arbitration body",
   "Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.": "We are neither willing nor obliged to take part in dispute resolution proceedings before a consumer arbitration body.",
-
   /* ---- Privacy policy -------------------------------------------- */
   "Änderung und Aktualisierung der Datenschutzerklärung": "Amendment and updating of this privacy policy",
   "Begriffsdefinitionen": "Definitions of terms",
@@ -1011,7 +1037,6 @@ export const de2en = {
   "Verantwortliche Stelle": "Responsible body",
   "Verantwortlicher": "Controller",
   "Webanalyse, Monitoring und Optimierung": "Web analytics, monitoring and optimisation",
-
   /* ---- Terms & conditions ---------------------------------------- */
   "1. Geltungsbereich": "1. Scope",
   "10. Haftung": "10. Liability",
@@ -1037,14 +1062,12 @@ export const de2en = {
   "Lieferung schnellstmöglich, spätestens innerhalb von ca. sechs Wochen nach Vertragsabschluss. Verlängerung bei höherer Gewalt; Rücktrittsrecht des Vertragspartners bei Verzögerung über vier Wochen.": "Delivery as quickly as possible, at the latest within approximately six weeks of the contract being concluded. Extended in cases of force majeure; the contracting party has a right of withdrawal if the delay exceeds four weeks.",
   "Mängel sind binnen acht Werktagen zu rügen. Mängelansprüche können innerhalb von sechs Monaten ab Übernahme der Leistung geltend gemacht werden. Keine Gewähr bei unsachgemäßer Bedienung, Reparaturversuchen Dritter oder natürlicher Abnutzung.": "Defects must be notified within eight working days. Claims for defects can be asserted within six months of the service being accepted. No warranty applies in cases of improper operation, repair attempts by third parties or natural wear and tear.",
   "Warenpreise verstehen sich ab Werk bzw. ab Lager, ohne gesetzliche Mehrwertsteuer, Verpackung und Montage, soweit nichts anderes vereinbart wurde.": "Goods prices are ex works or ex warehouse, excluding statutory VAT, packaging and installation, unless otherwise agreed.",
-
   /* ---- not-found ------------------------------------------------- */
   "Der Link ist möglicherweise veraltet. Nutzen Sie die Navigation oder gehen Sie zurück zur Startseite.": "The link may be out of date. Use the navigation or head back to the homepage.",
   "Diese Seite gibt es nicht.": "This page does not exist.",
   "Fehler 404": "Error 404",
   "Seite nicht gefunden | FT Sicherheitstechnik": "Page Not Found | FT Sicherheitstechnik",
   "Zur Startseite": "Back to the homepage",
-
   /* ---- Interaction-only: never present in the server-rendered HTML ------- */
   "Bereiche wählen": "Choose areas",
   "Welche Bereiche möchten Sie absichern?": "Which areas would you like to secure?",

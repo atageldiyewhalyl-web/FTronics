@@ -1,4 +1,8 @@
-import { Button, Card, Chip, ChipRow, SectionHead, Placeholder } from '@/components/ui'
+import { Button, Card, Chip, ChipRow, SectionHead, Media, Placeholder } from '@/components/ui'
+import { Compare } from '@/components/compare'
+import { Teardown } from '@/components/teardown'
+import { ScrollGallery } from '@/components/scroll'
+import { ScanBand } from '@/components/scan-band'
 import { site, cta, jsonLd, breadcrumbJsonLd } from '@/lib/site'
 
 export const metadata = {
@@ -12,9 +16,9 @@ export const metadata = {
 
 /* Card titles carry the artboard's U+00AD soft hyphens so they break cleanly. */
 const aiCards = [
-  ['Personen­erkennung', 'Erkennt Personen, ignoriert Tiere und Bewegungsfehler. Drastisch weniger Fehlalarme im Live-Betrieb.'],
-  ['Fahrzeug­erkennung', 'Unterscheidet Lkw, Pkw und Zweirad. Ideal für Werkstore, Tankstellen und Logistik.'],
-  ['Linien­überschreitung', 'Virtuelle Zäune und Bereichsalarme. Wer eine Schutzlinie überschreitet, löst sofort den Alarm aus.'],
+  ['Personen­erkennung', 'Erkennt Personen, ignoriert Tiere und Bewegungsfehler. Drastisch weniger Fehlalarme im Live-Betrieb.', '/ki-person.webp', 'Kameraansicht: eine Person mit Erkennungsrahmen auf dem Hof'],
+  ['Fahrzeug­erkennung', 'Unterscheidet Lkw, Pkw und Zweirad. Ideal für Werkstore, Tankstellen und Logistik.', '/ki-fahrzeug.webp', 'Kameraansicht: ein Transporter am Tor mit Erkennungsrahmen'],
+  ['Linien­überschreitung', 'Virtuelle Zäune und Bereichsalarme. Wer eine Schutzlinie überschreitet, löst sofort den Alarm aus.', '/ki-linie.webp', 'Kameraansicht: eine virtuelle Schutzlinie über den Hof, eine Person überschreitet sie'],
 ]
 
 const parts = [
@@ -90,19 +94,6 @@ const lensFigures = [
   ['8 MP', '3840 × 2160 echte Bildpunkte, nicht hochgerechnet'],
   ['F1.6', 'Lichtstarke Festoptik für Dämmerung und Restlicht'],
   ['110°', 'Horizontales Sichtfeld, vertikal rund 58°'],
-]
-
-/* After dark the camera does one job two ways, and which way it picks is a
-   decision it makes on the scene rather than on a clock. */
-const nightModes = [
-  [
-    'Farbe, solange es geht',
-    'Der Starvis-Sensor hält das Farbbild bis hinunter zu 0,003 Lux. Solange noch Restlicht da ist — eine Straßenlaterne, ein Hoftor-Strahler — bleiben Kleidung, Fahrzeugfarbe und Kennzeichen unterscheidbar.',
-  ],
-  [
-    'Infrarot, wenn nicht',
-    'Fällt das Licht darunter, schaltet Smart IR zu: 18 SMD-LEDs bis 30 m, adaptiv geregelt. Wer dicht an der Kamera steht, wird nicht zur weißen Fläche — der Nahbereich bleibt zeichnungsfähig.',
-  ],
 ]
 
 /* Every figure above has conditions attached. They belong on the page, not in
@@ -188,7 +179,7 @@ const productSchema = {
 
 const twoCol = {
   display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))',
+  gridTemplateColumns: 'repeat(auto-fit,minmax(min(300px,100%),1fr))',
   gap: 'clamp(2rem,4vw,4rem)',
   alignItems: 'center',
 }
@@ -265,16 +256,16 @@ export default function ProduktFC8DPro() {
         </div>
       </section>
 
-      {/* Premium · Sensor · Intelligente Erkennung */}
-      <section style={{ padding: 'clamp(5rem,7vw,8rem) 0 0' }}>
+      {/* Premium · Sensor */}
+      <section style={{ padding: 'clamp(9rem,14vw,16rem) 0 clamp(6rem,9vw,10rem)' }}>
         <div
           className="ft-shell"
           style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(4rem,6vw,6rem)' }}
         >
-          <div data-rev-group style={{ maxWidth: 680 }}>
+          <div data-rev-group className="ft-center" style={{ maxWidth: 'min(100%,900px)', marginInline: 'auto' }}>
             <p className="ft-eyebrow" data-rev>Premium-Qualität</p>
             <h2 data-rev>Nicht für die Schublade. Für den Einsatz.</h2>
-            <p data-rev style={{ color: 'var(--fg-secondary)', marginTop: '1rem' }}>
+            <p data-rev style={{ color: 'var(--fg-secondary)', marginTop: '1rem', maxWidth: 'none' }}>
               FTronics-Kameras werden nicht für Privatkunden mit Smart-Home-Spielereien entwickelt.
               Sie entstehen für reale, anspruchsvolle Industrie- und Gewerbeumgebungen, wo eine
               verpasste Sekunde echte Folgen hat. Aluminium-Druckgussgehäuse, gehärtetes Sichtglas,
@@ -283,100 +274,106 @@ export default function ProduktFC8DPro() {
             </p>
           </div>
 
-          <div style={twoCol}>
-            <div data-rev>
-              <Placeholder ratio="4 / 3" rounded="var(--r-lg)" label="Sensor-Vergleich Tag/Nacht" />
-            </div>
-            <div data-rev-group>
-              <p className="ft-eyebrow" data-rev>Sony Starvis IMX415</p>
-              <h3 data-rev>Ein Sensor, der für Industrieanwendungen entwickelt wurde.</h3>
-              <p data-rev style={{ color: 'var(--fg-secondary)' }}>
-                Der Sony Starvis IMX415 ist kein Smartphone-Sensor. Er ist ein 1/2,8&quot;
-                Back-Illuminated CMOS-Sensor, entwickelt für professionelle Überwachung in
-                Industrieanlagen, Logistik-Zentren und kritischer Infrastruktur. Das Ergebnis:
-                gestochen scharfes 4K bei Tag, brillante Farben bei Dämmerung und sauberes,
-                rauscharmes Bild auch bei minimaler Beleuchtung. Wo andere Kameras blind werden,
-                sieht die FC-8D Pro weiter.
-              </p>
-            </div>
-          </div>
 
-          <div>
-            <div data-rev-group style={{ maxWidth: 680 }}>
-              <p className="ft-eyebrow" data-rev>Intelligente Erkennung</p>
-              <h2 data-rev>Sie sieht. Sie versteht. Sie entscheidet.</h2>
-              <p data-rev style={{ color: 'var(--fg-secondary)', marginTop: '1rem' }}>
-                Die integrierte KI-Engine unterscheidet zwischen Person, Fahrzeug und harmlosem
-                Bewegungsereignis. Fehlalarme durch Blätter, Tiere oder Lichtwechsel? Vorbei. Die
-                FC-8D Pro alarmiert nur dann, wenn es relevant ist, und das in Echtzeit, direkt
-                auf dem Gerät, ohne Cloud-Abhängigkeit.
-              </p>
-            </div>
-            <div
-              data-rev-group
-              className="ft-grid"
-              style={{
-                gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))',
-                marginTop: '2.5rem',
-              }}
-            >
-              {aiCards.map(([t, d]) => (
-                <div data-rev key={t}>
-                  <Card title={t}>{d}</Card>
-                </div>
-              ))}
-            </div>
+        </div>
+      </section>
+
+      {/* Sensor — its own full-bleed band. The render's top half is empty pale
+          grey by design, and a gradient carries that last step to the page's
+          own ground, so the section arrives without a seam. */}
+      <section className="ft-sensorband">
+        <img
+          className="ft-sensorband-img"
+          src="/fc-8d-pro-sensorband.webp"
+          alt="Makroaufnahme eines rückwärtig belichteten CMOS-Bildsensors mit Golddrahtkontakten auf einer Platine"
+        />
+        <div className="ft-shell ft-sensorband-inner">
+          <div className="ft-sensorband-copy ft-center" data-rev-group>
+            <p className="ft-eyebrow" data-rev>Sony Starvis IMX415</p>
+            <h2 data-rev>Ein Sensor, der für Industrieanwendungen entwickelt wurde.</h2>
+            <p data-rev style={{ color: 'var(--fg-secondary)', marginTop: '1rem', maxWidth: 'none' }}>
+              Der Sony Starvis IMX415 ist kein Smartphone-Sensor. Er ist ein 1/2,8&quot;
+              Back-Illuminated CMOS-Sensor, entwickelt für professionelle Überwachung in
+              Industrieanlagen, Logistik-Zentren und kritischer Infrastruktur. Das Ergebnis:
+              gestochen scharfes 4K bei Tag, brillante Farben bei Dämmerung und sauberes,
+              rauscharmes Bild auch bei minimaler Beleuchtung. Wo andere Kameras blind werden,
+              sieht die FC-8D Pro weiter.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Component Analysis — sticky explosion render + caption spy */}
-      <section
-        className="ft-section ft-section--raised"
-        style={{ marginTop: 'clamp(5rem,7vw,8rem)' }}
-      >
-        <div className="ft-shell">
-          <SectionHead
-            eyebrow="Component Analysis"
-            title="Sechs Bauteile. Eine Industrie-Klasse."
-            lead="Wir zerlegen die FC-8D Pro bis auf die Schraube und zeigen, warum jedes Detail Industrie-Standard ist, nicht Smart-Home-Spielerei."
+      {/* Intelligent detection, as its own band: the claim is about telling a
+          person from a passing shadow, and the night photograph beside it is
+          the evidence. Same shape as "Hand-Made in Mannheim" on the home page.
+          data-nav-dark: the bar inverts itself while this section is under it. */}
+      <ScanBand className="ft-band ft-band--dark ft-band--scan" data-nav-dark>
+        {/* Pinned while the section's extra height scrolls past. */}
+        <div className="ft-band-stage">
+          {/* Sharp at the top of the sequence, softening as --p climbs. */}
+          <img
+            className="ft-band-img"
+            src="/fc-8d-pro-ki.webp"
+            alt="Eine Person überquert nachts einen Betriebshof, von der Kamera erkannt und mit einem Erkennungsrahmen markiert"
           />
-          <div
-            style={{
-              display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))',
-              gap: 'clamp(2rem,4vw,4rem)', marginTop: '3rem', alignItems: 'start',
-            }}
-          >
-            <div style={{ position: 'sticky', top: 96 }}>
-              <Placeholder ratio="4 / 5" label="Explosions-Render: 6 Bauteile" />
+
+          <div className="ft-shell ft-band-inner">
+            <div className="ft-band-copy" data-rev-group lang="de">
+              <p className="ft-eyebrow" data-rev>Intelligente Erkennung</p>
+              <h2 data-rev>Sie sieht. Sie versteht. Sie entscheidet.</h2>
+              <p className="ft-lead" data-rev>
+                Die integrierte KI-Engine unterscheidet zwischen Person, Fahrzeug und harmlosem
+                Bewegungsereignis. Fehlalarme durch Blätter, Tiere oder Lichtwechsel? Vorbei.
+                Sie alarmiert nur dann, wenn es relevant ist — in Echtzeit, direkt auf dem Gerät,
+                ohne Cloud-Abhängigkeit.
+              </p>
             </div>
-            <div
-              style={{
-                display: 'flex', flexDirection: 'column',
-                gap: 'clamp(2.5rem,6vh,5rem)', padding: '1rem 0',
-              }}
-            >
-              {parts.map((c) => (
-                <div data-spy key={c.n}>
-                  <p className="ft-num" style={{ fontSize: 13, margin: '0 0 .5rem' }}>{c.n}</p>
-                  <h4 style={{ marginBottom: '.4em' }}>{c.h}</h4>
-                  <p
-                    style={{
-                      color: 'var(--fg-secondary)', fontSize: 'var(--t-body-sm)',
-                      marginBottom: '.8em',
-                    }}
-                  >
-                    {c.p}
-                  </p>
-                  <ChipRow>
-                    {c.chips.map((x) => <Chip key={x}>{x}</Chip>)}
-                  </ChipRow>
-                </div>
-              ))}
+
+            {/* The three capabilities ride in on a rail once the picture has
+                receded, rather than sitting in the copy column competing with it. */}
+            <div className="ft-band-rail" data-rev-group>
+              <ScrollGallery itemWidth={320} label="KI-Erkennung" paddles={false}>
+                {aiCards.map(([t, d, img, alt]) => (
+                  <div data-rev key={t}>
+                    <div className="ft-scan-card">
+                    {/* alt describes the frame; the caption beneath states the
+                        capability, so the two are not saying the same thing. */}
+                    <img className="ft-scan-card-img" src={img} alt={alt} loading="lazy" decoding="async" />
+                    <div className="ft-scan-card-body">
+                      <h4>{t}</h4>
+                      <p>{d}</p>
+                    </div>
+                  </div>
+                  </div>
+                ))}
+              </ScrollGallery>
             </div>
           </div>
+        </div>
+      </ScanBand>
 
-          <div data-rev-group className="ft-grid ft-grid--auto-xs" style={{ marginTop: '3rem' }}>
+      {/* Component Analysis — the same scroll-scrubbed clip the home page uses
+          for "Sicherheit im Detail", with this page's six parts on its
+          timeline instead of five. The sticky render and the caption-spy
+          column it replaces were saying the same thing without moving. */}
+      <Teardown
+        captions={parts.map((c) => [c.h, c.p, c.chips])}
+        head={{
+          eyebrow: 'Component Analysis',
+          title: 'Sechs Bauteile. Eine Industrie-Klasse.',
+          lead:
+            'Wir zerlegen die FC-8D Pro bis auf die Schraube und zeigen, warum jedes Detail Industrie-Standard ist, nicht Smart-Home-Spielerei.',
+          mediaLabel: 'FTronics FC-8D Pro: Explosionsansicht der sechs Bauteile',
+        }}
+        ctaHref="/kontakt"
+        ctaLabel={`${cta.advice} →`}
+      />
+
+      {/* The counters follow the clip on the same ground rather than sitting
+          inside it: they summarise the six parts, they are not one of them. */}
+      <section className="ft-section ft-section--raised" style={{ paddingTop: 0 }}>
+        <div className="ft-shell">
+          <div data-rev-group className="ft-grid ft-grid--auto-xs">
             {counters.map(([n, l]) => (
               <div data-rev key={l}>
                 <Card variant="stat" title={n}>{l}</Card>
@@ -386,21 +383,29 @@ export default function ProduktFC8DPro() {
         </div>
       </section>
 
-      {/* Wetterfest */}
+      {/* Wetterfest — the photograph is the panel's ground and the copy sits
+          on it, rather than the two standing side by side. A scrim carries the
+          left of the frame up to paper so the ink still reads. */}
       <section style={{ padding: 'clamp(5rem,7vw,8rem) 0 0' }}>
-        <div className="ft-shell" style={twoCol}>
-          <div data-rev-group>
-            <p className="ft-eyebrow" data-rev>Wetterfest</p>
-            <h2 data-rev>Schnee. Hitze. Vandalismus. Egal.</h2>
-            <p data-rev style={{ color: 'var(--fg-secondary)', marginTop: '1rem' }}>
-              −30 °C bis +60 °C Betriebstemperatur. IP67 gegen Staub und Strahlwasser. IK10 gegen
-              mechanische Einwirkung. Diese Kamera ist nicht für die Veranda gemacht. Sie wurde für
-              Werkstore, Außenanlagen und exponierte Standorte entwickelt, an denen normale Kameras
-              längst aufgegeben hätten.
-            </p>
-          </div>
-          <div data-rev>
-            <Placeholder ratio="4 / 3" rounded="var(--r-lg)" label="Außeneinsatz: Witterungsfoto" />
+        <div className="ft-shell">
+          <div className="ft-weather-panel" data-rev>
+            <img
+              className="ft-weather-panel-img"
+              src="/fc-8d-pro-regen.webp"
+              alt="Die FC-8D Pro im Starkregen unter einem Betonvorsprung, Wasser perlt an der Kuppel ab"
+              loading="lazy"
+              decoding="async"
+            />
+            <div className="ft-weather-panel-copy" data-rev-group>
+              <p className="ft-eyebrow" data-rev>Wetterfest</p>
+              <h2 data-rev>Schnee. Hitze. Vandalismus. Egal.</h2>
+              <p data-rev style={{ color: 'var(--fg-secondary)', marginTop: '1rem' }}>
+                −30 °C bis +60 °C Betriebstemperatur. IP67 gegen Staub und Strahlwasser. IK10 gegen
+                mechanische Einwirkung. Diese Kamera ist nicht für die Veranda gemacht. Sie wurde
+                für Werkstore, Außenanlagen und exponierte Standorte entwickelt, an denen normale
+                Kameras längst aufgegeben hätten.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -411,14 +416,29 @@ export default function ProduktFC8DPro() {
           they would be three rows among thirty. */}
       <section id="nachts" style={{ padding: 'clamp(5rem,7vw,8rem) 0 0' }}>
         <div className="ft-shell">
-          <div data-rev-group style={{ maxWidth: 680 }}>
+          <div data-rev-group className="ft-center" style={{ maxWidth: 'min(100%,900px)', marginInline: 'auto' }}>
             <p className="ft-eyebrow" data-rev>Optik & Nachtsicht</p>
             <h2 data-rev>Wenn das Licht geht, hört sie nicht auf zu arbeiten.</h2>
-            <p data-rev style={{ color: 'var(--fg-secondary)', marginTop: '1rem' }}>
+            <p data-rev style={{ color: 'var(--fg-secondary)', marginTop: '1rem', maxWidth: 'none' }}>
               Eine Kamera, die nachts nur noch Silhouetten liefert, dokumentiert einen Vorfall,
               statt ihn aufzuklären. Die FC-8D Pro hält das Farbbild so lange wie physikalisch
               möglich und schaltet erst dann auf Infrarot, wenn wirklich nichts mehr da ist.
             </p>
+          </div>
+
+          <div data-rev style={{ marginTop: 'clamp(2rem,4vw,3rem)' }}>
+            {/* The same yard, the same frame, twice. This section makes the
+                low-light claim, so the proof of it belongs here rather than
+                beside the sensor copy further up. */}
+            <Compare
+              ratio="16 / 9"
+              before="/fc-8d-pro-tag.webp"
+              after="/fc-8d-pro-nachtszene.webp"
+              beforeLabel="Tag"
+              afterLabel="Nacht"
+              beforeAlt="Betriebshof bei Tageslicht, aufgenommen von der FC-8D Pro"
+              afterAlt="Derselbe Betriebshof bei Nacht — Fahrzeugfarbe, Poller und Hecke bleiben unterscheidbar"
+            />
           </div>
 
           <div className="ft-figs" data-rev-group>
@@ -430,14 +450,6 @@ export default function ProduktFC8DPro() {
             ))}
           </div>
 
-          <div className="ft-modes" data-rev-group>
-            {nightModes.map(([h, d]) => (
-              <div className="ft-mode" data-rev key={h}>
-                <h3>{h}</h3>
-                <p>{d}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -446,15 +458,24 @@ export default function ProduktFC8DPro() {
           <SectionHead eyebrow="Spezifikationen" title="Technische Daten" />
 
           <div
-            data-rev-group
-            className="ft-grid"
+            data-rev
             style={{
-              gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))',
+              ...specCard,
+              display: 'grid',
+              gridTemplateColumns: '1fr',
+              gap: 0,
               marginTop: '2.5rem',
             }}
           >
-            {specGroups.map((g) => (
-              <div data-rev key={g.title} style={specCard}>
+            {specGroups.map((g, groupIndex) => (
+              <div
+                key={g.title}
+                style={{
+                  padding: groupIndex === 0 ? 0 : '1.6rem 0 0',
+                  marginTop: groupIndex === 0 ? 0 : '1.6rem',
+                  ...(groupIndex === 0 ? null : { borderTop: '1px solid var(--border)' }),
+                }}
+              >
                 <h4 style={{ marginBottom: '1em' }}>{g.title}</h4>
                 <dl
                   style={{
@@ -518,7 +539,7 @@ export default function ProduktFC8DPro() {
           <p
             data-rev
             style={{
-              fontSize: 'var(--t-lead)', lineHeight: 1.45, color: 'var(--fg-secondary)',
+              fontSize: 'var(--t-lead)', lineHeight: 'var(--t-lead-lh)', color: 'var(--fg-secondary)',
               maxWidth: 620, margin: '1rem auto 2rem',
             }}
           >

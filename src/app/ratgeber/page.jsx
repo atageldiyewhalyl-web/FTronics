@@ -107,7 +107,7 @@ export default function Ratgeber() {
             <p
               data-rev
               style={{
-                fontSize: 'var(--t-lead)', lineHeight: 1.45,
+                fontSize: 'var(--t-lead)', lineHeight: 'var(--t-lead-lh)',
                 color: 'var(--fg-secondary)', margin: '1rem 0 0',
               }}
             >
@@ -129,7 +129,7 @@ export default function Ratgeber() {
           <div
             data-rev-group
             style={{
-              display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(340px,1fr))',
+              display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(min(340px,100%),1fr))',
               gap: '1.25rem', marginTop: '3rem',
             }}
           >

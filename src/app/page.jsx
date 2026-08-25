@@ -231,23 +231,14 @@ export default function Startseite() {
             <h1 data-rev style={{ maxWidth: '24ch', marginLeft: 'auto', marginRight: 'auto' }}>
               Smarte Sicherheits&shy;technik nach Ihren Ansprüchen
             </h1>
-            <p
-              data-rev
-              style={{
-                fontSize: 'var(--t-lead)', lineHeight: 1.45, color: 'var(--fg-secondary)',
-                maxWidth: 680, margin: '1rem auto 2rem',
-              }}
-            >
+            {/* .ft-lead already carries the size, leading, colour and measure;
+                only the rhythm around it is the hero's own, and it lives in
+                CSS so a short screen can close it up. */}
+            <p data-rev className="ft-lead hero-lead">
               Seit über 15 Jahren schützen wir Privat- und Geschäftskunden in der Metropolregion
               Rhein-Neckar mit modernster Sicherheitstechnologie, von Alarmanlagen bis Smart Home.
             </p>
-            <div
-              data-rev
-              style={{
-                display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center',
-                marginBottom: 'clamp(1rem,3vh,2rem)',
-              }}
-            >
+            <div data-rev className="hero-cta">
               <Button href="/kontakt">Jetzt Anfrage starten</Button>
               <Button variant="secondary" href="/loesungen-privat">Unsere Lösungen</Button>
             </div>
@@ -713,7 +704,7 @@ export default function Startseite() {
           <p
             data-rev
             style={{
-              fontSize: 'var(--t-lead)', lineHeight: 1.45, color: 'var(--fg-secondary)',
+              fontSize: 'var(--t-lead)', lineHeight: 'var(--t-lead-lh)', color: 'var(--fg-secondary)',
               maxWidth: 600, margin: '1rem auto 2rem',
             }}
           >

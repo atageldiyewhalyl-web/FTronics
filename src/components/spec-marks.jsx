@@ -104,10 +104,44 @@ export const specMarks = {
       <path d="M5.6 4.4h3.2a1.3 1.3 0 0 1 1.3 1.3v3.2a1.3 1.3 0 0 1-1.3 1.3H5.6a1.3 1.3 0 0 1-1.3-1.3V5.7a1.3 1.3 0 0 1 1.3-1.3Zm9.6 0h3.2a1.3 1.3 0 0 1 1.3 1.3v3.2a1.3 1.3 0 0 1-1.3 1.3h-3.2a1.3 1.3 0 0 1-1.3-1.3V5.7a1.3 1.3 0 0 1 1.3-1.3ZM5.6 13.8h3.2a1.3 1.3 0 0 1 1.3 1.3v3.2a1.3 1.3 0 0 1-1.3 1.3H5.6a1.3 1.3 0 0 1-1.3-1.3v-3.2a1.3 1.3 0 0 1 1.3-1.3Zm9.6 0h3.2a1.3 1.3 0 0 1 1.3 1.3v3.2a1.3 1.3 0 0 1-1.3 1.3h-3.2a1.3 1.3 0 0 1-1.3-1.3v-3.2a1.3 1.3 0 0 1 1.3-1.3Z" />
     </IconMark>
   ),
+  /* A shield, for what the housing is rated to survive. */
+  shield: (
+    <IconMark size={15}>
+      <path d="M12 2.7a1.3 1.3 0 0 1 .5.1l6.2 2.5a1.3 1.3 0 0 1 .8 1.2v4.6c0 4.2-2.6 7.8-6.5 9.4a2 2 0 0 1-1.5 0c-3.9-1.6-6.5-5.2-6.5-9.4V6.5a1.3 1.3 0 0 1 .8-1.2l6.2-2.5a1.3 1.3 0 0 1 .5-.1Z" />
+    </IconMark>
+  ),
   /* Stacked platters, for where the footage lands. */
   storage: (
     <IconMark size={15}>
       <path d="M4.8 5.4h14.4a1.5 1.5 0 0 1 1.5 1.5v2.2a1.5 1.5 0 0 1-1.5 1.5H4.8a1.5 1.5 0 0 1-1.5-1.5V6.9a1.5 1.5 0 0 1 1.5-1.5Zm0 8h14.4a1.5 1.5 0 0 1 1.5 1.5v2.2a1.5 1.5 0 0 1-1.5 1.5H4.8a1.5 1.5 0 0 1-1.5-1.5v-2.2a1.5 1.5 0 0 1 1.5-1.5Z" />
     </IconMark>
   ),
+}
+
+/* ---------------- spec text -> mark ----------------
+   Resolved from the spec string itself so each surface keeps one source of
+   truth: the copy stays the copy, and the mark is derived from it. Order
+   matters — "Motorzoom" has to reach `zoom` before "MP" reaches `res`, and
+   "Gesichtserkennung" has to reach `face` before "erkennung" reaches `ai`. */
+const specRules = [
+  [/gesichtserkennung|face/, 'face'],
+  [/zoom|\d\s*mm/, 'zoom'],
+  [/^ip\d/, 'weather'],
+  [/ik10|vandal|aluminium/, 'shield'],
+  [/°c/, 'weather'],
+  [/dual-light|ir\s*\d|\bnm\b|^bis\s/, 'night'],
+  [/audio|spl/, 'audio'],
+  [/kanäle|kanale|hybrid|channel/, 'channels'],
+  [/sata|raid|anr/, 'storage'],
+  [/poe|^\d+w$/, 'power'],
+  [/sony|imx|cmos|starvis|f1\.|f\//, 'sensor'],
+  [/ki-|vca|tracking|\bai\b|analytics|local|cloud/, 'ai'],
+]
+
+export function markFor(spec) {
+  const t = spec.toLowerCase()
+  const hit = specRules.find(([re]) => re.test(t))
+  /* Everything left is a picture spec — resolution, frame rate, WDR, codec,
+     the HDMI it comes out of — so the frame is the honest default. */
+  return specMarks[hit ? hit[1] : 'res']
 }

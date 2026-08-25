@@ -13,16 +13,23 @@ export const metadata = {
 export default function Produkte() {
   return (
     <>
-      {/* Hero */}
-      <section style={{ padding: 'clamp(4rem,6vw,6.5rem) 0 0' }}>
-        <div className="ft-shell">
-          <div data-rev-group>
+      {/* Hero — the same full-bleed band the product pages use, but sized to
+          a header rather than a full screen: this page's job is the grid
+          below it, so the picture introduces the range and gets out of the way. */}
+      <section className="ft-phero ft-phero--short">
+        <img
+          className="ft-phero-img"
+          src="/produkte-hero.webp"
+          alt="Eine FTronics Dome-Kamera unter der Decke eines Hauseingangs im Morgenlicht"
+        />
+        <div className="ft-shell ft-phero-inner">
+          <div className="ft-phero-copy" data-rev-group>
             <p className="ft-eyebrow" data-rev>FTronics Eigenmarke</p>
             <h1 data-rev style={{ maxWidth: '18ch' }}>FTronics: Unsere Eigenmarke</h1>
             <p
               data-rev
               style={{
-                fontSize: 'var(--t-lead)', lineHeight: 1.45, color: 'var(--fg-secondary)',
+                fontSize: 'var(--t-lead)', lineHeight: 'var(--t-lead-lh)', color: 'var(--fg-secondary)',
                 maxWidth: 680, margin: '1rem 0 0',
               }}
             >

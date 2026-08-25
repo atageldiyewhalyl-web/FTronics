@@ -34,9 +34,9 @@ html{font-optical-sizing:auto}
 .ft-section--raised + .ft-section--raised { border-top: 0; }
 .ft-section--raised:has(+ .ft-section--raised) { border-bottom: 0; }
 .ft-grid { display: grid; gap: 1.25rem; }
-.ft-grid--auto { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-.ft-grid--auto-sm { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
-.ft-grid--auto-xs { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.ft-grid--auto { grid-template-columns: repeat(auto-fit, minmax(min(280px,100%), 1fr)); }
+.ft-grid--auto-sm { grid-template-columns: repeat(auto-fit, minmax(min(230px,100%), 1fr)); }
+.ft-grid--auto-xs { grid-template-columns: repeat(auto-fit, minmax(min(200px,100%), 1fr)); }
 .ft-media {
   border-radius: var(--r-xl);
   overflow: hidden;
@@ -199,7 +199,7 @@ html{font-optical-sizing:auto}
   margin:0 0 var(--sp-6);
   max-width:none;
 }
-.ft-lead{font-size:var(--t-lead);line-height:1.45;letter-spacing:.002em;color:var(--fg-secondary);max-width:var(--container-text)}
+.ft-lead{font-size:var(--t-lead);line-height:var(--t-lead-lh);letter-spacing:.002em;color:var(--fg-secondary);max-width:var(--container-text)}
 
 /* ---------------- Field ---------------- */
 .ft-field{display:flex;flex-direction:column;gap:7px;margin-bottom:var(--sp-4)}
@@ -210,9 +210,13 @@ html{font-optical-sizing:auto}
 .ft-field .ft-error{font-size:var(--t-body-sm);color:var(--ft-error);margin:0}
 
 /* ---------------- NavBar ---------------- */
+/* One height at every width, now that the links collapse into a sheet
+   instead of wrapping to a second row. The hero reads it too, so the two
+   cannot drift apart. */
+:root{--ft-nav-h:72px}
 /* Light translucent chrome with a scroll edge effect instead of a hard 1px
    rule: content dissolves under the bar rather than being cut off by a line. */
-.ft-nav{position:sticky;top:0;z-index:50;height:72px;display:flex;align-items:center;background:rgba(244,246,247,.82);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);transition:height var(--dur-2) var(--ease-out)}
+.ft-nav{position:sticky;top:0;z-index:50;height:var(--ft-nav-h);display:flex;align-items:center;background:rgba(244,246,247,.82);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);transition:height var(--dur-2) var(--ease-out)}
 /* Over the hero the bar is just the marks on it; the background arrives with
    the next section. */
 .ft-nav.is-over-hero{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
@@ -220,7 +224,7 @@ html{font-optical-sizing:auto}
    more tracking than the same text on a solid ground. */
 .ft-nav-link{letter-spacing:.005em}
 .ft-nav-link:hover,.ft-nav-link[aria-current="page"]{color:var(--fg)}
-.ft-nav-inner{width:100%;max-width:var(--container);margin:0 auto;padding:0 var(--gutter);display:flex;align-items:center;gap:var(--sp-8)}
+.ft-nav-inner{position:relative;z-index:2;width:100%;max-width:var(--container);margin:0 auto;padding:0 var(--gutter);display:flex;align-items:center;gap:var(--sp-8)}
 .ft-nav-brand{font-family:var(--font-display);font-weight:600;font-size:16px;letter-spacing:-0.004em;text-decoration:none;display:flex;align-items:center;gap:10px}
 .ft-nav-brand:hover{color:var(--fg)}
 /* The full supplied lockup, shown at its native 800:164 ratio. Height drives
@@ -253,11 +257,163 @@ html{font-optical-sizing:auto}
 .ft-nav-link{font:500 13.5px var(--font-ui);color:var(--fg-secondary);text-decoration:none;padding:8px 12px;border-radius:var(--r-sm);transition:background var(--dur-2) var(--ease-out),color var(--dur-2) var(--ease-out);background:none;border:0;cursor:pointer;white-space:nowrap}
 .ft-nav-link:hover{background:var(--bg-card-hover);color:var(--fg)}
 .ft-nav-link[aria-current="page"]{color:var(--fg);background:var(--bg-card-hover)}
+/* ---- Lösungen submenu (desktop) ----
+   The label opens the menu rather than navigating: the two routes under it
+   are the whole of it, so a parent link would have to pick one of its own
+   children to point at. */
+.ft-nav-item{position:relative;display:flex;align-items:center}
+.ft-nav-link--menu{display:inline-flex;align-items:center;gap:5px}
+/* A button has no aria-current to style against — data-current says the same
+   thing for the set of routes the menu collects. */
+.ft-nav-link--menu[data-current="true"]{color:var(--fg);background:var(--bg-card-hover)}
+.ft-nav-caret{flex:none;opacity:.72;transition:transform var(--dur-2) var(--ease-out)}
+.ft-nav-link--menu[aria-expanded="true"] .ft-nav-caret{transform:rotate(180deg)}
+
+/* Hidden with visibility, not display: it still leaves the tab order and the
+   accessibility tree while closed, but it can also fade both ways. The delay
+   on the visibility step holds the panel present until the fade has finished. */
+.ft-nav-menu{
+  position:absolute;top:calc(100% + 8px);left:0;z-index:1;min-width:212px;
+  display:flex;flex-direction:column;gap:2px;padding:var(--sp-2);
+  background:var(--bg-raised);border:1px solid var(--border);
+  border-radius:var(--r-md);box-shadow:0 12px 32px rgba(14,16,18,.10);
+  opacity:0;visibility:hidden;transform:translateY(-6px);
+  transition:opacity var(--dur-2) var(--ease-out),transform var(--dur-2) var(--ease-out),visibility 0s linear var(--dur-2);
+}
+.ft-nav-menu[data-open]{
+  opacity:1;visibility:visible;transform:none;
+  transition:opacity var(--dur-2) var(--ease-out),transform var(--dur-2) var(--ease-out),visibility 0s;
+}
+/* Bridges the gap between the trigger and the panel. Without it the pointer
+   crosses 8px of page on the way down, which is a pointerleave, and the menu
+   shuts under the cursor that was reaching for it. */
+.ft-nav-menu::before{content:"";position:absolute;left:0;right:0;top:-9px;height:9px}
+.ft-nav-menu-link{
+  display:block;font:500 13.5px var(--font-ui);color:var(--fg-secondary);
+  text-decoration:none;padding:9px 12px;border-radius:var(--r-sm);white-space:nowrap;
+  transition:background var(--dur-2) var(--ease-out),color var(--dur-2) var(--ease-out);
+}
+/* --chip-bg, not --bg-card-hover: the panel's own ground is already the near
+   white that hover token is, so it would read as no hover at all. */
+.ft-nav-menu-link:hover,.ft-nav-menu-link[aria-current="page"]{background:var(--chip-bg);color:var(--fg)}
+
+/* Over a dark section the panel is a dark card, not a white one punched into
+   the section. */
+.ft-nav.is-over-dark .ft-nav-menu{
+  background:rgba(20,23,25,.92);
+  backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
+  border-color:rgba(255,255,255,.12);box-shadow:0 16px 40px rgba(0,0,0,.42);
+}
+.ft-nav.is-over-dark .ft-nav-menu-link{color:rgba(255,255,255,.74)}
+.ft-nav.is-over-dark .ft-nav-menu-link:hover,
+.ft-nav.is-over-dark .ft-nav-menu-link[aria-current="page"],
+.ft-nav.is-over-dark .ft-nav-link--menu[data-current="true"]{color:#fff;background:rgba(255,255,255,.14)}
+
+/* ---- Sheet trigger ----
+   The same two bars become the close mark, so the control never resizes or
+   jumps between its states. */
+.ft-nav-burger{
+  display:none;margin-left:auto;width:44px;height:44px;
+  align-items:center;justify-content:center;
+  background:none;border:0;border-radius:var(--r-sm);color:var(--fg);cursor:pointer;
+  transition:background var(--dur-2) var(--ease-out),color var(--dur-2) var(--ease-out);
+}
+.ft-nav-burger:hover{background:var(--bg-card-hover)}
+.ft-burger-box{position:relative;display:block;width:20px;height:14px}
+.ft-burger-box span{
+  position:absolute;left:0;width:100%;height:1.5px;border-radius:2px;background:currentColor;
+  transition:transform var(--dur-2) var(--ease-out);
+}
+.ft-burger-box span:first-child{top:0}
+.ft-burger-box span:last-child{bottom:0}
+/* 6.25px is half the gap between the two bar centres: both land on the middle
+   line before they rotate, so the cross closes on itself. */
+.ft-nav-burger[aria-expanded="true"] .ft-burger-box span:first-child{transform:translateY(6.25px) rotate(45deg)}
+.ft-nav-burger[aria-expanded="true"] .ft-burger-box span:last-child{transform:translateY(-6.25px) rotate(-45deg)}
+.ft-nav.is-over-dark .ft-nav-burger{color:#fff}
+.ft-nav.is-over-dark .ft-nav-burger:hover{background:rgba(255,255,255,.14)}
+
+/* ---- The sheet ----
+   Positioned against the bar, not fixed to the viewport. .ft-nav is sticky, so
+   it is always the containing block for these two — and it is laid out in the
+   same viewport the rest of the page is. A fixed panel instead resolves
+   against the initial containing block, which is not guaranteed to be that
+   width; where the two differ the panel is laid out wider than the screen and
+   its right edge is cut off. top:100% puts both directly under the bar, which
+   is where the bar's own foot is whatever the page is scrolled to. */
+.ft-nav-scrim{
+  display:none;position:absolute;top:100%;left:0;right:0;z-index:0;
+  height:calc(100dvh - var(--ft-nav-h));background:rgba(14,16,18,.34);
+  opacity:0;visibility:hidden;
+  transition:opacity var(--dur-2) var(--ease-out),visibility 0s linear var(--dur-2);
+}
+.ft-nav-scrim[data-open]{opacity:1;visibility:visible;transition:opacity var(--dur-2) var(--ease-out),visibility 0s}
+.ft-nav-sheet{
+  display:none;position:absolute;top:100%;left:0;right:0;z-index:1;
+  max-height:calc(100dvh - var(--ft-nav-h));overflow-y:auto;overscroll-behavior:contain;
+  padding:var(--sp-4) var(--gutter) var(--sp-8);
+  background:var(--bg-raised);border-bottom:1px solid var(--border);
+  box-shadow:0 18px 40px rgba(14,16,18,.12);
+  opacity:0;visibility:hidden;transform:translateY(-10px);
+  transition:opacity var(--dur-2) var(--ease-out),transform var(--dur-2) var(--ease-out),visibility 0s linear var(--dur-2);
+}
+.ft-nav-sheet[data-open]{
+  opacity:1;visibility:visible;transform:none;
+  transition:opacity var(--dur-2) var(--ease-out),transform var(--dur-2) var(--ease-out),visibility 0s;
+}
+.ft-nav-sheet-list,.ft-nav-sheet-sub{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.ft-nav-sheet-link{
+  display:block;font:500 16px var(--font-ui);color:var(--fg);text-decoration:none;
+  padding:13px 12px;border-radius:var(--r-md);
+  transition:background var(--dur-2) var(--ease-out);
+}
+.ft-nav-sheet-link:hover,.ft-nav-sheet-link[aria-current="page"]{background:var(--chip-bg)}
+.ft-nav-sheet-label{
+  display:block;font:500 12px/1.1 var(--font-ui);letter-spacing:.08em;text-transform:uppercase;
+  color:var(--fg-tertiary);padding:var(--sp-6) 12px var(--sp-2);
+}
+.ft-nav-sheet-cta{width:100%;margin-top:var(--sp-6)}
+
+/* While the sheet is down the bar is its header: it takes the sheet's own
+   ground whatever is scrolled behind it, so the two read as one surface and
+   a light-on-dark bar never ends up sitting on a white panel. Must follow the
+   is-over-hero and is-over-dark rules — same specificity, source order wins. */
+.ft-nav.is-sheet-open{
+  background:var(--ft-paper);backdrop-filter:none;-webkit-backdrop-filter:none;
+  border-bottom:1px solid var(--border);
+}
+.ft-nav.is-sheet-open .ft-nav-burger{color:var(--fg)}
+.ft-nav.is-sheet-open .ft-nav-burger:hover{background:var(--bg-card-hover)}
+.ft-nav.is-sheet-open .ft-nav-logo--ink{opacity:1}
+.ft-nav.is-sheet-open .ft-nav-logo--light{opacity:0}
+
 @media(max-width:900px){
-  .ft-nav{height:auto}
-  .ft-nav-inner{flex-wrap:wrap;padding-top:10px;padding-bottom:10px;gap:var(--sp-4)}
-  .ft-nav-links{width:100%;margin-left:0;overflow-x:auto;scrollbar-width:none}
-  .ft-nav-links::-webkit-scrollbar{display:none}
+  .ft-nav-links{display:none}
+  .ft-nav-burger{display:inline-flex}
+  .ft-nav-scrim,.ft-nav-sheet{display:block}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .ft-nav-caret,.ft-burger-box span{transition:none}
+  .ft-nav-menu,.ft-nav-menu[data-open],
+  .ft-nav-sheet,.ft-nav-sheet[data-open]{transform:none;transition:opacity 200ms ease,visibility 0s}
+}
+/* Translucency is a preference: give the panels a solid ground and drop the
+   blur, the same way the bar itself answers this. */
+@media(prefers-reduced-transparency:reduce){
+  .ft-nav.is-over-dark .ft-nav-menu{
+    background:var(--ft-ink-850);backdrop-filter:none;-webkit-backdrop-filter:none;
+  }
+  /* The bar drops to paper-96 under this preference, so the sheet follows it —
+     the two are one surface and must not part along the seam. */
+  .ft-nav-sheet{background:var(--ft-paper-96)}
+}
+@media(prefers-contrast:more){
+  .ft-nav-menu,.ft-nav-sheet{border:1px solid var(--fg)}
+}
+@media(forced-colors:active){
+  .ft-nav-menu,.ft-nav-sheet{border:1px solid CanvasText;background:Canvas}
+  .ft-burger-box span{background:CanvasText}
 }
 
 /* ---------------- SiteFooter ---------------- */
@@ -274,7 +430,14 @@ html{font-optical-sizing:auto}
 .ft-footer-legal nav{display:flex;gap:var(--sp-4);flex-wrap:wrap}
 
 /* ---------------- ScrollGallery ---------------- */
-.ft-gallery{display:flex;gap:var(--sp-6);overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:var(--sp-2) 0 var(--sp-4)}
+/* position:relative is not decoration here, it is what makes overflow-x
+   actually clip. A scroll container only clips descendants whose containing
+   block is inside it; a static one is not a containing block, so anything
+   absolutely positioned in a card resolves against the page instead and is
+   never clipped — it just sits wherever the rail happens to have scrolled it,
+   and stretches the document to reach. That is a horizontal scrollbar on the
+   whole page, produced by a 1px visually-hidden span in the third card. */
+.ft-gallery{position:relative;display:flex;gap:var(--sp-6);overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:var(--sp-2) 0 var(--sp-4)}
 .ft-gallery::-webkit-scrollbar{display:none}
 .ft-gallery>*{flex:0 0 min(78vw,var(--ft-item-w,420px));scroll-snap-align:center}
 .ft-paddle-row{display:flex;gap:var(--sp-2);justify-content:flex-end;margin-bottom:var(--sp-3)}
@@ -287,7 +450,11 @@ html{font-optical-sizing:auto}
    above with z-index. */
 .ft-ringfield-host{position:relative;overflow:hidden;isolation:isolate}
 .ft-ringfield-host > .ft-shell{position:relative;z-index:1}
-.ft-field{
+/* The rings behind a section. Named for its host: this used to be .ft-field,
+   which is also the form field wrapper 200 lines above — and because this
+   block wins on source order, every input on the contact page was being laid
+   out as a 1100px absolutely positioned circle with pointer-events:none. */
+.ft-ringfield{
   position:absolute;left:50%;top:50%;
   /* Wide enough that the outer rings always leave the frame sideways. */
   width:min(1700px,max(1100px,110%));
@@ -296,8 +463,8 @@ html{font-optical-sizing:auto}
   pointer-events:none;
   z-index:0;
 }
-.ft-field-rings{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.ft-field-ring{
+.ft-ringfield-rings{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.ft-ringfield-ring{
   fill:none;
   stroke:rgba(14,16,18,.07);
   stroke-width:2;
@@ -307,14 +474,14 @@ html{font-optical-sizing:auto}
 /* The layer spins; the dot just sits on it at its radius. Rotating one parent
    is a single composited transform, where animating the dot's own left/top
    would put two layout properties on the main thread every frame. */
-.ft-field-orbit{
+.ft-ringfield-orbit{
   position:absolute;inset:0;
   animation:ft-orbit var(--dur,40s) linear infinite;
   animation-delay:var(--delay,0s);
   will-change:transform;
 }
-.ft-field-orbit--rev{animation-direction:reverse}
-.ft-field-dot{
+.ft-ringfield-orbit--rev{animation-direction:reverse}
+.ft-ringfield-dot{
   position:absolute;
   /* --r is unitless viewBox units, which are percentages of this square box. */
   left:calc(50% + var(--r) * 1%);
@@ -329,7 +496,7 @@ html{font-optical-sizing:auto}
 /* A dot circling forever is exactly the kind of persistent motion that gets
    switched off: keep the rings and the marks, drop the travel. */
 @media(prefers-reduced-motion:reduce){
-  .ft-field-orbit{animation:none}
+  .ft-ringfield-orbit{animation:none}
 }
 
 /* ---------------- Award seals ----------------
@@ -1002,7 +1169,7 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
 /* Translucency is a preference, not a given — frost the chrome to solid and
    drop the blur when the viewer has asked for less transparency. */
 @media(prefers-reduced-transparency:reduce){
-  .ft-nav,.ft-nav.is-over-hero{background:var(--ft-paper-96);backdrop-filter:none;-webkit-backdrop-filter:none;border-bottom:1px solid var(--border)}
+  .ft-nav,.ft-nav.is-over-hero,.ft-nav.is-sheet-open{background:var(--ft-paper-96);backdrop-filter:none;-webkit-backdrop-filter:none;border-bottom:1px solid var(--border)}
   .ft-nav::after{display:none}
 }
 
@@ -1041,6 +1208,23 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
 /* Centring container. text-align alone is not enough: base.css caps every <p>
    at --container-text and headings carry their own max-width, so a capped
    block stays left-anchored inside a centred parent. Auto margins fix that. */
+/* The hero's pair of calls to action. Side by side while both fit; once they
+   stack, one grid column sized to the wider label, with both buttons stretched
+   to it — two stacked pills of different widths read as two unrelated controls
+   rather than a primary and its alternative. */
+.hero-lead{margin:1rem auto 2rem}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:clamp(1rem,3vh,2rem)}
+@media(max-width:600px){
+  /* Two equal columns rather than a stack: the pair stays one row, so the
+     alternative sits beside the primary instead of under it. 1fr 1fr, not
+     auto-fit — equal tracks are the point, and auto would size each to its
+     own label and hand the wider one more room. */
+  .hero-cta{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  /* The tracks are half a phone wide, so the generous desktop inset has to
+     give — otherwise the longer label breaks onto a second line and the two
+     buttons stop matching in height. */
+  .hero-cta .ft-btn{padding-left:.6rem;padding-right:.6rem;text-align:center}
+}
 .ft-center{text-align:center}
 .ft-center > p,
 .ft-center > h1,
@@ -1080,7 +1264,7 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
      interpolates through transparent black and greys out mid-way. Change this
      with the background or the fade will not match. */
   --hero-ground:255,255,255;
-  --nav-h:72px;
+  --nav-h:var(--ft-nav-h);
   /* Breathing room above the eyebrow and below the camera. The top value is
      added to --nav-h, so it describes the gap between the bar and the copy,
      not the distance from the top of the page. */
@@ -1134,9 +1318,10 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
 /* Too short or too narrow to fit one screen without squashing the type: let
    the section grow again and give the camera its ratio back. */
 @media(max-width:860px),(max-height:620px){
-  /* The bar wraps to its own height down here, so --nav-h no longer describes
-     it: put the section back below the bar rather than guessing. */
-  .hero{margin-top:0;padding-top:var(--hero-pad-top);height:auto;min-height:0;display:block}
+  /* The bar is one height at every width now, so the section can keep sitting
+     under it down here — only the fixed viewport height goes, so the copy and
+     the camera stack instead of being squeezed into one screen. */
+  .hero{height:auto;min-height:0;display:block}
   .hero > .ft-shell{display:block}
   .hero-media-wrap{display:block}
   .hero-media{height:auto;aspect-ratio:16 / 10}
@@ -1261,11 +1446,17 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
 .hero-scene{z-index:0}
 .hero > .ft-shell{z-index:2}
 
-/* No hover, no torch. Leave the hero exactly as it reads today rather than
-   half-revealing a photograph a touch user cannot control. */
+/* A touch device gets the same reveal, driven by scroll rather than by a
+   pointer it does not have — so the rule that used to hide it here is gone.
+   The beam is a little wider down here: it is walking the scene on its own
+   rather than being aimed, so it has to cover more of the frame to read. */
 @media(hover:none),(pointer:coarse){
-  .hero-scene{display:none}
+  .hero-scene{--beam-open:clamp(280px,64vw,520px)}
 }
+/* Only once a hold has been recognised. Declaring touch-action:none up front
+   would take vertical scrolling away from the whole camera — a large target
+   near the top of the page — for a gesture most readers will never make. */
+.hero-media-wrap.is-gripped{touch-action:none}
 /* The beam follows the pointer directly, which is fine, but it should not
    also animate open. */
 @media(prefers-reduced-motion:reduce){
@@ -1341,12 +1532,39 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
   .ft-teardown-step p{font-size:var(--t-body-sm);line-height:1.55}
 }
 
-/* Below that the two stack in order, nothing is pinned, and every caption
-   simply reads. */
+/* Below that, the same pinning rather than a flat list. The scrub is the
+   whole point of the section — the captions are written to arrive on the beat
+   the clip reaches, and read as a stack of unrelated headings without it — and
+   the clip already scrubs at every width, only the layout was opting out.
+   Sized for one hand: a shorter frame, so the caption under it still has room
+   on a screen that is mostly height. The base rules above already stack and
+   fade the captions, so there is nothing to re-state here. */
 @media(max-width:899px){
-  .ft-teardown-step{position:static;opacity:1;transform:none}
-  .ft-teardown-copy{grid-template-rows:none}
-  .ft-teardown-step,.ft-teardown-cta{grid-area:auto}
+  .ft-teardown{min-height:220svh;gap:0}
+  .ft-teardown-stage{
+    position:sticky;top:0;
+    height:100svh;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    gap:clamp(.75rem,3vh,1.75rem);
+  }
+  .ft-scrollvideo--fill{
+    position:static;
+    width:100%;height:auto;
+    aspect-ratio:854 / 480;
+    max-height:34svh;
+    flex:0 1 auto;
+  }
+  .ft-scrollvideo--fill .ft-scrollvideo-el{object-position:center}
+  .ft-teardown-copy{
+    position:static;height:auto;width:100%;
+    justify-items:center;
+    text-align:center;
+    padding:0;
+  }
+  .ft-teardown-copy > * {max-width:38ch;margin-inline:auto}
+  .ft-teardown-step h3{font-size:var(--t-h4);line-height:1.2;letter-spacing:-0.002em}
+  .ft-teardown-step p{font-size:var(--t-body-sm);line-height:1.5}
 }
 
 /* ---------------- Scroll-scrubbed video ----------------
@@ -1494,14 +1712,6 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
 .ft-fig strong{display:block;font-family:var(--font-display);font-size:var(--t-h3);font-weight:600;line-height:1.05;letter-spacing:-0.01em}
 .ft-fig span{display:block;margin-top:.4rem;color:var(--fg-tertiary);font-size:var(--t-body-sm);line-height:1.5}
 
-/* Two modes side by side. The camera does one job two ways after dark, and
-   the pair says that faster than a paragraph about switching thresholds. */
-.ft-modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--sp-6);margin-top:var(--sp-8)}
-@media(max-width:720px){.ft-modes{grid-template-columns:1fr}}
-.ft-mode{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--sp-6);display:flex;flex-direction:column;gap:var(--sp-2)}
-.ft-mode h3{margin:0;font-size:var(--t-h4);font-weight:600;line-height:1.2}
-.ft-mode p{margin:0;color:var(--fg-secondary);font-size:var(--t-body-sm);line-height:1.6}
-
 /* The qualifications, kept on the page instead of in a brochure nobody
    reads. Small, but present: every figure above has conditions attached. */
 .ft-notes{list-style:none;margin:var(--sp-8) 0 0;padding:var(--sp-6) 0 0;border-top:1px solid var(--border)}
@@ -1541,6 +1751,10 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
 .ft-phero-inner{width:100%}
 .ft-phero-copy{max-width:min(46ch,52%)}
 .ft-phero-copy h1{margin:0}
+/* Header-sized rather than screen-sized: on the catalogue the picture
+   introduces the range and then gives way to the grid. */
+.ft-phero--short{min-height:clamp(360px,46vh,520px)}
+.ft-phero--short .ft-phero-copy{max-width:min(58ch,60%)}
 
 /* Below the fold of a phone the overlay stops working: the copy would sit on
    the camera. Stack instead — picture, then words. */
@@ -1620,4 +1834,354 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
   .ft-bento{grid-template-columns:1fr}
   .ft-bento-tile--tall{grid-row:auto;min-height:340px}
   .ft-bento-tile--wide{grid-column:auto}
+}
+
+/* ---------------- Before/after compare ---------------- */
+/* Two frames of the same place, one wiped over the other. --pos is set from
+   React and drives both the clip and the divider, so they can never drift
+   apart. */
+.ft-compare{
+  position:relative;isolation:isolate;overflow:hidden;margin:0;
+  border-radius:var(--r-lg);background:var(--ft-paper-92);
+  touch-action:pan-y;
+}
+.ft-compare-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+/* Clipped from the right edge back to the divider. */
+.ft-compare-img--clip{clip-path:inset(0 calc(100% - var(--pos)) 0 0)}
+
+.ft-compare-divider{
+  position:absolute;top:0;bottom:0;left:var(--pos);
+  width:2px;margin-left:-1px;background:rgba(255,255,255,.92);
+  box-shadow:0 0 0 1px rgba(8,9,10,.18);
+  pointer-events:none;z-index:2;
+}
+.ft-compare-grip{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:40px;height:40px;border-radius:var(--r-pill);
+  background:rgba(255,255,255,.96);color:var(--ft-ink-800);
+  display:grid;place-items:center;
+  box-shadow:0 2px 10px rgba(8,9,10,.22);
+}
+/* Labels for which side is which. Small, and out of the way of the subject. */
+.ft-compare-tag{
+  position:absolute;top:var(--sp-3);z-index:2;pointer-events:none;
+  font:500 12px/1 var(--font-ui);letter-spacing:.06em;text-transform:uppercase;
+  padding:.45rem .7rem;border-radius:var(--r-pill);
+  background:rgba(8,9,10,.55);color:#fff;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+}
+.ft-compare-tag--before{left:var(--sp-3)}
+.ft-compare-tag--after{right:var(--sp-3)}
+
+/* The real control, invisible but full-size: drag anywhere on the picture.
+   Kept in the accessibility tree — it is how a keyboard moves the divider. */
+.ft-compare-range{
+  position:absolute;inset:0;z-index:3;
+  width:100%;height:100%;margin:0;padding:0;
+  opacity:0;cursor:ew-resize;
+  -webkit-appearance:none;appearance:none;background:transparent;
+}
+.ft-compare-range::-webkit-slider-thumb{-webkit-appearance:none;width:44px;height:100%;cursor:ew-resize}
+.ft-compare-range::-moz-range-thumb{width:44px;height:100%;border:0;background:transparent;cursor:ew-resize}
+/* The input itself is invisible, so focus has to show on the grip instead —
+   otherwise a keyboard user gets no ring at all. */
+.ft-compare-range:focus-visible ~ .ft-compare-divider .ft-compare-grip{
+  outline:3px solid var(--ring);outline-offset:2px;
+}
+@media(prefers-reduced-motion:reduce){
+  .ft-compare-grip{transition:none}
+}
+
+/* ---------------- Detection band: scrubbed scan sequence ---------------- */
+/* The whole sequence is a function of one number. ScanBand writes --p (0 → 1)
+   as the section scrolls past; each stage below reads it and takes its slice:
+   the photograph blurs across the whole run, the headline gives way through
+   the middle, the cards arrive at the end. No stage owns a timer, so they
+   cannot drift apart, and scrubbing backwards runs it in reverse. */
+.ft-band--scan{
+  /* Section height beyond one screen IS the scroll travel. */
+  min-height:280svh;
+  /* .ft-band clips its photograph with overflow:hidden, but an ancestor with
+     a clipping overflow becomes the sticky child's scroll container — and
+     since that container never scrolls itself, the stage never sticks and the
+     whole band scrolls past 1:1. The stage does its own clipping, so this
+     variant hands the overflow back. */
+  overflow:visible;
+}
+.ft-band-stage{
+  position:sticky;top:0;
+  height:100svh;
+  overflow:hidden;
+  isolation:isolate;
+}
+
+/* The photograph recedes over the full run. Scaled up so the blur cannot pull
+   the frame's edges inward and show the ground behind it. */
+.ft-band--scan{display:block}
+.ft-band--scan .ft-band-img{
+  position:absolute;inset:0;
+  width:100%;height:100%;aspect-ratio:auto;
+  filter:blur(calc(var(--p,0) * 18px)) saturate(calc(1 - var(--p,0) * 0.2)) brightness(calc(1 - var(--p,0) * 0.34));
+  transform:scale(calc(1 + var(--p,0) * 0.08));
+  opacity:1;
+}
+
+.ft-band--scan .ft-band-inner{
+  display:grid;
+  grid-template-columns:1fr;
+  align-content:center;align-items:center;
+  min-height:100svh;
+}
+.ft-band--scan:not(.ft-band--standard-product) .ft-band-copy,
+.ft-band--scan:not(.ft-band--standard-product) .ft-band-rail{grid-area:1 / 1}
+/* The copy keeps the right half it was written for. It leads the sequence and
+   then stands down — by the time the cards are legible it is gone, so the two
+   never compete for the same corner of the picture. */
+.ft-band--scan .ft-band-copy{
+  margin-left:auto;
+  opacity:clamp(0,calc((0.52 - var(--p,0)) * 4),1);
+  transform:translateY(calc(var(--p,0) * -24px));
+  /* Out of the way of a pointer once it has faded. */
+  pointer-events:none;
+}
+
+/* The cards are the payoff: nothing until the picture has receded, then up
+   and in over the last third. */
+.ft-band-rail{
+  width:100%;
+  opacity:clamp(0,calc((var(--p,0) - 0.42) * 3.4),1);
+  transform:translateY(calc((1 - clamp(0,calc((var(--p,0) - 0.42) * 3.4),1)) * 36px));
+}
+
+/* Product-detail bands crossfade between one opening statement and the
+   function cards. Both occupy the centre of the stage so the faded opening
+   copy does not keep an empty row above the cards at the end of the scrub. */
+.ft-band--standard-product .ft-band-inner{position:relative}
+.ft-band--standard-product .ft-band-copy{
+  position:absolute;top:50%;right:var(--gutter);
+  transform:translateY(calc(-50% + var(--p,0) * -24px));
+}
+.ft-band--standard-product .ft-band-rail{
+  position:absolute;top:50%;left:var(--gutter);right:var(--gutter);width:auto;
+  transform:translateY(calc(-50% + (1 - clamp(0,calc((var(--p,0) - 0.42) * 3.4),1)) * 36px));
+}
+
+/* Picture first, caption under it. No panel behind them: the tile is already
+   a hard-edged rectangle on a blurred ground, and a card around it would draw
+   a second edge around something that has one. */
+.ft-scan-card{display:flex;flex-direction:column;gap:var(--sp-4);height:100%}
+.ft-scan-card-img{
+  display:block;width:100%;
+  aspect-ratio:4 / 5;object-fit:cover;
+  border-radius:var(--r-lg);
+  background:rgba(255,255,255,.05);
+}
+.ft-scan-card-body{display:flex;flex-direction:column;gap:6px}
+.ft-scan-card-body h4{
+  margin:0;color:#fff;
+  line-height:1.2;letter-spacing:-0.004em;
+}
+.ft-scan-card-body p{
+  margin:0;max-width:38ch;
+  color:rgba(255,255,255,.70);
+  font-size:var(--t-body-sm);line-height:1.6;
+}
+
+/* No sequence to scrub: ScanBand pins --p at 1, so this is simply the end
+   state — soft picture, cards up, headline stood down — with no pinning and
+   no extra height to scroll through. */
+@media(prefers-reduced-motion:reduce){
+  .ft-band--scan{min-height:0}
+  .ft-band-stage{position:static;height:auto}
+  .ft-band--scan .ft-band-copy{opacity:1;transform:none;pointer-events:auto}
+  .ft-band--standard-product .ft-band-inner{min-height:0;padding-block:var(--sp-10)}
+  .ft-band--standard-product .ft-band-copy,
+  .ft-band--standard-product .ft-band-rail{position:static;transform:none;opacity:1}
+  .ft-band--standard-product .ft-band-rail{margin-top:var(--sp-8)}
+}
+
+@media(max-width:760px){
+  .ft-band--standard-product{min-height:0}
+  .ft-band--standard-product .ft-band-stage{position:static;height:auto}
+  .ft-band--standard-product .ft-band-inner{min-height:0;padding-block:var(--sp-10)}
+  .ft-band--standard-product .ft-band-copy,
+  .ft-band--standard-product .ft-band-rail{position:static;transform:none;opacity:1;pointer-events:auto}
+  .ft-band--standard-product .ft-band-rail{margin-top:var(--sp-8)}
+}
+
+/* Teardown specs: icon and label, centred under the caption. Reuses .ft-spec
+   from the catalogue so the two surfaces state a spec the same way. */
+.ft-teardown-specs{
+  list-style:none;margin:1rem 0 0;padding:0;
+  display:flex;flex-wrap:wrap;justify-content:center;
+  gap:var(--sp-2) var(--sp-6);
+}
+
+/* ---------------- Sensor band ---------------- */
+/* Full bleed and a full screen, with the render's own empty upper half held
+   for the copy. The picture was generated to fade toward pale grey at the
+   top; the gradient below carries that last step exactly to --bg, so the
+   section meets the one above it without a visible edge. */
+.ft-sensorband{
+  position:relative;isolation:isolate;overflow:hidden;
+  min-height:100svh;
+  display:flex;align-items:flex-end;
+  background:var(--bg);
+  /* --bg as channels. A fade has to end on a transparent stop *of this
+     colour*: ending on plain `transparent` interpolates toward transparent
+     black and greys out mid-way, which is what showed up as a soft cut across
+     the fade. Same reasoning as --hero-ground on the home page hero. */
+  --band-ground:244,246,247;
+}
+.ft-sensorband-img{
+  position:absolute;inset:0;z-index:-2;
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:center 100%;
+}
+.ft-sensorband::before{
+  content:'';position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(180deg,
+    rgb(var(--band-ground)) 0%,
+    rgba(var(--band-ground),.82) 3%,
+    rgba(var(--band-ground),.32) 9%,
+    rgba(var(--band-ground),0) 17%);
+}
+.ft-sensorband-inner{width:100%;padding-block:clamp(4rem,11vh,8rem)}
+.ft-sensorband-copy{max-width:min(100%,900px);margin-inline:auto;position:relative}
+.ft-sensorband-copy::before{
+  content:'';position:absolute;z-index:-1;
+  left:50%;top:50%;transform:translate(-50%,-50%);
+  width:100vw;height:210%;
+  background:linear-gradient(180deg,
+    rgba(var(--band-ground),0) 0%,
+    rgba(var(--band-ground),.55) 22%,
+    rgba(var(--band-ground),.78) 42%,
+    rgba(var(--band-ground),.78) 62%,
+    rgba(var(--band-ground),.40) 80%,
+    rgba(var(--band-ground),0) 100%);
+  pointer-events:none;
+}
+.ft-sensorband-copy p:last-child{max-width:none}
+.ft-sensorband-copy .ft-eyebrow{background:var(--ft-ink-900);color:#fff}
+@media(max-width:760px){
+  /* The chip needs room of its own once the column narrows. */
+  .ft-sensorband{min-height:0;padding-bottom:56vw}
+}
+
+/* Cover crops from the sides here; the subject lives on the right of the
+   frame, so the empty half is what gives way. */
+.ft-media--anchor-right .ft-media-img{object-position:right center}
+
+/* ---------------- Weatherproof panel ---------------- */
+/* One panel: the rain shot is the ground and the copy sits on it. The subject
+   is on the right of the frame, so the copy takes the left and the crop gives
+   way there first. */
+.ft-weather-panel{
+  position:relative;isolation:isolate;overflow:hidden;
+  border-radius:var(--r-xl);
+  min-height:clamp(420px,58vh,620px);
+  display:flex;align-items:center;
+  /* Paper as channels: a scrim has to end on a transparent stop of its own
+     colour, or it interpolates toward transparent black and greys out. */
+  --panel-ground:255,255,255;
+}
+.ft-weather-panel-img{
+  position:absolute;inset:0;z-index:-2;
+  width:100%;height:100%;object-fit:cover;object-position:right center;
+}
+.ft-weather-panel::before{
+  content:'';position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(90deg,
+    rgba(var(--panel-ground),.94) 0%,
+    rgba(var(--panel-ground),.88) 34%,
+    rgba(var(--panel-ground),.45) 56%,
+    rgba(var(--panel-ground),0) 76%);
+}
+.ft-weather-panel-copy{
+  position:relative;
+  padding:clamp(2rem,5vw,3.5rem);
+  max-width:min(100%,54ch);
+}
+@media(max-width:760px){
+  /* Too narrow to hold copy beside the subject: the scrim covers the frame. */
+  .ft-weather-panel::before{
+    background:linear-gradient(180deg,
+      rgba(var(--panel-ground),.94) 0%,
+      rgba(var(--panel-ground),.90) 62%,
+      rgba(var(--panel-ground),.55) 100%);
+  }
+  .ft-weather-panel{min-height:0}
+}
+
+/* ---------------- Phone type ----------------
+   Matched to apple.com/iphone-17-pro measured at a 375px viewport: its big
+   headline runs 40/44 and the copy under it 17/21. Ours already lands on 40px
+   down here — the h1 clamp bottoms out below 667px — so the headline only
+   needs the looser leading; the lead drops 18→17px. Sizes and leading only:
+   the weights and the family stay ours.
+   The lead keeps 17px but not Apple's 1.235 leading — German compounds set
+   longer lines than the English that ratio was drawn for, and at this measure
+   they close up. 1.35 is the compromise: their size, room to read it. */
+@media(max-width:600px){
+  :root{
+    --t-lead:1.0625rem;   /* 17px */
+    --t-lead-lh:1.35;     /* ~23px on 17px */
+  }
+  h1{line-height:1.1}     /* 44px on 40px */
+
+  /* The sweep reads as one big arc behind the camera rather than a set of
+     tight circles. On a phone the 92vw term never binds — 92vw of 375 is a
+     third of the floor — so the field is effectively a constant down here,
+     and the floor is the only dial worth turning. */
+  .hero-field{--hero-field-size:min(1700px,max(1560px,92vw))}
+
+  /* The badge never breaks. It hugs its text, so a second line turns a label
+     into a paragraph in a lozenge — and the hero's is the longest string on
+     the site at 41 characters, which is what sets the size below: the vw term
+     is the largest that still fits it inside the shell at 320px, the narrowest
+     phone worth holding. Tracking comes in from .06em, which reads as tracking
+     at 14px and as gaps at 12. Everything else is already one line at full
+     size; they take the smaller badge too, so the scale stays one scale. */
+  .ft-eyebrow{
+    font-size:min(var(--t-body-sm),3.2vw);
+    letter-spacing:.03em;
+    padding:.5rem .85rem;
+    white-space:nowrap;
+  }
+}
+
+/* ---------------- Phone hero geometry ----------------
+   The camera is the product, and on a phone it was landing 84px below the
+   fold: you arrived on the page and it was not there. Three things move —
+   the section's top inset gives a little back, the gap above the camera
+   closes, and the box is then sized from what is left rather than from a
+   ratio, so the cutout is as large as it can be and still finish above the
+   fold. Height in svh, not a ratio, because the constraint down here is the
+   screen's height and nothing else. */
+@media(max-width:600px){
+  .hero{--hero-pad-top:clamp(1.75rem,4.5vh,3rem)}
+  .hero-media-wrap{
+    margin-top:clamp(.5rem,1.5vh,1rem);
+    width:min(100%,460px);
+    height:min(30svh,260px);
+    aspect-ratio:auto;
+  }
+  /* Fills the box the wrapper just measured. The ≤860 rule hands the media
+     its own ratio back, which would size it independently of that height. */
+  .hero-media{height:100%;aspect-ratio:auto}
+}
+
+/* Short phones. The copy above the camera is a fixed number of lines however
+   tall the screen is, so on an SE-sized device it alone reaches the fold and
+   no amount of sizing the camera helps. What is left to give is the rhythm
+   around it — the section inset, the space under the badge, the lead, and the
+   gap over the camera — and the camera then takes a smaller share of a
+   smaller screen. */
+@media(max-width:600px) and (max-height:750px){
+  .hero{--hero-pad-top:clamp(.75rem,2vh,1.5rem)}
+  .hero .ft-eyebrow{margin-bottom:var(--sp-3)}
+  .hero-lead{margin:.75rem auto 1rem}
+  .hero-cta{margin-bottom:.5rem}
+  .hero-media-wrap{margin-top:.25rem;height:min(24svh,190px)}
 }

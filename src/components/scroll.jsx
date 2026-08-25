@@ -208,20 +208,22 @@ function Chevron({ back = false }) {
 }
 
 /** ScrollGallery — Pattern E. Snap rail with paddles and arrow-key support. */
-export function ScrollGallery({ itemWidth = 420, label = 'Galerie', children }) {
+export function ScrollGallery({ itemWidth = 420, label = 'Galerie', paddles = true, children }) {
   const ref = useRef(null)
   const by = (d) => ref.current?.scrollBy({ left: d * (itemWidth + 24), behavior: 'smooth' })
 
   return (
     <div>
-      <div className="ft-paddle-row">
-        <button className="ft-paddle" aria-label="Zurück" onClick={() => by(-1)} type="button">
-          <Chevron back />
-        </button>
-        <button className="ft-paddle" aria-label="Weiter" onClick={() => by(1)} type="button">
-          <Chevron />
-        </button>
-      </div>
+      {paddles && (
+        <div className="ft-paddle-row">
+          <button className="ft-paddle" aria-label="Zurück" onClick={() => by(-1)} type="button">
+            <Chevron back />
+          </button>
+          <button className="ft-paddle" aria-label="Weiter" onClick={() => by(1)} type="button">
+            <Chevron />
+          </button>
+        </div>
+      )}
       <div
         ref={ref}
         className="ft-gallery"

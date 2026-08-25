@@ -71,7 +71,7 @@ export default function Partner() {
             <p
               data-rev
               style={{
-                fontSize: 'var(--t-lead)', lineHeight: 1.45, color: 'var(--fg-secondary)',
+                fontSize: 'var(--t-lead)', lineHeight: 'var(--t-lead-lh)', color: 'var(--fg-secondary)',
                 maxWidth: 680, margin: '1rem 0 0',
               }}
             >
@@ -94,7 +94,7 @@ export default function Partner() {
           <div
             data-rev-group
             style={{
-              display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))',
+              display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(300px,100%),1fr))',
               gap: '1.25rem', marginTop: '3rem',
             }}
           >

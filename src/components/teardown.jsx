@@ -17,6 +17,7 @@
 
 import { useState } from 'react'
 import { SectionHead, Button } from './ui'
+import { markFor } from './spec-marks'
 import { ScrollVideo } from './scroll-video'
 
 /**
@@ -27,10 +28,25 @@ import { ScrollVideo } from './scroll-video'
  */
 const STOPS = [0.3, 0.44, 0.58, 0.72, 0.86]
 
-export function Teardown({ captions, ctaHref, ctaLabel, head }) {
+/**
+ * The window on the clip where the parts are separated — the span the default
+ * stops occupy. A section with a different number of captions spreads them
+ * evenly across the same window rather than over the whole clip, so nothing is
+ * said while the camera is still closed.
+ */
+const WINDOW = [STOPS[0], STOPS[STOPS.length - 1]]
+const spread = (n) =>
+  n === STOPS.length
+    ? STOPS
+    : Array.from({ length: n }, (_, i) =>
+        n === 1 ? WINDOW[0] : WINDOW[0] + ((WINDOW[1] - WINDOW[0]) * i) / (n - 1)
+      )
+
+export function Teardown({ captions, ctaHref, ctaLabel, head, src = '/camera-video.mp4', stops }) {
   const [progress, setProgress] = useState(0)
 
-  const activeIndex = STOPS.reduce((found, stop, i) => (progress >= stop ? i : found), -1)
+  const marks = stops || spread(captions.length)
+  const activeIndex = marks.reduce((found, stop, i) => (progress >= stop ? i : found), -1)
 
   return (
     <section className="ft-section ft-section--raised ft-teardown-section">
@@ -46,15 +62,24 @@ export function Teardown({ captions, ctaHref, ctaLabel, head }) {
           <div className="ft-teardown-stage">
           <ScrollVideo
             fill
-            src="/camera-video.mp4"
+            src={src}
             label={head.mediaLabel}
             onProgress={setProgress}
           />
           <div className="ft-teardown-copy">
-            {captions.map(([h, p], i) => (
+            {captions.map(([h, p, chips], i) => (
               <div className={`ft-teardown-step${i === activeIndex ? ' is-on' : ''}`} key={h}>
                 <h3>{h}</h3>
                 <p style={{ color: 'var(--fg-secondary)' }}>{p}</p>
+                {/* Optional: a caption that has specs to show gets them here,
+                    so a section using this does not have to give them up. */}
+                {chips?.length ? (
+                  <ul className="ft-teardown-specs">
+                    {chips.map((x) => (
+                      <li className="ft-spec" key={x}>{markFor(x)}{x}</li>
+                    ))}
+                  </ul>
+                ) : null}
               </div>
             ))}
             <div className="ft-teardown-cta">

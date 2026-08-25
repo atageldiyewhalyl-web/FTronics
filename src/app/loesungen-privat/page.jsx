@@ -98,7 +98,7 @@ const solutions = [
    be expressed as an inline style. Copied verbatim from the artboard's own
    <style> block. */
 const css = `
-.sol-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(2rem,4vw,4rem);align-items:center}
+.sol-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:clamp(2rem,4vw,4rem);align-items:center}
 @media(min-width:961px){.sol-grid.flip>div:first-child{order:2}}
 `
 
@@ -127,7 +127,7 @@ export default function LoesungenPrivat() {
             <p
               data-rev
               style={{
-                fontSize: 'var(--t-lead)', lineHeight: 1.45, color: 'var(--fg-secondary)',
+                fontSize: 'var(--t-lead)', lineHeight: 'var(--t-lead-lh)', color: 'var(--fg-secondary)',
                 maxWidth: 680, margin: '1rem 0 1.5rem',
               }}
             >

@@ -191,7 +191,7 @@ export function KonfiguratorForm() {
 
           <div
             style={{
-              display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))',
+              display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(300px,100%),1fr))',
               gap: 'clamp(1.5rem,3vw,3rem)', alignItems: 'start',
             }}
           >
