@@ -256,6 +256,10 @@ html{font-optical-sizing:auto}
 .ft-nav-links{display:flex;gap:var(--sp-2);margin-left:auto;align-items:center}
 .ft-nav-link{font:500 13.5px var(--font-ui);color:var(--fg-secondary);text-decoration:none;padding:8px 12px;border-radius:var(--r-sm);transition:background var(--dur-2) var(--ease-out),color var(--dur-2) var(--ease-out);background:none;border:0;cursor:pointer;white-space:nowrap}
 .ft-nav-link:hover{background:var(--bg-card-hover);color:var(--fg)}
+/* The press, at the button's timing rather than the bar's: a 240ms background
+   cannot land inside an 80ms tap. Fast in, and the 240ms above carries it back
+   out on release. */
+.ft-nav-link:active{background:var(--chip-bg);color:var(--fg);transition:background var(--dur-1) var(--ease-out),color var(--dur-1) var(--ease-out)}
 .ft-nav-link[aria-current="page"]{color:var(--fg);background:var(--bg-card-hover)}
 /* ---- Lösungen submenu (desktop) ----
    The label opens the menu rather than navigating: the two routes under it
@@ -646,13 +650,14 @@ html{font-optical-sizing:auto}
    text — the chip's usual soft grey has almost nothing to sit against there.
    On the light band the ordinary chip already works. */
 .ft-band--dark .ft-band-copy .ft-eyebrow{background:#fff;color:var(--fg)}
-/* White at the top falling to grey at the foot of the block. The paint is a
-   gradient clipped to the glyphs, so `color` no longer draws anything — which
-   is why the fallbacks below matter: anywhere the clip is unsupported or
-   overridden, transparent text would be invisible text. */
+/* Solid white, not a fade to grey. The paint is still a gradient clipped to
+   the glyphs — `color` no longer draws anything, which is why the fallbacks
+   below matter: anywhere the clip is unsupported or overridden, transparent
+   text would be invisible text — but both stops are now full white, so the
+   foot of a two-line headline is as opaque as its cap. */
 .ft-band-copy h2{
   color:#fff;
-  background:linear-gradient(180deg,#fff 0%,#fff 34%,rgba(255,255,255,.58) 100%);
+  background:linear-gradient(180deg,#fff 0%,#fff 100%);
   --band-h2-fallback:#fff;
   -webkit-background-clip:text;
   background-clip:text;
@@ -670,7 +675,7 @@ html{font-optical-sizing:auto}
   .ft-band-copy h2{background:none;-webkit-text-fill-color:currentColor;color:CanvasText}
 }
 .ft-band-copy .ft-lead{max-width:none}
-.ft-band--dark .ft-band-copy .ft-lead{color:rgba(255,255,255,.82)}
+.ft-band--dark .ft-band-copy .ft-lead{color:#fff}
 /* Light band: the headline runs ink to grey, the mirror of the dark one. */
 .ft-band--light .ft-band-copy h2{
   color:var(--fg);
@@ -891,6 +896,13 @@ a.ft-pcard:hover{
   box-shadow:0 12px 32px rgba(14,16,18,.10);
   color:inherit;
 }
+/* The card is a link, so it owes a finger the same answer it gives a pointer.
+   Settling back onto the page rather than lifting further off it. */
+a.ft-pcard:active{
+  transform:translateY(0) scale(.995);
+  box-shadow:0 4px 14px rgba(14,16,18,.07);
+  transition:transform var(--dur-1) var(--ease-out),box-shadow var(--dur-1) var(--ease-out);
+}
 /* The global ring assumes a 4px corner; on a 28px card it cut across them. */
 a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border-radius:var(--r-xl)}
 /* The render is inset instead of bleeding to the card's edges, so the white
@@ -967,6 +979,17 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
 
 /* ---------------- Scroll patterns ---------------- */
 [data-rev]{opacity:0;transform:translateY(28px);transition:opacity var(--dur-4) var(--ease-out),transform var(--dur-4) var(--ease-out)}
+/* Above the fold there is nothing to reveal — the content is in view the
+   moment the page paints, so 700ms over a 28px rise means the first screen
+   arrives empty and fills in over most of a second. The openers keep the same
+   move, shorter and closer: --dur-3, and 14px of travel. Section reveals
+   further down still earn the longer one, because they genuinely arrive. */
+.hero [data-rev],
+.ft-screen-head [data-rev],
+.ft-phero:not(.ft-phero--short) [data-rev]{
+  transform:translateY(14px);
+  transition-duration:var(--dur-3),var(--dur-3);
+}
 [data-rev].is-in{opacity:1;transform:none}
 [data-spy]{opacity:.35;transition:opacity var(--dur-3) var(--ease-out)}
 [data-spy].spy-in{opacity:1}
@@ -1288,6 +1311,43 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
      buttons stop matching in height. */
   .hero-cta .ft-btn{padding-left:.6rem;padding-right:.6rem;text-align:center}
 }
+/* A page opener sized to the screen it opens. One viewport less the sticky
+   bar — .ft-nav is 72px, and --nav-h is scoped to the home page hero so it
+   cannot be borrowed here. svh, so a phone's collapsing toolbar cannot make
+   the block taller than the screen it is meant to match. Content taller than
+   that simply grows the section: min-height is a floor, not a cage. */
+.ft-screen-head{
+  min-height:calc(100svh - 72px);display:flex;align-items:center;
+  padding:clamp(4rem,6vw,6.5rem) 0 clamp(3rem,5vw,5rem);
+  position:relative;isolation:isolate;overflow:hidden;
+}
+.ft-screen-head > .ft-shell{width:100%}
+/* A drawn grid behind the opener, at the weight of a hairline rather than of a
+   pattern: at .055 it is a texture you notice only once the eye is still, and
+   the type still sits on plain paper. Masked to nothing well before any edge —
+   a grid that runs to the sides reads as a panel dropped on the page, and the
+   seam where it stops is the only thing anyone sees. */
+.ft-screen-head::before{
+  content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
+  --grid-line:rgba(14,16,18,.055);
+  --grid-step:clamp(44px,5vw,72px);
+  background-image:
+    linear-gradient(to right,var(--grid-line) 1px,transparent 1px),
+    linear-gradient(to bottom,var(--grid-line) 1px,transparent 1px);
+  background-size:var(--grid-step) var(--grid-step);
+  background-position:50% 50%;
+  -webkit-mask-image:radial-gradient(ellipse 76% 66% at 50% 46%,#000 30%,transparent 100%);
+  mask-image:radial-gradient(ellipse 76% 66% at 50% 46%,#000 30%,transparent 100%);
+}
+/* Forced colours replace the paint with the system pair, which would turn a
+   texture into a full-contrast lattice across the headline. */
+@media(forced-colors:active){
+  .ft-screen-head::before{display:none}
+}
+/* A row of marks with their words — the same mark-and-word pair the product
+   cards use, set as a row for a page's own claims. Inside .ft-center it is a
+   direct child div, so that utility centres it. */
+.ft-marks{display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-6)}
 .ft-center{text-align:center}
 .ft-center > p,
 .ft-center > h1,
@@ -1300,8 +1360,20 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
 .ft-prose p{color:var(--fg-secondary)}
 .ft-list{margin:0;padding-left:1.1rem;color:var(--fg-secondary);font-size:var(--t-body-sm);display:flex;flex-direction:column;gap:6px}
 .ft-num{font-family:var(--font-mono);color:var(--fg-tertiary);font-size:14px;margin:0 0 .8rem}
-.ft-quiet-link{color:var(--fg-secondary);font:500 var(--t-body-sm) var(--font-ui);text-decoration:none}
+/* inline-flex with a 44px floor: as plain inline text this was a 20px-tall
+   target, under the minimum the buttons beside it already keep. The box grows,
+   the type does not move — align-items centres it in the taller box. */
+.ft-quiet-link{
+  display:inline-flex;align-items:center;min-height:44px;
+  color:var(--fg-secondary);font:500 var(--t-body-sm) var(--font-ui);text-decoration:none;
+  transition:color var(--dur-2) var(--ease-out),transform var(--dur-1) var(--ease-out);
+}
 .ft-quiet-link:hover{color:var(--fg)}
+/* Feedback on the press. A pointer has hover to answer it; a finger has
+   nothing at all until the next page paints, which is the longest stretch of
+   the interaction to leave silent. Instant in on --dur-1, gentle back out on
+   the rule above — the transition that runs is the destination state's. */
+.ft-quiet-link:active{color:var(--fg);transform:scale(.985)}
 .ft-skip{position:absolute;left:-9999px;top:0;background:var(--fg);color:var(--bg);padding:12px 18px;border-radius:var(--r-sm);z-index:100}
 .ft-skip:focus{left:var(--gutter);top:8px}
 
@@ -1869,9 +1941,19 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
 /* The three numbers a lens is judged on, set large enough to be read across
    the room and captioned so they are not just decoration. */
 .ft-figs{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-6);margin-top:var(--sp-8)}
-@media(max-width:620px){.ft-figs{grid-template-columns:1fr;gap:var(--sp-4)}}
 .ft-fig strong{display:block;font-family:var(--font-display);font-size:var(--t-h3);font-weight:600;line-height:1.05;letter-spacing:-0.01em}
 .ft-fig span{display:block;margin-top:.4rem;color:var(--fg-tertiary);font-size:var(--t-body-sm);line-height:1.5}
+/* Stacked, the three figures lost the thing that made them figures: side by
+   side the column edges separate them, in one column they were three lines
+   set at nearly the paragraph's own size, reading as a list. A rule between
+   each and the numeral at display size gives every figure a band of its own —
+   the number carries it and the line under it explains it. */
+@media(max-width:620px){
+  .ft-figs{grid-template-columns:1fr;gap:0;margin-top:var(--sp-6)}
+  .ft-fig{padding:var(--sp-6) 0;border-top:1px solid var(--border)}
+  .ft-fig strong{font-size:clamp(2.75rem,13vw,3.75rem);line-height:1;letter-spacing:-0.02em}
+  .ft-fig span{margin-top:.6rem;max-width:34ch}
+}
 
 /* The qualifications, kept on the page instead of in a brochure nobody
    reads. Small, but present: every figure above has conditions attached. */
@@ -1930,6 +2012,26 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
 @media(max-width:860px){
   .ft-phero,
   .ft-phero--short{display:block;min-height:0}
+  /* A product header is still one screen on a phone. Left to its content it
+     came out around 495px of an 812px screen, so the rail below it pushed into
+     the header's own screen and the page opened on two half-sections instead
+     of one whole one. The catalogue's --short header is deliberately a header
+     rather than a screen and keeps the height it has. */
+  .ft-phero:not(.ft-phero--short){
+    display:flex;flex-direction:column;
+    min-height:calc(100svh - 72px);
+  }
+  /* The copy keeps the picture as its anchor — padding-top still puts its
+     first line where the scrim has closed over the photograph — and then takes
+     the middle of what is left below that, rather than sitting high with a
+     screen's worth of empty ground under the button. Content taller than the
+     space wins over the centring: a flex item will not shrink under its own
+     content, so on a short phone the copy stays on its anchor and the section
+     grows instead. */
+  .ft-phero:not(.ft-phero--short) .ft-phero-inner{
+    flex:1;display:flex;flex-direction:column;justify-content:center;
+    padding-bottom:var(--sp-8);
+  }
   /* The plate is 2400x1018 and its left half is blown-out morning light; the
      camera it is here to show sits right. ~72vw keeps that crop on any phone. */
   .ft-phero{--phero-img-h:min(104vw,470px)}
@@ -2000,15 +2102,23 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
 .ft-bento-img{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover}
 .ft-bento-tile--dark{background:var(--ft-ink-900);color:#fff}
 .ft-bento-tile--light{background:var(--ft-paper-96)}
-/* A scrim only where words sit, so the picture keeps its contrast elsewhere. */
+/* A photo tile has no ground of its own — the picture is the ground, and the
+   scrim over it is dark, so its words take the same white pair. */
+.ft-bento-tile--photo{color:#fff}
+/* A scrim only where words sit, so the picture keeps its contrast elsewhere.
+   One direction for both kinds. A white scrim carried the copy over a dark
+   photograph, but gave way on any picture that was already pale — a concrete
+   façade in daylight left grey text on near-white, and which way a tile fell
+   depended on the shot rather than on the design. The dark scrim holds on
+   every photograph, so it is the only one here. */
 .ft-bento-tile--dark::before,
 .ft-bento-tile--photo::before{
   content:'';position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(180deg,rgba(8,9,10,.72) 0%,rgba(8,9,10,.30) 46%,rgba(8,9,10,0) 78%);
 }
-.ft-bento-tile--dark::before{background:linear-gradient(180deg,rgba(8,9,10,.72) 0%,rgba(8,9,10,.30) 46%,rgba(8,9,10,0) 78%)}
 /* Copy at the foot means the scrim runs the other way. */
-.ft-bento-tile--tall.ft-bento-tile--dark::before{background:linear-gradient(0deg,rgba(8,9,10,.82) 0%,rgba(8,9,10,.38) 44%,rgba(8,9,10,0) 76%)}
-.ft-bento-tile--photo::before{background:linear-gradient(180deg,rgba(255,255,255,.94) 0%,rgba(255,255,255,.90) 34%,rgba(255,255,255,.68) 56%,rgba(255,255,255,0) 84%)}
+.ft-bento-tile--tall.ft-bento-tile--dark::before,
+.ft-bento-tile--tall.ft-bento-tile--photo::before{background:linear-gradient(0deg,rgba(8,9,10,.82) 0%,rgba(8,9,10,.38) 44%,rgba(8,9,10,0) 76%)}
 .ft-bento-tile h3{margin:0;font-size:var(--t-h4);font-weight:600;line-height:1.2;max-width:20ch}
 .ft-bento-tile p{margin:.5rem 0 0;font-size:var(--t-body-sm);line-height:1.6;max-width:34ch;color:var(--fg-secondary)}
 /* Headings are painted site-wide with an INK gradient clipped to the glyphs,
@@ -2016,7 +2126,8 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
    the paint underneath is near-black, which on a night photograph is very
    nearly invisible. Re-declare it in white, exactly the treatment
    .ft-cta-dark h2 and .pin-panel-copy h3 need for the same reason. */
-.ft-bento-tile--dark h3{
+.ft-bento-tile--dark h3,
+.ft-bento-tile--photo h3{
   color:#fff;
   background:linear-gradient(180deg,#fff 0%,#fff 42%,rgba(255,255,255,.70) 100%);
   -webkit-background-clip:text;
@@ -2026,23 +2137,102 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
 }
 /* No clip support: solid white rather than a transparent hole. */
 @supports not ((background-clip:text) or (-webkit-background-clip:text)){
-  .ft-bento-tile--dark h3{background:none;-webkit-text-fill-color:#fff}
+  .ft-bento-tile--dark h3,
+  .ft-bento-tile--photo h3{background:none;-webkit-text-fill-color:#fff}
 }
 /* Forced colours replace the background but not text-fill-color, which would
    leave the heading invisible; hand it back to the system pair. */
 @media(forced-colors:active){
-  .ft-bento-tile--dark h3{background:none;-webkit-text-fill-color:currentColor;color:CanvasText}
+  .ft-bento-tile--dark h3,
+  .ft-bento-tile--photo h3{background:none;-webkit-text-fill-color:currentColor;color:CanvasText}
 }
 /* The global rule answers prefers-contrast by resetting headings to --fg, and
    --fg is paper ink — on this ground that is the invisible case again. */
 @media(prefers-contrast:more){
-  .ft-bento-tile--dark h3{background:none;-webkit-text-fill-color:#fff;color:#fff}
+  .ft-bento-tile--dark h3,
+  .ft-bento-tile--photo h3{background:none;-webkit-text-fill-color:#fff;color:#fff}
 }
-.ft-bento-tile--dark p{color:rgba(255,255,255,.82)}
+.ft-bento-tile--dark p,
+.ft-bento-tile--photo p{color:rgba(255,255,255,.82)}
+/* ---------------- Feature bento on a phone ----------------
+   One column is four full-height photographs to scroll past, each with its
+   words laid over the one thing the tile exists to show — on the night shot
+   the copy sits across the lit IR ring. On a phone the tiles become a rail
+   instead: the picture holds a frame of its own, the words come out from
+   under it onto the page's own ground, and the next tile is left peeking past
+   the screen edge so the row reads as something to swipe. The paddles stay
+   hidden until then; a grid has nothing to page through. */
+.ft-bento-rail > .ft-paddle-row{display:none}
 @media(max-width:760px){
-  .ft-bento{grid-template-columns:1fr}
-  .ft-bento-tile--tall{grid-row:auto;min-height:340px}
-  .ft-bento-tile--wide{grid-column:auto}
+  /* position:relative for the reason .ft-gallery carries it: a static scroll
+     container is not a containing block, so anything positioned inside a tile
+     resolves against the page instead of being clipped by the rail. */
+  .ft-bento{
+    display:flex;position:relative;
+    overflow-x:auto;overflow-y:hidden;
+    scroll-snap-type:x mandatory;scrollbar-width:none;
+    /* Out to the screen edges. The peek has to happen past the gutter — inside
+       it the next card starts where the copy column ends, and the row reads as
+       cut off rather than carried on. */
+    margin-inline:calc(var(--gutter) * -1);
+    padding-inline:var(--gutter);
+    scroll-padding-inline:var(--gutter);
+  }
+  .ft-bento::-webkit-scrollbar{display:none}
+  .ft-bento-rail > .ft-bento{order:1}
+  .ft-bento-rail > .ft-paddle-row{display:flex}
+  /* A spent paddle is the end of the rail, not a dead control: it keeps its
+     shape and stops answering the pointer. */
+  .ft-bento-rail .ft-paddle:disabled{opacity:.38;cursor:default}
+  .ft-bento-rail .ft-paddle:disabled:hover{background:var(--bg-card);border-color:var(--border)}
+  /* Inside a rail the tiles fade in place — the reveal's 22px offset would be
+     scrollable overflow the rail has to hide, which is a stray vertical drag. */
+  .ft-bento [data-rev]{transform:none}
+  .ft-bento-tile{flex:0 0 82%;scroll-snap-align:start;min-height:0}
+  .ft-bento-tile--tall,.ft-bento-tile--wide{grid-row:auto;grid-column:auto;min-height:0}
+
+  /* --- Tiles with a picture: frame above, words below --- */
+  /* The tile stops being a card. It is a picture with a caption under it, so
+     it carries no ground, no padding and no clipping of its own — the frame
+     is the image's border-radius and the words sit on the page. */
+  .ft-bento-tile--framed{display:block;padding:0;background:none;border-radius:0;overflow:visible}
+  .ft-bento-tile--framed .ft-bento-img{
+    position:relative;inset:auto;z-index:auto;
+    display:block;width:100%;height:auto;aspect-ratio:4 / 3;
+    border-radius:var(--r-xl);margin-bottom:var(--sp-4);
+  }
+  /* Nothing sits on the photograph any more, so the scrim that held those
+     words' contrast has nothing left to do. */
+  .ft-bento-tile--framed::before{content:none}
+  /* The words keep the shape they have everywhere else — the claim on its own
+     line, the explanation under it. Only their paint changes: on the page's
+     own ground the white pair that a night photograph needed would be a white
+     heading on paper. */
+  .ft-bento-tile--framed h3{
+    color:var(--fg);background-image:none;-webkit-text-fill-color:currentColor;
+    padding-bottom:0;
+  }
+  .ft-bento-tile--framed p{color:var(--fg-secondary)}
+  /* Where the clip is supported, the site's own heading fade rather than flat
+     ink — the same paint every other heading on the page carries. */
+  @supports ((background-clip:text) or (-webkit-background-clip:text)){
+    .ft-bento-tile--framed h3{
+      background-image:linear-gradient(180deg,var(--ft-ink-text) 0%,var(--ft-ink-grad-end) 100%);
+      -webkit-background-clip:text;background-clip:text;
+      color:transparent;-webkit-text-fill-color:transparent;
+    }
+  }
+  /* Both of those hand the glyphs back to the system pair, exactly as the
+     global heading rule does. */
+  @media(forced-colors:active),(prefers-contrast:more){
+    .ft-bento-tile--framed h3{background-image:none;color:var(--fg);-webkit-text-fill-color:currentColor}
+  }
+
+  /* --- Tiles with no picture: still a panel --- */
+  /* PoE, ONVIF, NDAA — the claims that never had a photograph. There is no
+     frame for their words to come out from under, so they keep the ink panel
+     they are, centred against the taller framed tiles beside them. */
+  .ft-bento-tile:not(.ft-bento-tile--framed){justify-content:center}
 }
 
 /* ---------------- Before/after compare ---------------- */
@@ -2203,19 +2393,67 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
   .ft-band--scan{min-height:0}
   .ft-band-stage{position:static;height:auto}
   .ft-band--scan .ft-band-copy{opacity:1;transform:none;pointer-events:auto}
-  .ft-band--standard-product .ft-band-inner{min-height:0;padding-block:var(--sp-10)}
+  /* --sp-10 is not a token; var() with no fallback made this padding invalid
+     and the block sat flush against both neighbours. */
+  .ft-band--standard-product .ft-band-inner{min-height:0;padding-block:var(--sp-8)}
   .ft-band--standard-product .ft-band-copy,
   .ft-band--standard-product .ft-band-rail{position:static;transform:none;opacity:1}
   .ft-band--standard-product .ft-band-rail{margin-top:var(--sp-8)}
 }
 
-@media(max-width:760px){
-  .ft-band--standard-product{min-height:0}
-  .ft-band--standard-product .ft-band-stage{position:static;height:auto}
-  .ft-band--standard-product .ft-band-inner{min-height:0;padding-block:var(--sp-10)}
+/* The rail's controls on the dark band. The site's paddle is a white pill,
+   which is right on paper and reads as two headlights on this ground; same
+   shape and size, in the band's own language. Hidden until the band stacks —
+   on a wide screen the three cards fit the rail with nothing to page to. */
+.ft-band-rail .ft-paddle-row{display:none}
+.ft-band-rail .ft-paddle{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.22);color:#fff}
+.ft-band-rail .ft-paddle:hover{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.38)}
+
+/* ---------------- Detection band on a phone ----------------
+   The scrub has nothing to work with at this width. The stage is one screen
+   and the picture, the words and the cards all want that screen at once, so
+   the sequence spends its travel hiding two of the three — and the rail,
+   sharing a grid cell with the copy, sizes that cell to its own untruncated
+   925px behind an overflow:hidden edge, which is the headline being cut off
+   mid-word. So the band takes the shape the dark band already takes here:
+   photograph across the top, words underneath on the band's own ground, and
+   the cards following the words instead of arriving in place of them. Nothing
+   is pinned, nothing is blurred, nothing fades in or out. */
+@media(max-width:900px){
+  .ft-band--scan{min-height:0}
+  /* Static and un-isolated. The picture goes back to the section for its
+     containing block — which is what .ft-band--dark's phone rules position it
+     against — and the copy's z-index:2 can reach past the fade again instead
+     of being trapped inside the stage's own stacking context. */
+  .ft-band--scan .ft-band-stage{
+    position:static;height:auto;overflow:visible;isolation:auto;
+  }
+  /* The photograph is the head of the section rather than a ground being
+     scrubbed; its height, crop and fade are .ft-band--dark's. */
+  .ft-band--scan .ft-band-img{filter:none;transform:none}
+  /* Block flow: the rail stops sharing a cell with the copy, and stops being
+     what decides how wide that cell is. */
+  .ft-band--scan .ft-band-inner{display:block;min-height:0}
+  .ft-band--scan .ft-band-copy{
+    opacity:1;transform:none;pointer-events:auto;
+    margin-left:0;width:100%;
+  }
+  /* Room enough that the cards read as what the words lead to rather than as
+     the next line of the paragraph. */
+  .ft-band--scan .ft-band-rail{opacity:1;transform:none;margin-top:clamp(3.5rem,13vw,5.5rem)}
+  /* Paddles under the cards and centred, where the thumb is. Below 880 the
+     site's own rail rule already says this; the band starts stacking at 900,
+     so it says it here for the twenty pixels in between. */
+  .ft-band-rail .ft-rail{display:flex;flex-direction:column}
+  .ft-band-rail .ft-gallery{order:1}
+  .ft-band-rail .ft-paddle-row{display:flex;order:2;justify-content:center;margin:1.25rem 0 0}
+  /* The standard-product bands place the two by hand on a wide screen, one
+     over the other in the middle of the stage. Here they are simply in
+     order. */
   .ft-band--standard-product .ft-band-copy,
-  .ft-band--standard-product .ft-band-rail{position:static;transform:none;opacity:1;pointer-events:auto}
-  .ft-band--standard-product .ft-band-rail{margin-top:var(--sp-8)}
+  .ft-band--standard-product .ft-band-rail{
+    position:static;transform:none;width:100%;
+  }
 }
 
 /* Teardown specs: icon and label, centred under the caption. Reuses .ft-spec
@@ -2273,14 +2511,311 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
 }
 .ft-sensorband-copy p:last-child{max-width:none}
 .ft-sensorband-copy .ft-eyebrow{background:var(--ft-ink-900);color:#fff}
+/* ---------------- Sensor band, phone ----------------
+   Full-bleed, the picture is the ground and the words are on it — and on a
+   phone the column narrows until the paragraph runs straight across the
+   sensor's gold contacts, which is where the haze behind the copy stops being
+   enough. So the band takes the shape the hand-made one takes here: the
+   photograph across the top, dissolving into the section's own ground at its
+   foot, and the words underneath it on that ground. A picture is a ground
+   without ever having to be a backdrop for type.
+
+   Height tied to width, as there: cover scales the plate by whichever axis
+   binds, and ~104vw is the ratio that keeps the sensor in frame on any phone
+   rather than letting the crop wander with the screen. */
 @media(max-width:760px){
-  /* The chip needs room of its own once the column narrows. */
-  .ft-sensorband{min-height:0;padding-bottom:56vw}
+  .ft-sensorband{
+    min-height:0;padding-bottom:0;
+    display:block;
+    --sensor-photo-h:min(104vw,520px);
+  }
+  .ft-sensorband-img{
+    position:absolute;inset:0 0 auto;
+    width:100%;height:var(--sensor-photo-h);
+    object-fit:cover;object-position:center center;
+  }
+  /* One fade doing both ends: the pale head of the plate carried to --bg so
+     the band still arrives without a seam, clear through the middle where the
+     sensor is, then closed to solid by the foot so there is no edge under the
+     copy — only the point where you stop being able to tell there was a
+     photograph. */
+  .ft-sensorband::before{
+    inset:0 0 auto;height:var(--sensor-photo-h);
+    background:linear-gradient(to bottom,
+      rgb(var(--band-ground)) 0%,
+      rgba(var(--band-ground),.72) 5%,
+      rgba(var(--band-ground),0) 16%,
+      rgba(var(--band-ground),0) 58%,
+      rgba(var(--band-ground),.42) 76%,
+      rgba(var(--band-ground),.88) 92%,
+      rgb(var(--band-ground)) 100%);
+  }
+  /* Starts just inside the solid end of that fade. */
+  .ft-sensorband-inner{
+    padding-top:calc(var(--sensor-photo-h) - 1.5rem);
+    padding-bottom:clamp(3rem,9vh,5rem);
+  }
+  /* The haze existed to hold type against a photograph. On solid ground it has
+     nothing left to hide, and it only greys the paper it sits on. */
+  .ft-sensorband-copy::before{display:none}
+}
+
+/* ---------------- Sensor band, split ----------------
+   Everything above assumes the picture is the sensor macro the hand-written
+   FC-8D pages carry: a photograph generated with an empty upper half, which
+   is what the full-bleed band and both of its scrims exist to use. The
+   generated product pages show the camera instead — a render cut out on
+   near-white, subject dead centre. There is no empty half there, so the copy
+   landed across the lens and the haze that was meant to protect it only fogged
+   the render. A camera gets a column of its own: words left, render right, and
+   the band drops from a full screen to the height that pair needs.
+
+   Declared after the phone block on purpose — every rule here outweighs its
+   full-bleed counterpart on specificity, so the variant holds at every width
+   and the split simply collapses to one column when the grid runs out. */
+.ft-sensorband--split{
+  min-height:100svh;
+  display:flex;align-items:center;
+  padding-block:clamp(4rem,7vw,7rem);
+  /* --band-solid is set per product from the render's own edge colour; the
+     five webp cameras sit on a pale grey, the recorder shots on white, and the
+     cut-out PNGs set nothing and fall through to the page. */
+  background:var(--band-solid,var(--bg));
+}
+/* Nothing lies over the picture now, so neither scrim has work left to do. */
+.ft-sensorband--split::before,
+.ft-sensorband--split .ft-sensorband-copy::before{content:none}
+.ft-sensorband--split .ft-sensorband-inner{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));
+  gap:clamp(2rem,5vw,4.5rem);
+  align-items:center;
+  padding-block:0;
+}
+.ft-sensorband--split .ft-sensorband-copy{max-width:52ch;margin-inline:0}
+/* Back into the flow, and held to a size the copy can sit beside rather than
+   the whole width of the screen. No frame and no radius — the section is
+   painted in the render's own ground instead.
+
+   That ground is a studio backdrop, not a flat fill: it lifts from about 209
+   at the edges to 225 behind the subject, and the foot of the frame carries
+   the surface the camera stands on at 130. So matching the section to one
+   number still leaves a panel. The mask finishes the job — the outer tenth of
+   each side dissolves into the section, which takes the four corners, the
+   bottom shadow and whatever is left of the mismatch with them, and leaves
+   the camera sitting on the page rather than in a box. Unsupported, it simply
+   does not apply and the colour match alone carries it. */
+.ft-sensorband--split .ft-sensorband-img{
+  position:relative;inset:auto;z-index:auto;
+  width:100%;height:auto;
+  max-width:min(100%,540px);
+  justify-self:end;
+  object-fit:contain;
+  /* Eased over many stops rather than ramped in one: a straight two-stop fade
+     puts a visible line where the ramp begins, which is the seam again in a
+     softer form. Full opacity holds across the middle two thirds, so the
+     camera is never inside the fade — only the ground around it, and on the
+     shots whose base or shadow does run to an edge, the fade reads as the
+     vignette a product shot would have anyway. */
+  --edge-fade:linear-gradient(to right,
+                transparent 0,rgba(0,0,0,.25) 4%,rgba(0,0,0,.62) 8%,rgba(0,0,0,.88) 12%,#000 17%,
+                #000 83%,rgba(0,0,0,.88) 88%,rgba(0,0,0,.62) 92%,rgba(0,0,0,.25) 96%,transparent 100%),
+              linear-gradient(to bottom,
+                transparent 0,rgba(0,0,0,.25) 4%,rgba(0,0,0,.62) 8%,rgba(0,0,0,.88) 12%,#000 17%,
+                #000 83%,rgba(0,0,0,.88) 88%,rgba(0,0,0,.62) 92%,rgba(0,0,0,.25) 96%,transparent 100%);
+  -webkit-mask-image:var(--edge-fade);
+  mask-image:var(--edge-fade);
+  -webkit-mask-composite:source-in;
+  mask-composite:intersect;
 }
 
 /* Cover crops from the sides here; the subject lives on the right of the
    frame, so the empty half is what gives way. */
 .ft-media--anchor-right .ft-media-img{object-position:right center}
+
+/* ---------------- Map embed ----------------
+   The contact map. Sized like the frame it replaced — a 4:3 media block with
+   the kit's own radius — and given the card's hairline so it reads as part of
+   the same set rather than as a window cut into the page. */
+.ft-map{
+  display:block;width:100%;aspect-ratio:4 / 3;
+  border:1px solid var(--border);border-radius:var(--r-lg);
+  background:var(--ft-paper-96);
+}
+
+/* ---------------- Building plan ----------------
+   A cutaway of a building with a ring on every system it carries: hover or tap
+   a ring and a card names the system and what it includes. Lived in the
+   Privatkunden page until the Gewerbe page took the same shape — two surfaces
+   using one drawing of an idea is the whole reason this file exists. What
+   stays with a page is where its plan sits: the private one is its hero's
+   right-hand ground, the commercial one runs full width under centred copy. */
+.ft-plan{margin:clamp(2.5rem,5vw,4rem) 0 0}
+.ft-plan-frame{position:relative;width:100%}
+.ft-plan-img{display:block;width:100%;height:auto;border-radius:var(--r-xl)}
+/* A hollow ring sitting on the device, and nothing else until asked. White at
+   92%, with a hairline dark halo under it so it holds its shape over a pale
+   wall and over a dark screen alike.
+
+   The mark itself draws no box: display:contents puts the ring and the card
+   side by side in the picture's own coordinates, both positioned from --x/--y.
+   That is what lets the card be centred on the house on a phone — inside a
+   positioned mark it could only ever be measured from the mark. Hover still
+   reaches the wrapper: a box is not needed to be an ancestor of what the
+   pointer is over. */
+.ft-plan-mark{display:contents}
+.ft-plan-ring{
+  position:absolute;left:var(--x);top:var(--y);z-index:1;
+  width:44px;height:44px;margin:-22px 0 0 -22px;padding:0;
+  border-radius:50%;border:2px solid rgba(255,255,255,.92);
+  background:rgba(255,255,255,.06);
+  box-shadow:0 0 0 1px rgba(14,16,18,.09),0 8px 22px rgba(14,16,18,.12);
+  cursor:pointer;pointer-events:auto;
+  transition:transform var(--dur-2) var(--ease-out),background var(--dur-2) var(--ease-out);
+}
+.ft-plan-mark:hover .ft-plan-ring,
+.ft-plan-mark:focus-within .ft-plan-ring,
+.ft-plan-mark[data-open] .ft-plan-ring{transform:scale(1.14);background:rgba(255,255,255,.24)}
+.ft-plan-ring:active{transform:scale(1.02);transition-duration:var(--dur-1)}
+
+/* The card carries the system itself — name, what it includes, and the way on.
+   Opens on hover, and on focus, which is what a tab gives you. Its offsets are
+   measured from the ring's own position: 34px clears the ring's radius and
+   leaves the 12px gap the bridge below covers. */
+.ft-plan-pop{
+  position:absolute;left:var(--x);bottom:calc(100% - var(--y) + 34px);z-index:5;
+  transform:translate(-50%,6px);
+  width:max-content;max-width:19rem;text-align:left;
+  padding:1rem 1.1rem 1.05rem;
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);
+  box-shadow:0 18px 44px rgba(14,16,18,.16);
+  opacity:0;pointer-events:none;
+  transition:opacity var(--dur-1) var(--ease-out),transform var(--dur-2) var(--ease-out);
+}
+/* The gap between ring and card is one the pointer would fall through on its
+   way to the link inside. This bridges it without drawing anything. */
+.ft-plan-pop::before{content:'';position:absolute;left:0;right:0;top:100%;height:14px}
+.ft-plan-mark.below .ft-plan-pop::before{top:auto;bottom:100%}
+.ft-plan-mark:hover .ft-plan-pop,
+.ft-plan-mark:focus-within .ft-plan-pop,
+.ft-plan-mark[data-open] .ft-plan-pop{opacity:1;pointer-events:auto;transform:translate(-50%,0)}
+/* Marks near the right edge open their card inward, and marks high up open
+   downward — either way it stays on the picture. */
+.ft-plan-mark.flip .ft-plan-pop{left:auto;right:calc(100% - var(--x) - 32px);transform:translate(0,6px)}
+.ft-plan-mark.flip:hover .ft-plan-pop,
+.ft-plan-mark.flip:focus-within .ft-plan-pop,
+.ft-plan-mark.flip[data-open] .ft-plan-pop{transform:translate(0,0)}
+.ft-plan-mark.below .ft-plan-pop{bottom:auto;top:calc(var(--y) + 34px);transform:translate(-50%,-6px)}
+.ft-plan-mark.below.flip .ft-plan-pop{transform:translate(0,-6px)}
+.ft-plan-mark.below:hover .ft-plan-pop,
+.ft-plan-mark.below:focus-within .ft-plan-pop,
+.ft-plan-mark.below[data-open] .ft-plan-pop{transform:translate(-50%,0)}
+.ft-plan-mark.below.flip:hover .ft-plan-pop,
+.ft-plan-mark.below.flip:focus-within .ft-plan-pop,
+.ft-plan-mark.below.flip[data-open] .ft-plan-pop{transform:translate(0,0)}
+
+/* A pinned card is the only card: hover and focus stop opening the others,
+   or clicking one and then resting the pointer on another shows two at once. */
+.ft-plan[data-anyopen] .ft-plan-mark:not([data-open]) .ft-plan-pop{opacity:0;pointer-events:none}
+
+.ft-plan-pop-h{margin:0;font:600 var(--t-body)/1.25 var(--font-display);letter-spacing:-0.004em;color:var(--fg)}
+.ft-plan-pop-list{
+  list-style:none;margin:.6rem 0 0;padding:0;
+  display:grid;gap:5px;
+  font:400 13px/1.45 var(--font-ui);color:var(--fg-secondary);
+}
+.ft-plan-pop-list li{padding-left:.85rem;position:relative}
+.ft-plan-pop-list li::before{content:'';position:absolute;left:0;top:.52em;width:4px;height:4px;border-radius:50%;background:var(--fg-tertiary)}
+.ft-plan-pop-x{
+  display:none;position:absolute;top:8px;right:8px;
+  width:32px;height:32px;border-radius:50%;
+  border:1px solid var(--border);background:var(--bg);color:var(--fg-secondary);
+  place-items:center;cursor:pointer;
+}
+.ft-plan-pop-x:active{background:var(--chip-bg);color:var(--fg)}
+.ft-plan-pop-cta{
+  display:inline-block;margin-top:.85rem;
+  font:600 13px/1.3 var(--font-ui);color:var(--ft-red-brand);text-decoration:none;
+}
+.ft-plan-pop-cta:hover{color:var(--ft-red-brand-hover)}
+
+/* A phone has no pointer to hover with and no room for a 44px ring on a
+   343px plan: the rings come down a size, and the cards open on tap. */
+@media(max-width:760px){
+  /* Out to the screen edges and then some: at the shell's width the house was
+     343px across and every device in it was a speck. The frame overhangs on
+     both sides and the section clips it, so the marks stay proportional — they
+     are percentages of the frame, not of the picture's own pixels. */
+  .ft-plan{margin-inline:calc(var(--gutter) * -1)}
+  .ft-plan-frame{width:122%;margin-left:-11%}
+  .ft-plan-ring{width:32px;height:32px;margin:-16px 0 0 -16px;border-width:1.5px}
+  /* Centred on the house, not on the screen: the card is absolutely placed in
+     the picture's own box, so it sits in the middle of the plan and scrolls
+     away with it rather than following the viewport. */
+  .ft-plan-mark .ft-plan-pop,
+  .ft-plan-mark.flip .ft-plan-pop,
+  .ft-plan-mark.below .ft-plan-pop,
+  .ft-plan-mark.below.flip .ft-plan-pop{
+    left:50%;right:auto;top:50%;bottom:auto;
+    width:min(21rem,calc(100vw - 2 * var(--gutter)));max-width:none;
+    transform:translate(-50%,-46%);
+    padding:1.15rem 1.2rem 1.2rem;
+  }
+  /* Open when the state says so and at no other time. A tap leaves focus on
+     the ring, so a card held open by :focus-within could not be closed — the ✕
+     only moves focus to itself, inside the same mark. Every flip/below
+     combination is spelled out: the wide-screen rules for them are four
+     classes deep and would otherwise out-rank these. */
+  .ft-plan-mark:hover .ft-plan-pop,
+  .ft-plan-mark:focus-within .ft-plan-pop,
+  .ft-plan-mark.flip:hover .ft-plan-pop,
+  .ft-plan-mark.flip:focus-within .ft-plan-pop,
+  .ft-plan-mark.below:hover .ft-plan-pop,
+  .ft-plan-mark.below:focus-within .ft-plan-pop,
+  .ft-plan-mark.below.flip:hover .ft-plan-pop,
+  .ft-plan-mark.below.flip:focus-within .ft-plan-pop{
+    opacity:0;pointer-events:none;transform:translate(-50%,-46%);
+  }
+  .ft-plan-mark[data-open] .ft-plan-pop,
+  .ft-plan-mark.flip[data-open] .ft-plan-pop,
+  .ft-plan-mark.below[data-open] .ft-plan-pop,
+  .ft-plan-mark.below.flip[data-open] .ft-plan-pop,
+  .ft-plan-mark[data-open]:focus-within .ft-plan-pop,
+  .ft-plan-mark.flip[data-open]:focus-within .ft-plan-pop,
+  .ft-plan-mark.below[data-open]:focus-within .ft-plan-pop,
+  .ft-plan-mark.below.flip[data-open]:focus-within .ft-plan-pop{
+    opacity:1;pointer-events:auto;transform:translate(-50%,-50%);
+  }
+  /* Nothing to bridge once the card is not next to its ring. */
+  .ft-plan-pop::before{display:none}
+  .ft-plan-pop-x{display:grid}
+  .ft-plan-pop-h{padding-right:2.2rem}
+}
+@media(prefers-reduced-transparency:reduce){
+  .ft-plan-ring{background:rgba(255,255,255,.88);border-color:#fff}
+}
+@media(prefers-reduced-motion:reduce){
+  .ft-plan-ring,.ft-plan-pop{transition:opacity var(--dur-1) var(--ease-out)}
+  .ft-plan-mark:hover .ft-plan-ring,
+  .ft-plan-mark:focus-within .ft-plan-ring{transform:none}
+}
+
+/* ---------------- Product proof-panel facts ----------------
+   Stacked, not boxed. The figures run from two characters ("16") to a whole
+   range ("2,8–8 mm"), and three cards side by side in the panel's right-hand
+   column left the long one about eight characters of width — it broke mid
+   number, "2,8–8" over "mm". Down the column each figure gets the full width
+   and the set reads as one list rather than three competing tiles. */
+.ft-proof-facts{display:flex;flex-direction:column;gap:var(--sp-6)}
+.ft-proof-fact{display:flex;flex-direction:column;gap:var(--sp-2)}
+.ft-proof-fact-num{
+  font-family:var(--font-display);font-size:var(--t-h3);font-weight:600;
+  line-height:1;letter-spacing:-0.008em;
+}
+.ft-proof-fact-label{
+  font:500 var(--t-eyebrow)/1.1 var(--font-ui);
+  letter-spacing:.06em;text-transform:uppercase;color:var(--fg-tertiary);
+}
 
 /* ---------------- Weatherproof panel ---------------- */
 /* One panel: the rain shot is the ground and the copy sits on it. The subject
@@ -2312,15 +2847,27 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
   padding:clamp(2rem,5vw,3.5rem);
   max-width:min(100%,54ch);
 }
+/* Too narrow to hold copy beside the subject. Covering the whole frame with a
+   scrim only made the picture a texture behind eleven lines of body copy — the
+   rain is still legible through the paragraph, and the panel is neither a
+   photograph nor a card. So it stops being one frame with words on it: the
+   photograph takes the head of the block and the words sit underneath on the
+   page's own ground, the same shape the proof tiles take here. */
 @media(max-width:760px){
-  /* Too narrow to hold copy beside the subject: the scrim covers the frame. */
-  .ft-weather-panel::before{
-    background:linear-gradient(180deg,
-      rgba(var(--panel-ground),.94) 0%,
-      rgba(var(--panel-ground),.90) 62%,
-      rgba(var(--panel-ground),.55) 100%);
+  .ft-weather-panel{min-height:0;display:flex;flex-direction:column;overflow:visible;border-radius:0}
+  /* Words first here, picture after — the claim is a list of ratings and the
+     photograph is what they amount to, so it reads as the proof rather than as
+     the introduction. Order rather than markup: the picture stays first in the
+     document, where a wide screen still needs it. */
+  .ft-weather-panel-copy{order:1;padding:0 0 var(--sp-6);max-width:none}
+  .ft-weather-panel-img{
+    order:2;
+    position:relative;inset:auto;z-index:auto;
+    display:block;width:100%;height:auto;aspect-ratio:4 / 3;
+    border-radius:var(--r-xl);
   }
-  .ft-weather-panel{min-height:0}
+  /* Nothing sits on the picture now, so the scrim has nothing to hold. */
+  .ft-weather-panel::before{content:none}
 }
 
 /* ---------------- Phone type ----------------

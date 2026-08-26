@@ -202,7 +202,7 @@ export function PinStack({ panels, children }) {
    sit off-centre in a round button, and are read out by a screen reader. Drawn
    as a mark instead, it centres on the button and scales with the icon size,
    and aria-label carries the meaning. */
-function Chevron({ back = false }) {
+export function Chevron({ back = false }) {
   return (
     <svg
       viewBox="0 0 24 24"

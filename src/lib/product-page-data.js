@@ -6,7 +6,7 @@ const onvif = '23.12 (Profile S / G / T / M)'
 export const productPageData = {
   ...extendedProductPageData,
   'fc-8d-zoom': {
-    slug: 'fc-8d-zoom', name: 'FC-8D Zoom', category: 'Dome IP-Kamera',
+    slug: 'fc-8d-zoom', coreGround: 'rgb(201,203,211)', name: 'FC-8D Zoom', category: 'Dome IP-Kamera',
     metaTitle: 'FTronics FC-8D Zoom: 4K Dome-Kamera mit Motorzoom & KI-Suite',
     metaDescription: 'FTronics FC-8D Zoom: 4K Dome IP-Kamera mit motorisiertem 2,8–8-mm-Objektiv, Gesichtserkennung, Perimeterschutz, IP67 und PoE.',
     promise: '4K-Dome mit motorisiertem 2,8–8-mm-Zoom und vollständiger KI-Suite für flexibel geplante Bildausschnitte.',
@@ -52,7 +52,7 @@ export const productPageData = {
   },
 
   'fc-6z-mini': {
-    slug: 'fc-6z-mini', name: 'FC-6Z Mini', category: 'Mini-PTZ Dome-Kamera',
+    slug: 'fc-6z-mini', coreGround: 'rgb(208,209,214)', name: 'FC-6Z Mini', category: 'Mini-PTZ Dome-Kamera',
     metaTitle: 'FTronics FC-6Z Mini: 6 MP Mini-PTZ mit 3× Zoom & KI-Suite',
     metaDescription: 'FTronics FC-6Z Mini: kompakte 6-MP-Mini-PTZ-Dome-Kamera mit 3× optischem Zoom, IK10, Gesichtserkennung, IP67 und PoE.',
     promise: 'Kompakte 6-MP-Mini-PTZ mit 3× optischem Zoom, IK10 und vollständiger KI-Suite.',
@@ -88,7 +88,7 @@ export const productPageData = {
   },
 
   'fb-8a-pro': {
-    slug: 'fb-8a-pro', name: 'FB-8A Pro', category: 'Bullet IP-Kamera',
+    slug: 'fb-8a-pro', coreGround: 'rgb(214,215,219)', name: 'FB-8A Pro', category: 'Bullet IP-Kamera',
     metaTitle: 'FTronics FB-8A Pro: 4K Bullet-Kamera mit vollständiger KI-Suite',
     metaDescription: 'FTronics FB-8A Pro: 4K Bullet IP-Kamera mit Sony IMX415, Gesichts-, Personen-, Fahrzeug- und Haustiererkennung, IP67 und PoE.',
     promise: '4K-Bullet-Kamera mit vollständiger KI-Suite für Gesicht, Person, Fahrzeug, Haustier, Linie und Perimeter.',
@@ -124,7 +124,7 @@ export const productPageData = {
   },
 
   'fb-8a-max': {
-    slug: 'fb-8a-max', name: 'FB-8A Max', category: 'Bullet IP-Kamera',
+    slug: 'fb-8a-max', coreGround: 'rgb(203,203,203)', name: 'FB-8A Max', category: 'Bullet IP-Kamera',
     metaTitle: 'FTronics FB-8A Max: 4K Bullet-Kamera mit aktiver Abschreckung',
     metaDescription: 'FTronics FB-8A Max: 4K Bullet IP-Kamera mit Dual-Light, Rot-Blau-LEDs, Lautsprecher, vollständiger KI-Suite, IP67 und 100 dB WDR.',
     promise: '4K-Bullet-Kamera mit vollständiger KI-Suite, Dual-Light, Rot-Blau-Warnlicht und integrierter Sprachsirene.',
@@ -160,7 +160,7 @@ export const productPageData = {
   },
 
   'fb-8b': {
-    slug: 'fb-8b', name: 'FB-8B', category: 'Bullet IP-Kamera',
+    slug: 'fb-8b', coreGround: 'rgb(207,207,212)', name: 'FB-8B', category: 'Bullet IP-Kamera',
     metaTitle: 'FTronics FB-8B: 4K Bullet-Kamera mit 30 fps & Sony IMX415',
     metaDescription: 'FTronics FB-8B: 4K Bullet IP-Kamera mit 30 fps, Sony IMX415, Personen- und Fahrzeugerkennung, 120 dB WDR, IP67 und IR bis 30 m.',
     promise: '4K mit 30 Bildern pro Sekunde, Sony IMX415 und gezielter Personen- und Fahrzeugerkennung für lange Außenachsen.',

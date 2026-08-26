@@ -1,4 +1,3 @@
-import { Placeholder } from '@/components/ui'
 import { site, jsonLd, breadcrumbJsonLd } from '@/lib/site'
 import { KontaktForm } from './KontaktForm'
 
@@ -106,21 +105,21 @@ export default function Kontakt() {
                     </div>
                   ))}
                 </dl>
-                <p
-                  style={{
-                    margin: '1.2rem 0 0', fontSize: 'var(--t-body-sm)',
-                    color: 'var(--ft-ok)', fontWeight: 500,
-                  }}
-                >
-                  ● Antwort innerhalb von 24 Stunden
-                </p>
               </div>
 
               <div data-rev>
-                <Placeholder
-                  ratio="4 / 3"
-                  rounded="var(--r-lg)"
-                  label="Karte: Hafenbahnstraße 15, Mannheim"
+                {/* The address comes from site.js rather than being typed here,
+                    so the map cannot drift from the details listed above it.
+                    output=embed is the keyless Maps embed; title carries the
+                    place for anyone who cannot see the frame. */}
+                <iframe
+                  className="ft-map"
+                  title={`Karte: ${site.street}, ${site.postalCode} ${site.city}`}
+                  src={`https://www.google.com/maps?q=${encodeURIComponent(
+                    `${site.street}, ${site.postalCode} ${site.city}`
+                  )}&z=16&output=embed`}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
                 />
               </div>
             </div>

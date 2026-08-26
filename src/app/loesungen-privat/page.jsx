@@ -1,4 +1,7 @@
-import { Button, Chip, ChipRow, SectionHead, Placeholder } from '@/components/ui'
+import Link from 'next/link'
+import { Button } from '@/components/ui'
+import { Plan } from '@/components/plan'
+import { TrustMarks } from '@/components/trust-marks'
 import { cta, jsonLd, breadcrumbJsonLd } from '@/lib/site'
 
 export const metadata = {
@@ -12,7 +15,6 @@ export const metadata = {
 
 /* ---------------- section data ---------------- */
 
-const badges = ['Vor-Ort-Service', 'Top 100 Deutschlands', 'DSGVO-konform']
 
 /* Five alternating media rows. `flip` mirrors the artboard's .sol-grid.flip —
    the copy column moves to the right on wide viewports but stays first in the
@@ -21,6 +23,10 @@ const solutions = [
   {
     n: '01',
     h: 'Alarmanlagen',
+    /* Where this system sits on the plan, as a percentage of the render.
+       The corner motion detector on the living-room wall — the keypad beside
+       the stairs is the panel, but the detector is what the system does. */
+    at: [78.1, 51.5], flipPop: true,
     li: [
       'Hybride Ajax-Systeme (Funk + Draht)',
       'App-Steuerung & Push-Benachrichtigungen',
@@ -34,6 +40,7 @@ const solutions = [
   },
   {
     n: '02',
+    at: [78, 38.5], flipPop: true, popBelow: true,
     h: 'Videoüberwachung',
     flip: true,
     li: [
@@ -49,6 +56,7 @@ const solutions = [
   },
   {
     n: '03',
+    at: [62.6, 46.9],
     h: 'Smart Home',
     li: [
       'KNX & Home Assistant Integration',
@@ -63,6 +71,7 @@ const solutions = [
   },
   {
     n: '04',
+    at: [30.6, 65.5],
     h: 'Türsprechanlagen',
     flip: true,
     li: [
@@ -78,6 +87,7 @@ const solutions = [
   },
   {
     n: '05',
+    at: [45, 22.4], popBelow: true,
     h: 'Brandschutz',
     li: [
       'Rauchmelder nach DIN VDE',
@@ -98,8 +108,42 @@ const solutions = [
    be expressed as an inline style. Copied verbatim from the artboard's own
    <style> block. */
 const css = `
-.sol-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:clamp(2rem,4vw,4rem);align-items:center}
-@media(min-width:961px){.sol-grid.flip>div:first-child{order:2}}
+/* The page's ground is the render's own studio grey, sampled off the plate
+   itself — #e9e9e9 across its field. Matching it is what actually removes the
+   seam: there is no edge left to hide once the page is the colour the plate is
+   standing on. Both sections carry it, so the opener and the close are one
+   surface rather than two greys meeting. */
+.ft-privat-ground{background:#e9e9e9}
+
+/* On a wide screen the house stops being a block under the copy and becomes
+   the section's own right-hand ground: pinned to the section (the shell is
+   unpositioned, so an absolute child resolves against .ft-screen-head) and run
+   out past the container to the screen edge. It keeps no z-index of its own:
+   the picture's leading edge is masked to nothing where the copy sits, and the
+   figure passes the pointer through to everything but its own rings. Stacked
+   below 960, copy first — the house is the proof, and proof follows the
+   claim. */
+@media(min-width:961px){
+  .ft-plan{
+    position:absolute;inset:0 0 0 auto;
+    width:min(62%,1040px);margin:0;
+    display:flex;align-items:center;pointer-events:none;
+    /* the frame, not the figure, is what the marks measure against */
+  }
+  /* No card edge out here: it is the ground, not a figure on it. */
+  /* Only the leading edge needs help now: the ground matches, but the plate
+     carries its own soft floor shadow, which stops dead where the file does.
+     A short fade over the empty strip in front of the house — 14%, which is
+     just short of its left wall — and there is nothing left to see. */
+  .ft-plan-img{
+    border-radius:0;
+    -webkit-mask-image:linear-gradient(to right,rgba(0,0,0,0) 0,#000 14%);
+    mask-image:linear-gradient(to right,rgba(0,0,0,0) 0,#000 14%);
+  }
+  /* The words keep the left, at a measure rather than a margin. */
+  .ft-hero-copy{max-width:min(46%,540px)}
+}
+
 `
 
 /* ---------------- page ---------------- */
@@ -118,10 +162,12 @@ export default function LoesungenPrivat() {
       />
       <style href="loesungen-privat" precedence="default">{css}</style>
 
-      {/* 8.1 Hero */}
-      <section style={{ padding: 'clamp(4rem,6vw,6.5rem) 0 0' }}>
+      {/* 8.1 Hero — the page's own screen. Centred, and held to one viewport
+          less the bar above it, so the opener is the whole first impression
+          rather than a paragraph with the next section already under it. */}
+      <section className="ft-screen-head ft-privat-ground">
         <div className="ft-shell">
-          <div data-rev-group>
+          <div className="ft-hero-copy" data-rev-group>
             <p className="ft-eyebrow" data-rev>Privatkunden</p>
             <h1 data-rev style={{ maxWidth: '16ch' }}>Sicherheit für Ihr Zuhause</h1>
             <p
@@ -134,57 +180,34 @@ export default function LoesungenPrivat() {
               Schützen Sie Ihre Familie und Ihr Eigentum mit modernster Technik, professionell
               installiert, einfach zu bedienen.
             </p>
-            <div data-rev>
-              <ChipRow>
-                {badges.map((b) => <Chip key={b}>{b}</Chip>)}
-              </ChipRow>
+            {/* data-rev on the row itself rather than on a wrapper: a plain
+                block wrapper around a flex row is not what the layout centres. */}
+            <TrustMarks data-rev />
+            <div data-rev style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: '1.75rem' }}>
+              <Button href="/kontakt">{cta.start}</Button>
             </div>
-            <div data-rev style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: '1.5rem' }}>
-              <Button variant="secondary" size="sm" href="/loesungen-gewerbe">
+            {/* A link, not a second button. This is the way out to the other
+                audience's page, and a bordered pill under the enquiry read as
+                two calls to action of equal weight. */}
+            <div data-rev style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: '.85rem' }}>
+              <Link className="ft-quiet-link" href="/loesungen-gewerbe">
                 Für Gewerbekunden →
-              </Button>
+              </Link>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* 8.2 Fünf Lösungsbereiche */}
-      <section style={{ padding: 'clamp(4rem,6vw,6rem) 0 0' }}>
-        <div className="ft-shell">
-          <SectionHead
-            eyebrow="Unsere Lösungen für Privat"
-            title="Rundum geschützt zuhause"
-            lead="Maßgeschneiderte Sicherheitskonzepte für Wohnungen, Häuser und Grundstücke."
+          {/* One house, cut open, with the five systems marked where their
+              hardware actually sits. The marks are annotations on a picture the
+              alt text already describes; each card carries the system itself. */}
+          <Plan
+            systems={solutions}
+            src="/loesungen-privat-haus.webp"
+            alt="Isometrischer Schnitt durch ein Einfamilienhaus: Bewegungsmelder und Alarmzentrale, Außenkamera unter dem Dachüberstand, Smart-Home-Panel, Türsprechstelle an der Haustür und Rauchmelder an den Decken."
           />
-          <div
-            style={{
-              display: 'flex', flexDirection: 'column',
-              gap: 'clamp(4rem,6vw,6rem)', marginTop: '3.5rem',
-            }}
-          >
-            {solutions.map((s) => (
-              <div className={`sol-grid${s.flip ? ' flip' : ''}`} key={s.n}>
-                <div data-rev-group>
-                  <p className="ft-num" data-rev>{s.n}</p>
-                  <h3 data-rev>{s.h}</h3>
-                  <ul className="ft-list" data-rev style={{ margin: '1rem 0 1.5rem' }}>
-                    {s.li.map((x) => <li key={x}>{x}</li>)}
-                  </ul>
-                  <div data-rev>
-                    <Button variant="secondary" href={s.href}>{s.label}</Button>
-                  </div>
-                </div>
-                <div data-rev>
-                  <Placeholder ratio="4 / 3" rounded="var(--r-lg)" label={s.img} />
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
       {/* 8.3 Closing CTA */}
-      <section className="ft-section">
+      <section className="ft-section ft-privat-ground">
         <div className="ft-shell">
           <div
             data-rev

@@ -2,6 +2,7 @@ import { Button, Card, Chip, ChipRow, SectionHead, Media, Placeholder } from '@/
 import { Compare } from '@/components/compare'
 import { Teardown } from '@/components/teardown'
 import { ScrollGallery } from '@/components/scroll'
+import { FeatureBento } from '@/components/bento'
 import { ScanBand } from '@/components/scan-band'
 import { site, cta, jsonLd, breadcrumbJsonLd } from '@/lib/site'
 
@@ -236,23 +237,7 @@ export default function ProduktFC8DPro() {
           shot actually showing it, they stop being a spec list. */}
       <section style={{ padding: 'clamp(2rem,4vw,3rem) 0 0' }}>
         <div className="ft-shell">
-          <div className="ft-bento" data-rev-group>
-            {bento.map((t) => (
-              <div
-                data-rev
-                key={t.h}
-                className={
-                  'ft-bento-tile ft-bento-tile--' + t.kind +
-                  (t.tall ? ' ft-bento-tile--tall' : '') +
-                  (t.wide ? ' ft-bento-tile--wide' : '')
-                }
-              >
-                {t.img ? <img className="ft-bento-img" src={t.img} alt={t.alt} loading="lazy" decoding="async" /> : null}
-                <h3>{t.h}</h3>
-                <p>{t.p}</p>
-              </div>
-            ))}
-          </div>
+          <FeatureBento items={bento} label="FC-8D Pro Produktmerkmale" />
         </div>
       </section>
 
@@ -331,10 +316,15 @@ export default function ProduktFC8DPro() {
 
             {/* The three capabilities ride in on a rail once the picture has
                 receded, rather than sitting in the copy column competing with it. */}
-            <div className="ft-band-rail" data-rev-group>
-              <ScrollGallery itemWidth={320} label="KI-Erkennung" paddles={false}>
+            <div className="ft-band-rail">
+              {/* One entrance for the whole rail. Per-card reveals fire as each
+                  card intersects the viewport, and in a horizontal scroller the
+                  third card is off the side of the screen — so the set arrived
+                  one at a time, the last of them mid-swipe. */}
+              <div data-rev>
+              <ScrollGallery itemWidth={320} label="KI-Erkennung">
                 {aiCards.map(([t, d, img, alt]) => (
-                  <div data-rev key={t}>
+                  <div key={t}>
                     <div className="ft-scan-card">
                     {/* alt describes the frame; the caption beneath states the
                         capability, so the two are not saying the same thing. */}
@@ -347,6 +337,7 @@ export default function ProduktFC8DPro() {
                   </div>
                 ))}
               </ScrollGallery>
+              </div>
             </div>
           </div>
         </div>

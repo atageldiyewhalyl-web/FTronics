@@ -1,5 +1,6 @@
-import { Button, Card, Media, SectionHead } from '@/components/ui'
+import { Button, SectionHead } from '@/components/ui'
 import { ScrollGallery } from '@/components/scroll'
+import { FeatureBento } from '@/components/bento'
 import { ScanBand } from '@/components/scan-band'
 import { site, cta, jsonLd, breadcrumbJsonLd } from '@/lib/site'
 
@@ -83,19 +84,7 @@ export function StandardProductPage({ product }) {
 
       <section style={{ padding: 'clamp(2rem,4vw,3rem) 0 0' }}>
         <div className="ft-shell">
-          <div className="ft-bento" data-rev-group>
-            {product.proofs.map((item) => (
-              <div
-                data-rev
-                key={item.h}
-                className={`ft-bento-tile ft-bento-tile--${item.kind}${item.tall ? ' ft-bento-tile--tall' : ''}${item.wide ? ' ft-bento-tile--wide' : ''}`}
-              >
-                {item.img ? <img className="ft-bento-img" src={item.img} alt={item.alt} loading="lazy" decoding="async" /> : null}
-                <h3>{item.h}</h3>
-                <p>{item.p}</p>
-              </div>
-            ))}
-          </div>
+          <FeatureBento items={product.proofs} label={`${product.name} Produktmerkmale`} />
         </div>
       </section>
 
@@ -109,14 +98,26 @@ export function StandardProductPage({ product }) {
         </div>
       </section>
 
-      <section className="ft-sensorband">
-        <img className="ft-sensorband-img" src={product.images.core} alt={product.alts.core} loading="lazy" decoding="async" />
+      {/* Split rather than full bleed: the picture here is the camera itself,
+          cut out on near-white, not the sensor macro the hand-written FC-8D
+          pages put behind their words. There is no empty half to set copy
+          into, so the render takes a column instead of the whole band. Copy
+          first, which is also the order the columns collapse into. */}
+      <section
+        className="ft-sensorband ft-sensorband--split"
+        /* The render's own ground, sampled off the file's edge pixels, so the
+           picture meets the section with no rectangle around it. Absent on the
+           cut-out PNGs, which have no ground to match — there the band keeps
+           the page's. */
+        style={product.coreGround ? { '--band-solid': product.coreGround } : undefined}
+      >
         <div className="ft-shell ft-sensorband-inner">
-          <div className="ft-sensorband-copy ft-center" data-rev-group>
+          <div className="ft-sensorband-copy" data-rev-group>
             <p className="ft-eyebrow" data-rev>{product.core.eyebrow}</p>
             <h2 data-rev>{product.core.title}</h2>
             <p data-rev style={{ color: 'var(--fg-secondary)', marginTop: '1rem', maxWidth: 'none' }}>{product.core.text}</p>
           </div>
+          <img className="ft-sensorband-img" src={product.images.core} alt={product.alts.core} loading="lazy" decoding="async" />
         </div>
       </section>
 
@@ -130,7 +131,9 @@ export function StandardProductPage({ product }) {
               <p className="ft-lead">{product.intelligence.text}</p>
             </div>
             <div className="ft-band-rail">
-              <ScrollGallery itemWidth={320} label={`${product.name} Funktionen`} paddles={false}>
+              {/* One entrance for the whole rail — see the FC-8D Pro's band. */}
+              <div data-rev>
+              <ScrollGallery itemWidth={320} label={`${product.name} Funktionen`}>
                 {product.intelligence.cards.map((item) => (
                   <div key={item.h}>
                     <div className="ft-scan-card">
@@ -140,6 +143,7 @@ export function StandardProductPage({ product }) {
                   </div>
                 ))}
               </ScrollGallery>
+              </div>
             </div>
           </div>
         </div>
@@ -149,13 +153,25 @@ export function StandardProductPage({ product }) {
         <div className="ft-shell">
           <SectionHead className="ft-center" eyebrow={product.proofPanel.eyebrow} title={product.proofPanel.title} lead={product.proofPanel.lead} />
           <div data-rev style={{ ...panel, display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(280px,100%),1fr))', gap: 'clamp(2rem,5vw,5rem)', alignItems: 'center', marginTop: '2.5rem' }}>
-            <Media src={product.images.product} alt={product.alts.product} ratio="1 / 1" rounded="var(--r-lg)" pad="4%" />
+            {/* No media frame here: the render is a cutout on the panel's own
+                ground, so a box around it only drew a second edge inside the
+                one the panel already has. */}
+            <img
+              src={product.images.product}
+              alt={product.alts.product}
+              loading="lazy"
+              decoding="async"
+              style={{ display: 'block', width: '100%', height: 'auto' }}
+            />
             <div>
               <h3>{product.proofPanel.subhead}</h3>
               <p style={{ color: 'var(--fg-secondary)', marginTop: '.8rem' }}>{product.proofPanel.text}</p>
-              <div className="ft-grid ft-grid--auto-xs" data-rev-group style={{ marginTop: '2rem' }}>
+              <div className="ft-proof-facts" data-rev-group style={{ marginTop: '2rem' }}>
                 {product.proofPanel.facts.map(([value, label]) => (
-                  <div data-rev key={label}><Card variant="stat" title={value}>{label}</Card></div>
+                  <div className="ft-proof-fact" data-rev key={label}>
+                    <span className="ft-proof-fact-num">{value}</span>
+                    <span className="ft-proof-fact-label">{label}</span>
+                  </div>
                 ))}
               </div>
             </div>

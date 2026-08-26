@@ -1,6 +1,8 @@
 import Link from 'next/link'
-import { Button, Card, SectionHead } from '@/components/ui'
-import { breadcrumbJsonLd, jsonLd } from '@/lib/site'
+import { Button, SectionHead } from '@/components/ui'
+import { TrustMarks } from '@/components/trust-marks'
+import { Plan } from '@/components/plan'
+import { breadcrumbJsonLd, cta, jsonLd } from '@/lib/site'
 
 export const metadata = {
   /* `absolute` because the root layout's title template would otherwise
@@ -18,7 +20,8 @@ const breadcrumb = breadcrumbJsonLd([
 
 /* ---------------- section data ---------------- */
 
-/** The six commercial disciplines — each card ends in its own quiet link. */
+/** The six commercial disciplines. They live on the plan now: each is a mark
+    on the building, and its card carries the list and the link. */
 const loesungen = [
   {
     title: 'Alarmanlagen',
@@ -88,19 +91,130 @@ const loesungen = [
   },
 ]
 
+/* The six disciplines again, as marks on the plan: where on the render each
+   one's hardware actually sits, as a percentage of the picture. flipPop opens a
+   card inward for a mark near the right edge. Positions were read off the plate
+   itself, device by device. */
+const planMarks = {
+  'Alarmanlagen': { at: [45.3, 65.7] },
+  'Videoüberwachung': { at: [88.6, 39.8], flipPop: true },
+  'Zutrittskontrolle': { at: [45.7, 76.3] },
+  'Zeiterfassung': { at: [38.9, 71.5] },
+  'Brandschutz': { at: [58.6, 41.7] },
+  'NSL-Anbindung': { at: [76.6, 35], flipPop: true },
+}
+
+/* The plan takes the shape the Privatkunden page uses, so the six cards are
+   built from the discipline data rather than written out twice. */
+const planSystems = loesungen.map((l) => ({
+  h: l.title,
+  li: l.items,
+  label: l.link.label.replace(' \u2192', ''),
+  href: l.link.href,
+  ...planMarks[l.title],
+}))
+
+/* Each advantage is a picture with its claim under it. The renders are the
+   site's own isometric language — white matte objects on a light ground — so
+   they sit with the plan above rather than reading as stock icons. Decorative
+   by definition: the heading beneath each one says what it shows. */
 const vorteile = [
-  ['Compliance', 'Alle Systeme DSGVO-konform geplant und dokumentiert, wichtig für Versicherungsanforderungen.'],
-  ['Versicherungsvorteile', 'Bis zu 30% Ersparnis bei der Versicherungsprämie durch zertifizierte Sicherheitstechnik.'],
-  ['Fernzugriff', 'Alle Standorte jederzeit im Blick: per App, Browser oder Leitstelle.'],
-  ['Skalierbarkeit', 'Von einem Büro bis zum Multi-Standort-Unternehmen: unsere Systeme wachsen mit.'],
+  {
+    img: '/vorteil-compliance.webp',
+    h: 'Compliance',
+    p: 'Alle Systeme DSGVO-konform geplant und dokumentiert, wichtig für Versicherungsanforderungen.',
+  },
+  {
+    img: '/vorteil-versicherung.webp',
+    h: 'Versicherungsvorteile',
+    p: 'Bis zu 30% Ersparnis bei der Versicherungsprämie durch zertifizierte Sicherheitstechnik.',
+  },
+  {
+    img: '/vorteil-fernzugriff.webp',
+    h: 'Fernzugriff',
+    p: 'Alle Standorte jederzeit im Blick: per App, Browser oder Leitstelle.',
+  },
+  {
+    img: '/vorteil-skalierbarkeit.webp',
+    h: 'Skalierbarkeit',
+    p: 'Von einem Büro bis zum Multi-Standort-Unternehmen: unsere Systeme wachsen mit.',
+  },
 ]
 
-/** The artboard's card link sits on --fg, not the softer .ft-quiet-link grey. */
-const cardLink = {
-  color: 'var(--fg)',
-  font: '500 var(--t-body-sm) var(--font-ui)',
-  textDecoration: 'none',
+/* Page-scoped CSS. The opener's ground is the render's own studio grey,
+   sampled off the plate itself (#b8b8b8 across its field), so the picture has
+   no edge to show. That grey is dark enough to cost two things their contrast:
+   the lead at --fg-secondary measures 2.95:1 on it, under AA, and the eyebrow
+   chip's 3.5%-ink fill has nothing to sit against. The lead drops to
+   --ft-ink-grad-end (5.2:1 here) and the chip goes near-solid white. */
+const css = `
+.ft-gewerbe-ground{background:#b8b8b8}
+.ft-gewerbe-ground .ft-hero-lead{color:var(--ft-ink-grad-end)}
+.ft-gewerbe-ground .ft-eyebrow{background:rgba(255,255,255,.74);color:var(--ft-ink-text)}
+.ft-gewerbe-ground .ft-spec,
+.ft-gewerbe-ground .ft-spec svg,
+.ft-gewerbe-ground .ft-quiet-link{color:var(--ft-ink-grad-end)}
+.ft-gewerbe-ground .ft-quiet-link:hover{color:var(--ft-ink-text)}
+/* The ground matches the plate, but the plate carries its own soft floor
+   shadow and that stops dead where the file does — a faint edge all the way
+   round it. Faded out on every side, over the empty margin the building never
+   reaches, so there is nothing left to see. Two gradients intersected: one
+   pair of edges each. */
+.ft-gewerbe-ground .ft-plan-img{
+  -webkit-mask-image:
+    linear-gradient(to right,rgba(0,0,0,0) 0,#000 7%,#000 93%,rgba(0,0,0,0) 100%),
+    linear-gradient(to bottom,rgba(0,0,0,0) 0,#000 6%,#000 94%,rgba(0,0,0,0) 100%);
+  mask-image:
+    linear-gradient(to right,rgba(0,0,0,0) 0,#000 7%,#000 93%,rgba(0,0,0,0) 100%),
+    linear-gradient(to bottom,rgba(0,0,0,0) 0,#000 6%,#000 94%,rgba(0,0,0,0) 100%);
+  -webkit-mask-composite:source-in;
+  mask-composite:intersect;
 }
+
+/* Ihre Vorteile: a row of tall panels, each holding its claim, with the
+   sentence that qualifies it set underneath as a caption. The panel is the
+   page's own paper-96 on the raised white ground, so it reads as a plane
+   rather than as a bordered card — there is nothing to fence off. */
+.ft-vorteile{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(min(210px,100%),1fr));
+  gap:clamp(1rem,2vw,1.5rem);margin-top:clamp(2.5rem,5vw,3.5rem);
+}
+.ft-vorteil{margin:0;display:flex;flex-direction:column;gap:var(--sp-4)}
+.ft-vorteil-tile{
+  background:var(--ft-paper-96);border-radius:var(--r-xl);
+  aspect-ratio:3 / 4;overflow:hidden;
+}
+.ft-vorteil-tile img{display:block;width:100%;height:100%;object-fit:cover}
+.ft-vorteil-cap{margin:0;display:grid;gap:4px}
+.ft-vorteil-h{margin:0;font:600 var(--t-h4)/1.2 var(--font-display);letter-spacing:-0.004em;color:var(--fg)}
+.ft-vorteil-p{margin:0;font-size:var(--t-body-sm);line-height:1.6;color:var(--fg-secondary)}
+/* A rail on a phone: four tall pictures stacked two-up is most of a screen
+   each, and they are a set to look through rather than a list to read down.
+   Bled to the screen edges so the next one peeks past the gutter. */
+@media(max-width:760px){
+  .ft-vorteile{
+    display:flex;grid-template-columns:none;
+    overflow-x:auto;overflow-y:hidden;
+    scroll-snap-type:x mandatory;scrollbar-width:none;
+    margin-inline:calc(var(--gutter) * -1);
+    padding-inline:var(--gutter);
+    scroll-padding-inline:var(--gutter);
+    gap:var(--sp-4);
+  }
+  .ft-vorteile::-webkit-scrollbar{display:none}
+  .ft-vorteil{flex:0 0 72%;scroll-snap-align:start}
+  /* Inside a rail the cards fade in place — a reveal's vertical offset is
+     scrollable overflow the rail would otherwise have to hide. */
+  .ft-vorteile [data-rev]{transform:none}
+}
+
+/* Less overhang than the shared rule gives: this plan's rightmost mark is the
+   facade camera at 88.6%, further out than anything on the house, and at the
+   full 122% its ring is cut by the screen edge on a 375px phone. */
+@media(max-width:760px){
+  .ft-gewerbe-ground .ft-plan-frame{width:112%;margin-left:-6%}
+}
+`
 
 /* ---------------- page ---------------- */
 
@@ -108,73 +222,74 @@ export default function LoesungenGewerbe() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(breadcrumb)} />
+      <style href="loesungen-gewerbe" precedence="default">{css}</style>
 
-      {/* 9.1 Hero */}
-      <section style={{ padding: 'clamp(4rem,6vw,6.5rem) 0 0' }}>
+      {/* 9.1 Hero — the claim first, centred, and the site it protects under
+          it. The Privatkunden page sets its house beside the words; here the
+          building is wide and low, so it reads better full width below them. */}
+      <section className="ft-gewerbe-ground" style={{ padding: 'clamp(4rem,6vw,6.5rem) 0 clamp(3rem,5vw,4.5rem)' }}>
         <div className="ft-shell">
-          <div data-rev-group>
+          <div className="ft-center" data-rev-group>
             <p className="ft-eyebrow" data-rev>Gewerbekunden</p>
-            <h1 data-rev style={{ maxWidth: '20ch' }}>
+            <h1 data-rev style={{ maxWidth: '20ch', marginInline: 'auto' }}>
               Professionelle Sicherheit für Ihr Unternehmen
             </h1>
             <p
               data-rev
+              className="ft-hero-lead"
               style={{
-                fontSize: 'var(--t-lead)', lineHeight: 'var(--t-lead-lh)', color: 'var(--fg-secondary)',
-                maxWidth: 680, margin: '1rem 0 1.5rem',
+                fontSize: 'var(--t-lead)', lineHeight: 'var(--t-lead-lh)',
+                maxWidth: 680, margin: '1rem auto 1.5rem',
               }}
             >
               Skalierbare Sicherheitslösungen für Büros, Lagerhallen, Einzelhandel und Industrie,
               DSGVO-konform und versicherungsoptimiert.
             </p>
-            <div data-rev style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: '.5rem' }}>
-              <Button variant="secondary" size="sm" href="/loesungen-privat">
+            <TrustMarks data-rev />
+            <div data-rev style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: '1.75rem' }}>
+              <Button href="/kontakt">{cta.start}</Button>
+            </div>
+            {/* A link, not a second button — the way out to the other audience's
+                page, which is not a second call to action. */}
+            <div data-rev style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: '.85rem' }}>
+              <Link className="ft-quiet-link" href="/loesungen-privat">
                 Für Privatkunden →
-              </Button>
+              </Link>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* 9.2 Gewerbliche Lösungen — six discipline cards */}
-      <section style={{ padding: 'clamp(4rem,6vw,6rem) 0 0' }}>
-        <div className="ft-shell">
-          <SectionHead
-            eyebrow="Gewerbliche Lösungen"
-            title="Sicherheit, die Ihr Business schützt"
-            lead="Von der Zutrittskontrolle bis zur Videoüberwachung: alles aus einer Hand."
+          {/* One site, cut open, with the six disciplines marked where their
+              hardware sits. The marks are annotations on a picture the alt text
+              already describes; each card carries the discipline itself. */}
+          <Plan
+            systems={planSystems}
+            src="/loesungen-gewerbe-werk.webp"
+            alt="Isometrischer Schnitt durch ein Gewerbeobjekt mit Lagerhalle und Bürotrakt: Alarmzentrale, Außenkamera, Drehkreuz mit Zutrittsleser, Zeiterfassungsterminal, Brandmelderzentrale und Technikschrank für die NSL-Anbindung."
           />
-          <div data-rev-group className="ft-grid ft-grid--auto" style={{ marginTop: '3rem' }}>
-            {loesungen.map((l) => (
-              <div
-                data-rev
-                key={l.title}
-                className="ft-card"
-                style={{ display: 'flex', flexDirection: 'column' }}
-              >
-                <h4 style={{ marginBottom: '.8em' }}>{l.title}</h4>
-                <ul className="ft-list" style={{ margin: '0 0 1.5rem', flex: 1 }}>
-                  {l.items.map((i) => <li key={i}>{i}</li>)}
-                </ul>
-                <Link href={l.link.href} style={cardLink}>{l.link.label}</Link>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
       {/* 9.3 Ihre Vorteile */}
-      <section
-        className="ft-section ft-section--raised"
-        style={{ marginTop: 'clamp(5rem,7vw,8rem)' }}
-      >
+      {/* No margin above it: the grey opener ends and this section's own white
+          begins, and a gap between them was a strip of page ground showing
+          through as a third colour. */}
+      <section className="ft-section ft-section--raised">
         <div className="ft-shell">
           <SectionHead eyebrow="Ihre Vorteile" title="Warum Unternehmen uns vertrauen" />
-          <div data-rev-group className="ft-grid ft-grid--auto-sm" style={{ marginTop: '2.5rem' }}>
-            {vorteile.map(([t, d]) => (
-              <div data-rev key={t}>
-                <Card title={t}>{d}</Card>
-              </div>
+          {/* Picture in the panel, the claim under it and the sentence that
+              qualifies it under that — the caption reads as a caption instead
+              of as more card. */}
+          <div data-rev-group className="ft-vorteile">
+            {vorteile.map((v) => (
+              <figure data-rev className="ft-vorteil" key={v.h}>
+                <div className="ft-vorteil-tile">
+                  <img src={v.img} alt="" loading="lazy" decoding="async" />
+                </div>
+                <figcaption className="ft-vorteil-cap">
+                  <p className="ft-vorteil-h">{v.h}</p>
+                  <p className="ft-vorteil-p">{v.p}</p>
+                </figcaption>
+              </figure>
             ))}
           </div>
         </div>

@@ -47,11 +47,6 @@ const steps = [
 ]
 
 /** Summary rail — visible label + the state key it reads. */
-const summaryRows = [
-  ['Objekttyp', 'objekt'],
-  ['Bereiche', 'bereiche'],
-  ['Funktionen', 'funktionen'],
-]
 
 const formFields = [
   { label: 'Name *', name: 'name', required: true },
@@ -131,11 +126,6 @@ export function KonfiguratorForm() {
     })
   }
 
-  function summaryValue(key) {
-    const v = picked[key]
-    if (Array.isArray(v)) return v.length ? v.join(', ') : 'nicht gewählt'
-    return v || 'nicht gewählt'
-  }
 
   function handleSubmit(e) {
     e.preventDefault()
@@ -149,7 +139,7 @@ export function KonfiguratorForm() {
       <section style={{ padding: 'clamp(3rem,5vw,5rem) 0 clamp(5rem,7vw,8rem)' }}>
         <div className="ft-shell">
           {/* Intro */}
-          <header data-rev-group style={{ maxWidth: 680 }}>
+          <header className="ft-center" data-rev-group style={{ maxWidth: 680, marginInline: 'auto' }}>
             <p className="ft-eyebrow" data-rev>System-Konfigurator</p>
             <h1 data-rev>Ihr individuelles Sicherheits&shy;konzept</h1>
             <p className="ft-lead" data-rev style={{ margin: '1rem 0 0' }}>
@@ -158,7 +148,7 @@ export function KonfiguratorForm() {
           </header>
 
           {/* Progress */}
-          <div style={{ margin: '2.5rem 0 2rem', maxWidth: 820 }}>
+          <div style={{ margin: '2.5rem auto 2rem', maxWidth: 820 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
               <span style={{ font: '500 13px var(--font-ui)', color: 'var(--fg-secondary)' }}>
                 {current.rail}
@@ -189,15 +179,11 @@ export function KonfiguratorForm() {
             </div>
           </div>
 
-          <div
-            style={{
-              display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(300px,100%),1fr))',
-              gap: 'clamp(1.5rem,3vw,3rem)', alignItems: 'start',
-            }}
-          >
-            {/* Step column */}
+          {/* One column now that the summary rail is gone, held to a measure
+              and centred rather than stretched across the container. */}
+          <div style={{ maxWidth: 820, marginInline: 'auto' }}>
             <div style={{ minWidth: 0 }}>
-              <div className="step-in" key={step}>
+              <div className="step-in" key={step} style={{ textAlign: 'center' }}>
                 <h3 style={{ marginBottom: '.3em' }}>{current.title}</h3>
                 <p
                   style={{
@@ -214,7 +200,7 @@ export function KonfiguratorForm() {
                     style={{
                       display: 'grid',
                       gridTemplateColumns: `repeat(auto-fill,minmax(${current.min}px,1fr))`,
-                      gap: 12,
+                      gap: 12, justifyContent: 'center',
                     }}
                   >
                     {current.options.map((label) => {
@@ -247,7 +233,7 @@ export function KonfiguratorForm() {
                       </p>
                     </div>
                   ) : (
-                    <form onSubmit={handleSubmit} style={{ ...cardShell, padding: '1.8rem' }}>
+                    <form onSubmit={handleSubmit} style={{ ...cardShell, padding: '1.8rem', textAlign: 'left' }}>
                       <h4 style={{ marginBottom: '1em' }}>Unverbindliches Angebot anfordern</h4>
                       {formFields.map((f) => (
                         <Field key={f.name} {...f} />
@@ -276,7 +262,7 @@ export function KonfiguratorForm() {
               </div>
 
               {/* Step navigation */}
-              <div style={{ display: 'flex', gap: 12, marginTop: '2rem' }}>
+              <div style={{ display: 'flex', gap: 12, marginTop: '2rem', justifyContent: 'center' }}>
                 {step > 1 && !submitted && (
                   <Button
                     variant="secondary"
@@ -300,33 +286,6 @@ export function KonfiguratorForm() {
               </div>
             </div>
 
-            {/* Summary rail */}
-            <aside style={{ ...cardShell, padding: '1.6rem', position: 'sticky', top: 96 }}>
-              <p
-                style={{
-                  font: '500 12px var(--font-ui)', letterSpacing: '.06em',
-                  textTransform: 'uppercase', color: 'var(--fg-tertiary)', margin: '0 0 1.2rem',
-                }}
-              >
-                Ihre Auswahl
-              </p>
-              <div
-                style={{
-                  display: 'flex', flexDirection: 'column', gap: '1rem',
-                  fontSize: 'var(--t-body-sm)',
-                }}
-              >
-                {summaryRows.map(([label, key], i) => (
-                  <div
-                    key={key}
-                    style={i === 0 ? undefined : { borderTop: '1px solid var(--border)', paddingTop: '1rem' }}
-                  >
-                    <p style={{ margin: '0 0 .3em', color: 'var(--fg-tertiary)' }}>{label}</p>
-                    <p style={{ margin: 0, fontWeight: 500 }}>{summaryValue(key)}</p>
-                  </div>
-                ))}
-              </div>
-            </aside>
           </div>
         </div>
       </section>

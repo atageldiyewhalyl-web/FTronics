@@ -1,6 +1,7 @@
 import { Button, Card, Media, SectionHead } from '@/components/ui'
 import { Compare } from '@/components/compare'
 import { ScrollGallery } from '@/components/scroll'
+import { FeatureBento } from '@/components/bento'
 import { ScanBand } from '@/components/scan-band'
 import { site, cta, jsonLd, breadcrumbJsonLd } from '@/lib/site'
 
@@ -208,23 +209,7 @@ export default function ProduktFC8D() {
 
       <section style={{ padding: 'clamp(2rem,4vw,3rem) 0 0' }}>
         <div className="ft-shell">
-          <div className="ft-bento" data-rev-group>
-            {bento.map((item) => (
-              <div
-                data-rev
-                key={item.h}
-                className={
-                  `ft-bento-tile ft-bento-tile--${item.kind}` +
-                  (item.tall ? ' ft-bento-tile--tall' : '') +
-                  (item.wide ? ' ft-bento-tile--wide' : '')
-                }
-              >
-                {item.img ? <img className="ft-bento-img" src={item.img} alt={item.alt} loading="lazy" decoding="async" /> : null}
-                <h3>{item.h}</h3>
-                <p>{item.p}</p>
-              </div>
-            ))}
-          </div>
+          <FeatureBento items={bento} label="FC-8D Produktmerkmale" />
         </div>
       </section>
 
@@ -279,10 +264,13 @@ export default function ProduktFC8D() {
                 zu unnötigen Prüfungen.
               </p>
             </div>
-            <div className="ft-band-rail" data-rev-group>
-              <ScrollGallery itemWidth={320} label="FC-8D Analysefunktionen" paddles={false}>
+            <div className="ft-band-rail">
+              {/* One entrance for the whole rail rather than one per card — see
+                  the note on the FC-8D Pro's band. */}
+              <div data-rev>
+              <ScrollGallery itemWidth={320} label="FC-8D Analysefunktionen">
                 {aiCards.map((item) => (
-                  <div data-rev key={item.h}>
+                  <div key={item.h}>
                     <div className="ft-scan-card">
                       <img className="ft-scan-card-img" src={item.img} alt={item.alt} loading="lazy" decoding="async" />
                       <div className="ft-scan-card-body"><h4>{item.h}</h4><p>{item.p}</p></div>
@@ -290,6 +278,7 @@ export default function ProduktFC8D() {
                   </div>
                 ))}
               </ScrollGallery>
+              </div>
             </div>
           </div>
         </div>

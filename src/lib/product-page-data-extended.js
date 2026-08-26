@@ -45,7 +45,7 @@ const recorderNotes = [
 
 export const extendedProductPageData = {
   'ft-8c-pro': makeProduct({
-    slug: 'ft-8c-pro', name: 'FT-8C Pro', category: 'Turret IP-Kamera', mainExt: 'jpg',
+    slug: 'ft-8c-pro', coreGround: '#fff', name: 'FT-8C Pro', category: 'Turret IP-Kamera', mainExt: 'jpg',
     metaTitle: 'FTronics FT-8C Pro: 4K Turret-Kamera mit 24/7 Farbbild',
     metaDescription: 'FTronics FT-8C Pro mit 8 MP Sony IMX415, F1.0, 24/7 Farbbild, Gesichts-, Personen- und Fahrzeugerkennung, IP67 und PoE.',
     promise: '4K-Turret-Kamera mit Sony IMX415, lichtstarker F1.0-Optik und 24/7 Farbbildgebung.',
@@ -141,7 +141,7 @@ export const extendedProductPageData = {
   }),
 
   'fp-8s-25x': makeProduct({
-    slug: 'fp-8s-25x', name: 'FP-8S 25X', category: 'PTZ Speed Dome-Kamera',
+    slug: 'fp-8s-25x', coreGround: '#fff', name: 'FP-8S 25X', category: 'PTZ Speed Dome-Kamera',
     metaTitle: 'FTronics FP-8S 25X: kompakte 4K PTZ mit 25× Zoom',
     metaDescription: 'FTronics FP-8S 25X mit 8 MP, 25× optischem Zoom, 100 m IR, Auto-Tracking, eingebautem Mikrofon, IP66 und 128 Presets.',
     promise: 'Kompakte 4K-PTZ mit 25× optischem Zoom, 100 m IR und automatischem Personen-Tracking.',
@@ -204,7 +204,7 @@ export const extendedProductPageData = {
   }),
 
   'fn-8': makeProduct({
-    slug: 'fn-8', name: 'FN-8', category: '8-Kanal Netzwerk-Videorekorder', mainExt: 'jpg',
+    slug: 'fn-8', coreGround: '#fff', name: 'FN-8', category: '8-Kanal Netzwerk-Videorekorder', mainExt: 'jpg',
     metaTitle: 'FTronics FN-8: kompakter 8-Kanal 4K NVR mit Ultra 265',
     metaDescription: 'FTronics FN-8 NVR mit 8 IP-Kanälen, 64 Mbps, 4K HDMI, Ultra 265, VCA, Personenzählung und einem SATA-Schacht bis 8 TB.',
     promise: 'Kompakter 8-Kanal-NVR mit 4K-Ausgabe, Ultra-265-Kompression und integrierter Videoanalyse.',
@@ -235,7 +235,7 @@ export const extendedProductPageData = {
   }),
 
   'fn-16': makeProduct({
-    slug: 'fn-16', name: 'FN-16', category: '16-Kanal Netzwerk-Videorekorder', mainExt: 'jpg',
+    slug: 'fn-16', coreGround: '#fff', name: 'FN-16', category: '16-Kanal Netzwerk-Videorekorder', mainExt: 'jpg',
     metaTitle: 'FTronics FN-16: 16-Kanal 4K NVR mit 2× SATA',
     metaDescription: 'FTronics FN-16 NVR mit 16 IP-Kanälen, 160 Mbps, 4K HDMI, Ultra 265, VCA, Personenzählung und 2× SATA bis 16 TB gesamt.',
     promise: '16-Kanal-NVR mit 160 Mbps, 4K-Ausgabe, VCA und zwei SATA-Schächten für mittlere Anlagen.',
@@ -266,7 +266,7 @@ export const extendedProductPageData = {
   }),
 
   'fn-32': makeProduct({
-    slug: 'fn-32', name: 'FN-32', category: '32-Kanal Netzwerk-Videorekorder', mainExt: 'jpg',
+    slug: 'fn-32', coreGround: '#fff', name: 'FN-32', category: '32-Kanal Netzwerk-Videorekorder', mainExt: 'jpg',
     metaTitle: 'FTronics FN-32: 32-Kanal 4K NVR für große Anlagen',
     metaDescription: 'FTronics FN-32 NVR mit 32 IP-Kanälen, 160 Mbps, 4K HDMI, 16-Kanal-Wiedergabe, Ultra 265, VCA und 2× SATA bis 16 TB.',
     promise: '32-Kanal-NVR mit 4K-Ausgabe, 16-facher Wiedergabe und zentraler VCA für große Anlagen.',
