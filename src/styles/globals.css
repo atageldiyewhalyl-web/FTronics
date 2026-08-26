@@ -1942,6 +1942,7 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
     scroll-padding-inline:var(--sp-1);
     scrollbar-width:none;
     -webkit-overflow-scrolling:touch;
+    margin-inline:var(--gutter);
     padding:var(--sp-1) 0 var(--sp-4);
   }
   .ft-pledge-grid::-webkit-scrollbar{display:none}
@@ -3364,9 +3365,10 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
 .ft-cta-close{
   background:var(--bg-raised);
   border-top:1px solid var(--border);
-  padding-bottom:0;
+  padding-bottom:0!important;
+  margin-bottom:0;
 }
-.ft-cta-flatlay{margin-top:clamp(2.5rem,6vw,4.5rem)}
+.ft-cta-flatlay{margin-top:clamp(2.5rem,6vw,4.5rem);margin-bottom:0}
 
 /* Words left, enquiry right. The right column is held to a measure rather than
    a fraction so the form keeps a sane field width on a wide monitor while the

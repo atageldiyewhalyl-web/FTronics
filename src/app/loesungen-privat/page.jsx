@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { Button } from '@/components/ui'
 import { Plan } from '@/components/plan'
 import { TrustMarks } from '@/components/trust-marks'
@@ -185,14 +184,6 @@ export default function LoesungenPrivat() {
             <TrustMarks data-rev />
             <div data-rev style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: '1.75rem' }}>
               <Button href="/kontakt">{cta.start}</Button>
-            </div>
-            {/* A link, not a second button. This is the way out to the other
-                audience's page, and a bordered pill under the enquiry read as
-                two calls to action of equal weight. */}
-            <div data-rev style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: '.85rem' }}>
-              <Link className="ft-quiet-link" href="/loesungen-gewerbe">
-                Für Gewerbekunden →
-              </Link>
             </div>
           </div>
           {/* One house, cut open, with the five systems marked where their

@@ -325,13 +325,13 @@ export default function Startseite() {
             becomes a snap carousel: each card has room for its image and the
             next card peeks in to make the swipe affordance clear. */}
         <div
-          data-rev-group
+          data-rev
           className="ft-shell ft-pledge-grid"
           role="region"
           aria-label="Unsere Qualitätsversprechen"
         >
           {pledges.map(([t, d, img]) => (
-            <div data-rev key={t}>
+            <div key={t}>
               <Card title={t} media={img} className="ft-card--tall">{d}</Card>
             </div>
           ))}

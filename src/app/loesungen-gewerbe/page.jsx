@@ -148,13 +148,17 @@ const vorteile = [
    chip's 3.5%-ink fill has nothing to sit against. The lead drops to
    --ft-ink-grad-end (5.2:1 here) and the chip goes near-solid white. */
 const css = `
-.ft-gewerbe-ground{background:#b8b8b8}
+.ft-gewerbe-ground{background:#b8b8b8;overflow-x:clip}
 .ft-gewerbe-ground .ft-hero-lead{color:var(--ft-ink-grad-end)}
 .ft-gewerbe-ground .ft-eyebrow{background:rgba(255,255,255,.74);color:var(--ft-ink-text)}
 .ft-gewerbe-ground .ft-spec,
 .ft-gewerbe-ground .ft-spec svg,
 .ft-gewerbe-ground .ft-quiet-link{color:var(--ft-ink-grad-end)}
 .ft-gewerbe-ground .ft-quiet-link:hover{color:var(--ft-ink-text)}
+/* Keep the interactive building in its own visual row. This is especially
+   important during client-side navigation from Privatkunden, where the image
+   could otherwise paint alongside the incoming hero copy. */
+.ft-gewerbe-ground .ft-plan{clear:both;display:block;margin-top:clamp(5rem,9vw,8rem)}
 /* The ground matches the plate, but the plate carries its own soft floor
    shadow and that stops dead where the file does — a faint edge all the way
    round it. Faded out on every side, over the empty margin the building never
@@ -170,14 +174,6 @@ const css = `
   -webkit-mask-composite:source-in;
   mask-composite:intersect;
 }
-/* The source render reserves a large blank margin on its left, so although the
-   plan is structurally below the hero copy, the building looks as if it has
-   been laid out beside it. Crop that unused side inside the figure and shift
-   the frame left; its markers remain attached because they are positioned
-   relative to the same frame. */
-.ft-gewerbe-ground .ft-plan{overflow:hidden}
-.ft-gewerbe-ground .ft-plan-frame{margin-left:-16%}
-
 /* Ihre Vorteile: a row of tall panels, each holding its claim, with the
    sentence that qualifies it set underneath as a caption. The panel is the
    page's own paper-96 on the raised white ground, so it reads as a plane
@@ -219,7 +215,7 @@ const css = `
    facade camera at 88.6%, further out than anything on the house, and at the
    full 122% its ring is cut by the screen edge on a 375px phone. */
 @media(max-width:760px){
-  .ft-gewerbe-ground .ft-plan-frame{width:112%;margin-left:-6%}
+  .ft-gewerbe-ground .ft-plan-frame{width:100%;margin-left:0}
 }
 `
 
