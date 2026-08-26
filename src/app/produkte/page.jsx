@@ -1,6 +1,7 @@
-import { Button } from '@/components/ui'
+import { Button, CtaFlatlay } from '@/components/ui'
 import { cta } from '@/lib/site'
 import { ProductCatalogue } from './ProductCatalogue'
+import { CtaAnfrageForm } from '../CtaAnfrageForm'
 
 export const metadata = {
   /* Root layout appends " | FT Sicherheitstechnik" via the title template. */
@@ -49,26 +50,17 @@ export default function Produkte() {
       <ProductCatalogue />
 
       {/* Closing CTA */}
-      <section style={{ padding: '0 0 clamp(5rem,7vw,8rem)' }}>
-        <div className="ft-shell">
-          <div
-            data-rev
-            style={{
-              background: 'var(--bg-card)', border: '1px solid var(--border)',
-              borderRadius: 'var(--r-xl)', padding: 'clamp(2rem,5vw,4rem)',
-              display: 'flex', flexWrap: 'wrap', gap: '1.5rem',
-              alignItems: 'center', justifyContent: 'space-between',
-            }}
-          >
-            <div style={{ maxWidth: 560 }}>
+      <section className="ft-section ft-cta-close">
+        <div className="ft-shell ft-cta-split" data-rev>
+            <div className="ft-cta-copy">
               <h3 style={{ marginBottom: '.4em' }}>Interesse an unseren Produkten?</h3>
               <p style={{ margin: 0, color: 'var(--fg-secondary)' }}>
                 Wir beraten Sie gerne und erstellen Ihnen ein individuelles Angebot.
               </p>
             </div>
-            <Button href="/kontakt">{cta.quote}</Button>
-          </div>
+            <CtaAnfrageForm />
         </div>
+        <CtaFlatlay />
       </section>
     </>
   )

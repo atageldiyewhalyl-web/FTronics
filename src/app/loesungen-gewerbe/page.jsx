@@ -170,6 +170,13 @@ const css = `
   -webkit-mask-composite:source-in;
   mask-composite:intersect;
 }
+/* The source render reserves a large blank margin on its left, so although the
+   plan is structurally below the hero copy, the building looks as if it has
+   been laid out beside it. Crop that unused side inside the figure and shift
+   the frame left; its markers remain attached because they are positioned
+   relative to the same frame. */
+.ft-gewerbe-ground .ft-plan{overflow:hidden}
+.ft-gewerbe-ground .ft-plan-frame{margin-left:-16%}
 
 /* Ihre Vorteile: a row of tall panels, each holding its claim, with the
    sentence that qualifies it set underneath as a caption. The panel is the

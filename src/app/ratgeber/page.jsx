@@ -1,6 +1,7 @@
-import { Button, Chip, SectionHead, Placeholder } from '@/components/ui'
+import { Button, Chip, CtaFlatlay, SectionHead, Placeholder } from '@/components/ui'
 import { cta, jsonLd, breadcrumbJsonLd } from '@/lib/site'
 import { ReadingProgress } from './ReadingProgress'
+import { CtaAnfrageForm } from '../CtaAnfrageForm'
 
 export const metadata = {
   title: 'Ratgeber: Tipps zu Alarmanlagen & Sicherheit',
@@ -176,9 +177,10 @@ export default function Ratgeber() {
                 Unser Expertenteam steht Ihnen jederzeit zur Verfügung.
               </p>
             </div>
-            <Button href="/kontakt">{cta.contact}</Button>
+            <CtaAnfrageForm />
           </div>
         </div>
+        <CtaFlatlay />
       </section>
     </>
   )

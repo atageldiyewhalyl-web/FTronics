@@ -158,6 +158,24 @@ export function Media({ src, alt, ratio = '16 / 9', rounded = 'var(--r-xl)', pad
   )
 }
 
+/** Shared closing-CTA product flatlay. Decorative: surrounding CTA copy
+    already communicates the offer, while this simply gives the close a
+    consistent product-led finish. */
+export function CtaFlatlay() {
+  return (
+    <div data-rev className="ft-cta-flatlay">
+      <img
+        src="/cta-flatlay.webp"
+        alt=""
+        width={2400}
+        height={896}
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  )
+}
+
 /** Shell — the --container (1260px) column used by every section. */
 export function Shell({ children, className = '', ...rest }) {
   return <div className={`ft-shell ${className}`} {...rest}>{children}</div>

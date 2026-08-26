@@ -1,6 +1,7 @@
-import { Button, Chip, SectionHead } from '@/components/ui'
+import { Button, Chip, CtaFlatlay, SectionHead } from '@/components/ui'
 import { ScrollGallery } from '@/components/scroll'
 import { cta, jsonLd, breadcrumbJsonLd } from '@/lib/site'
+import { CtaAnfrageForm } from '../CtaAnfrageForm'
 
 export const metadata = {
   /* Root layout appends " | FT Sicherheitstechnik" via the title template. */
@@ -191,9 +192,10 @@ export default function Support() {
                 zur Seite.
               </p>
             </div>
-            <Button href="/kontakt">{cta.contact}</Button>
+            <CtaAnfrageForm />
           </div>
         </div>
+        <CtaFlatlay />
       </section>
     </>
   )

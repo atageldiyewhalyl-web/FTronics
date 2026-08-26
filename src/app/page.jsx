@@ -321,13 +321,15 @@ export default function Startseite() {
 
         </div>
 
-        {/* Four across, inside the column, all of it on screen at once. This
-            was a bled snap rail so that a 440px card could keep its picture at
-            full size, but it also put three of the four promises off the right
-            edge until someone dragged for them — and these four are a set. The
-            point is the whole list; a reader who sees only the first has been
-            told a quarter of it. The cards give up width for that. */}
-        <div data-rev-group className="ft-shell ft-pledge-grid">
+        {/* The full set stays visible as a grid on larger screens. On phones it
+            becomes a snap carousel: each card has room for its image and the
+            next card peeks in to make the swipe affordance clear. */}
+        <div
+          data-rev-group
+          className="ft-shell ft-pledge-grid"
+          role="region"
+          aria-label="Unsere Qualitätsversprechen"
+        >
           {pledges.map(([t, d, img]) => (
             <div data-rev key={t}>
               <Card title={t} media={img} className="ft-card--tall">{d}</Card>

@@ -104,7 +104,14 @@ html{font-optical-sizing:auto}
    four-column row with no panels to hold them, the figures read as one
    left-heavy block rather than as four. The icon is width:max-content, so
    text-align alone would not move it — it needs the auto margins. */
-.ft-card--stat-compact{text-align:center}
+.ft-stat-grid > [data-rev]{display:flex;justify-content:center}
+.ft-card--stat-compact{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+}
 .ft-card--stat-compact .ft-card-icon{margin:0 auto .55rem;color:var(--fg)}
 /* "Rhein-Neckar" wraps to two lines where the other three do not, so its
    card ran taller than its neighbours. Filling the grid cell puts the four
@@ -559,7 +566,13 @@ html{font-optical-sizing:auto}
    as equal weight. */
 .ft-award .ft-card-copy{color:var(--fg-secondary)}
 @media(max-width:520px){
-  .ft-award{flex-direction:column;align-items:flex-start;gap:var(--sp-4)}
+  .ft-award{
+    flex-direction:column;
+    align-items:center;
+    gap:var(--sp-4);
+    text-align:center;
+  }
+  .ft-award .ft-card-body{text-align:center}
 }
 
 /* ---------------- Editorial band ----------------
@@ -700,7 +713,15 @@ html{font-optical-sizing:auto}
    once a column would be narrower than the titles sitting in it. */
 .ft-band-list--split{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(1.5rem,2.6vw,2.5rem)}
 @media(max-width:640px){
-  .ft-band-list--split{grid-template-columns:1fr}
+  /* Once the service list is a single column, flex gives each entry its
+     natural height instead of distributing spare space between grid rows. */
+  .ft-band-list--split{
+    display:flex;
+    flex-direction:column;
+    gap:.75rem;
+  }
+  .ft-band-list--split > [data-rev]{flex:0 0 auto;min-height:0}
+  .ft-band-list--split .ft-card-copy{margin-top:.2rem}
 }
 .ft-band-list .ft-card{
   background:none;
@@ -711,14 +732,22 @@ html{font-optical-sizing:auto}
 }
 .ft-band-list .ft-card:hover{background:none;border:0;transform:none}
 /* The inset lives on the body, not on the card, so zeroing the card alone left
-   the promises indented from the eyebrow and headline above them. Flush now. */
-.ft-band-list .ft-card-body{padding:0}
+   the promises indented from the eyebrow and headline above them. Flush now.
+   A short title belongs beside its mark rather than beneath it; the supporting
+   copy then returns to the full measure below that compact title row. */
+.ft-band-list .ft-card-body{
+  display:grid;
+  grid-template-columns:max-content minmax(0,1fr);
+  column-gap:.75rem;
+  align-items:center;
+  padding-left:.35rem;
+}
 /* No hyphenation on these. The base heading rule turns it on for running
    headlines, but these are short labels in a narrow column, and the block
    carries lang="de" — so German hyphenation was breaking the English
    translation mid-word ("Door inter-com systems"). They should break at spaces
    instead; overflow-wrap is the safety net for a word wider than its column. */
-.ft-band-list .ft-card h4{font-weight:700;margin-bottom:.25em;hyphens:none;-webkit-hyphens:none;overflow-wrap:break-word}
+.ft-band-list .ft-card h4{font-weight:700;margin:0;hyphens:none;-webkit-hyphens:none;overflow-wrap:break-word}
 .ft-band--dark .ft-band-list .ft-card h4{color:var(--ft-signal-500)}
 .ft-band--light .ft-band-list .ft-card h4{color:var(--fg)}
 .ft-band--light .ft-band-list .ft-card .ft-card-copy{color:var(--fg-secondary)}
@@ -729,7 +758,7 @@ html{font-optical-sizing:auto}
 .ft-card-icon{
   display:block;
   width:max-content;
-  margin-bottom:.7rem;
+  margin:0;
   color:rgba(255,255,255,.88);
 }
 /* The signal tint on the dark band, not the brand red. Brand red is mixed for
@@ -741,7 +770,15 @@ html{font-optical-sizing:auto}
 .ft-band--dark .ft-band-list .ft-card-icon{color:var(--ft-signal-500)}
 .ft-band--light .ft-band-list .ft-card-icon{color:var(--fg)}
 .ft-card-icon svg{display:block}
-.ft-band-list .ft-card .ft-card-copy{color:rgba(255,255,255,.74);font-size:var(--t-body-sm)}
+.ft-band-list .ft-card .ft-card-copy{
+  grid-column:1 / -1;
+  margin-top:.45rem;
+  color:rgba(255,255,255,.74);
+  font-size:var(--t-body-sm);
+  line-height:1.45;
+}
+/* Service descriptions carry several lines on a phone. A slightly tighter
+   leading makes the list easier to scan without compromising readability. */
 
 /* Stack whenever the band cannot show the whole width of the photograph.
    `cover` crops on whichever axis has the surplus: once the band is taller in
@@ -1893,7 +1930,27 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
   .ft-pledge-grid .ft-card--tall{min-height:clamp(320px,32vw,420px)}
 }
 @media(max-width:560px){
-  .ft-pledge-grid{grid-template-columns:minmax(0,1fr)}
+  /* On a phone, the cards keep enough width to let the photography breathe.
+     The clipped next card is the visual cue that this is a swipeable set;
+     scroll snapping makes each promise land cleanly in view. */
+  .ft-pledge-grid{
+    display:flex;
+    gap:var(--sp-4);
+    overflow-x:auto;
+    overflow-y:hidden;
+    scroll-snap-type:x mandatory;
+    scroll-padding-inline:var(--sp-1);
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+    padding:var(--sp-1) 0 var(--sp-4);
+  }
+  .ft-pledge-grid::-webkit-scrollbar{display:none}
+  .ft-pledge-grid > div{
+    flex:0 0 calc(100% - 3.25rem);
+    scroll-snap-align:start;
+    scroll-snap-stop:always;
+  }
+  .ft-pledge-grid .ft-card--tall{min-height:clamp(360px,112vw,470px)}
 }
 
 .ft-pledge p{max-width:none}
@@ -3230,7 +3287,12 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
    four separate claims. Stated as two columns they read as one block of
    four and take a quarter of the scroll. */
 @media(max-width:600px){
-  .ft-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ft-stat-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    position:relative;
+    left:-.65rem;
+  }
+  .ft-stat-grid > [data-rev]:nth-child(even){position:relative;left:-.45rem}
 }
 
 /* ---------------- Catalogue filter bar ----------------
@@ -3338,6 +3400,7 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
    fields inside are --bg-raised, so they stay the light things on it rather
    than disappearing into a white card on a white ground. */
 .ft-cta-form-panel{
+  width:min(100%,440px);
   background:var(--bg);
   border:1px solid var(--border);
   border-radius:var(--r-xl);
@@ -3362,5 +3425,5 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
    instead — fewer objects on screen, but the ones there can be read. */
 @media(max-width:700px){
   .ft-cta-flatlay{overflow:hidden}
-  .ft-cta-flatlay img{width:190%;margin-inline-start:-45%}
+  .ft-cta-flatlay img{width:170%;margin-inline-start:-35%}
 }

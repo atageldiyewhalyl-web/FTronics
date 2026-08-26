@@ -1,5 +1,6 @@
-import { Button, Card, ChipRow, SectionHead } from '@/components/ui'
+import { Button, Card, ChipRow, CtaFlatlay, SectionHead } from '@/components/ui'
 import { cta, jsonLd, breadcrumbJsonLd } from '@/lib/site'
+import { CtaAnfrageForm } from '../CtaAnfrageForm'
 
 export const metadata = {
   /* The root layout appends " | FT Sicherheitstechnik" via title.template,
@@ -192,9 +193,10 @@ export default function Partner() {
                 in der Metropolregion Rhein-Neckar.
               </p>
             </div>
-            <Button href="/kontakt">{cta.advice}</Button>
+            <CtaAnfrageForm />
           </div>
         </div>
+        <CtaFlatlay />
       </section>
     </>
   )

@@ -1,4 +1,4 @@
-import { Button, SectionHead } from '@/components/ui'
+import { Button, CtaFlatlay, SectionHead } from '@/components/ui'
 import { ScrollGallery } from '@/components/scroll'
 import { FeatureBento } from '@/components/bento'
 import { ScanBand } from '@/components/scan-band'
@@ -260,6 +260,7 @@ export function StandardProductPage({ product }) {
             <Button variant="secondary" href="/produkte">{cta.products}</Button>
           </div>
         </div>
+        <CtaFlatlay />
       </section>
     </>
   )

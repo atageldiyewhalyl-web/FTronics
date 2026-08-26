@@ -1,4 +1,4 @@
-import { Button, SectionHead } from '@/components/ui'
+import { Button, CtaFlatlay, SectionHead } from '@/components/ui'
 import { Compare } from '@/components/compare'
 import { ScrollGallery } from '@/components/scroll'
 import { FeatureBento } from '@/components/bento'
@@ -459,6 +459,7 @@ export default function ProduktFC8D() {
             <Button variant="secondary" href="/produkte">{cta.products}</Button>
           </div>
         </div>
+        <CtaFlatlay />
       </section>
     </>
   )

@@ -1,4 +1,4 @@
-import { Button, Card, Chip, ChipRow, SectionHead, Media, Placeholder } from '@/components/ui'
+import { Button, Card, Chip, ChipRow, CtaFlatlay, SectionHead, Media, Placeholder } from '@/components/ui'
 import { Compare } from '@/components/compare'
 import { Teardown } from '@/components/teardown'
 import { ScrollGallery } from '@/components/scroll'
@@ -551,6 +551,7 @@ export default function ProduktFC8DPro() {
             <Button variant="secondary" href="/produkte">{cta.products}</Button>
           </div>
         </div>
+        <CtaFlatlay />
       </section>
     </>
   )
