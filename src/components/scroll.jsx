@@ -223,7 +223,12 @@ export function Chevron({ back = false }) {
 }
 
 /** ScrollGallery — Pattern E. Snap rail with paddles and arrow-key support. */
-export function ScrollGallery({ itemWidth = 420, label = 'Galerie', paddles = true, children }) {
+/* `actions` puts a control of the rail's own choosing in the paddle row —
+   a "see all" for a rail showing part of a set, say. It is ranged to the far
+   left of the row while the arrows stay right, so it lines up with the first
+   card rather than crowding the controls. Omitted by every other caller, and
+   the row still appears for a rail that wants an action but no arrows. */
+export function ScrollGallery({ itemWidth = 420, label = 'Galerie', paddles = true, actions, children }) {
   const ref = useRef(null)
   const by = (d) => ref.current?.scrollBy({ left: d * (itemWidth + 24), behavior: 'smooth' })
 
@@ -232,14 +237,19 @@ export function ScrollGallery({ itemWidth = 420, label = 'Galerie', paddles = tr
        this markup. Inside .ft-splitrail it stays display:contents, so its two
        children go on being placed by that grid directly. */
     <div className="ft-rail">
-      {paddles && (
+      {(paddles || actions) && (
         <div className="ft-paddle-row">
-          <button className="ft-paddle" aria-label="Zurück" onClick={() => by(-1)} type="button">
-            <Chevron back />
-          </button>
-          <button className="ft-paddle" aria-label="Weiter" onClick={() => by(1)} type="button">
-            <Chevron />
-          </button>
+          {actions && <div className="ft-paddle-actions">{actions}</div>}
+          {paddles && (
+            <>
+              <button className="ft-paddle" aria-label="Zurück" onClick={() => by(-1)} type="button">
+                <Chevron back />
+              </button>
+              <button className="ft-paddle" aria-label="Weiter" onClick={() => by(1)} type="button">
+                <Chevron />
+              </button>
+            </>
+          )}
         </div>
       )}
       <div

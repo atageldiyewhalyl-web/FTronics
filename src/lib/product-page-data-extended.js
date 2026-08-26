@@ -21,13 +21,29 @@ function makeProduct(p) {
       kind: index === 0 || index === 3 ? 'dark' : 'photo',
       tall: index === 0,
       wide: index === 3,
-      img: index < 3 ? (index === 1 ? main : feature) : undefined,
+      /* A per-tile override so a product whose proofs have actually been shot
+         can supply them, while every tile it has not shot yet keeps the
+         derived default. Absent — which it is for ten of the eleven — nothing
+         about the generated proofs changes. */
+      img: p.proofImgs?.[index] ?? (index < 3 ? (index === 1 ? main : feature) : undefined),
+      /* Crop anchor for that tile. A tall tile is far taller than the 16:9
+         scenes these are, so cover throws most of the width away and a centred
+         default can drop the camera out of frame entirely. */
+      pos: p.proofPos?.[index],
       alt: '', h: item[0], p: item[1],
     })),
     intelligence: {
       ...p.intelligence,
       cards: p.intelligence.cards.map((item, index) => ({
-        h: item[0], p: item[1], img: cardImages[index], alt: `${p.name}: ${item[0]}`,
+        h: item[0], p: item[1],
+        /* Same override shape as proofImgs. The detection cards are camera-POV
+           scenes with no camera in frame, so one shot for a given claim serves
+           any product making that claim — what has to match is the claim and
+           the grade, not the housing. Where a card is overridden the alt comes
+           with it, since the derived one describes the product rather than
+           what is actually visible. */
+        img: p.cardImgs?.[index] ?? cardImages[index],
+        alt: p.cardAlts?.[index] ?? `${p.name}: ${item[0]}`,
       })),
     },
   }
@@ -46,6 +62,19 @@ const recorderNotes = [
 export const extendedProductPageData = {
   'ft-8c-pro': makeProduct({
     slug: 'ft-8c-pro', coreGround: '#fff', name: 'FT-8C Pro', category: 'Turret IP-Kamera', mainExt: 'jpg',
+    /* Tiles 1–3 are shot for their own claims. Tile 0 keeps the derived
+       feature photo until a proof for it exists. */
+    proofImgs: [undefined, '/ft-8c-pro-proof-core.webp', '/ft-8c-pro-proof-analysis.webp', '/ft-8c-pro-proof-integration.webp'],
+    /* Borrowed: the FC-6Z Mini lobby suits retail and entrances, and FB-8B's
+       zones card carries the identical claim. The middle one is shot for this
+       page: no existing image marks a person and a vehicle at once, which is
+       exactly what "Personen und Fahrzeuge" claims. */
+    cardImgs: ['/fc-6z-mini-feature-face.webp', '/ft-8c-pro-feature-classification.webp', '/fb-8b-feature-motion.webp'],
+    cardAlts: [
+      'Kameraansicht von oben: eine Person betritt eine verglaste Eingangshalle, ihr Gesicht ist mit einem roten Erkennungsrahmen markiert',
+      'Kameraansicht auf einen Ladenvorplatz in der Dämmerung: eine Person und ein fahrendes Auto sind je rot umrahmt, die geparkten Fahrzeuge bleiben unmarkiert',
+      'Kameraansicht von oben: zwei rot markierte Bewegungszonen auf dem Boden vor einem Rolltor',
+    ],
     metaTitle: 'FTronics FT-8C Pro: 4K Turret-Kamera mit 24/7 Farbbild',
     metaDescription: 'FTronics FT-8C Pro mit 8 MP Sony IMX415, F1.0, 24/7 Farbbild, Gesichts-, Personen- und Fahrzeugerkennung, IP67 und PoE.',
     promise: '4K-Turret-Kamera mit Sony IMX415, lichtstarker F1.0-Optik und 24/7 Farbbildgebung.',
@@ -77,7 +106,20 @@ export const extendedProductPageData = {
   }),
 
   'ft-8p-dual': makeProduct({
-    slug: 'ft-8p-dual', name: 'FT-8P Dual', category: '180° Panorama Turret-Kamera',
+    slug: 'ft-8p-dual',
+    /* Camera sits at 36% of its scene; centred it lands 26% across the tall
+       tile and clips on the left edge. Anchored left it reaches 61%. */
+    proofPos: ['left center'],
+    /* Tiles 1–3 shot for their own claims. Tile 2 in particular: it and tile 0
+       were both handed the derived feature photo, so the page showed the same
+       loading bay twice. */
+    proofImgs: [undefined, '/ft-8p-dual-proof-core.webp', '/ft-8p-dual-proof-response.webp', '/ft-8p-dual-proof-integration.webp'],
+    cardImgs: ['/ft-8p-dual-feature-classification.webp', '/ft-8p-dual-feature-face.webp', '/ft-8p-dual-feature-deterrence.webp'],
+    cardAlts: [
+      'Kameraansicht auf einen Betriebshof in der Dämmerung: eine Person und ein Transporter sind je rot umrahmt, die Bäume dahinter bleiben unmarkiert',
+      'Kameraansicht auf eine Personentür: das Gesicht einer davorstehenden Person ist mit einem roten Erkennungsrahmen markiert, der Körper nicht',
+      'Die Kamera an einer Betonwand bei Nacht: rotes und blaues Warnlicht und ein weißer Lichtkegel, eine Person im Hof blickt zur Kamera zurück',
+    ], name: 'FT-8P Dual', category: '180° Panorama Turret-Kamera',
     metaTitle: 'FTronics FT-8P Dual: 8 MP Panoramakamera mit 180° Sicht',
     metaDescription: 'FTronics FT-8P Dual mit zwei 4-MP-Sensoren, 180° Panorama, Personen-, Fahrzeug- und Gesichtserkennung, Rot/Blau-Abschreckung, IP67 und PoE.',
     promise: '8-MP-Panoramakamera mit zwei Objektiven, 180° Übersicht und aktiver Abschreckung.',
@@ -109,7 +151,22 @@ export const extendedProductPageData = {
   }),
 
   'fp-8t-20x': makeProduct({
-    slug: 'fp-8t-20x', name: 'FP-8T 20X', category: 'PTZ Speed Dome-Kamera',
+    slug: 'fp-8t-20x',
+    /* Camera sits at 34% of its scene; centred it lands 23% across the tall
+       tile and clips. Anchored left it reaches 58%. */
+    proofPos: ['left center'],
+    proofImgs: [
+      undefined,
+      '/magnific_preserve-the-exact-suppli_O6Z7A81ynm.png',
+      '/magnific_preserve-the-exact-suppli_p8hMa2Uehw.png',
+      '/magnific_preserve-the-exact-suppli_dtapEmUXSL.png',
+    ],
+    cardImgs: [
+      '/magnific_premium-editorial-industr_SyNlYTMUb8.png',
+      '/magnific_premium-editorial-industr_BhCd1OSoQR.png',
+      '/magnific_premium-editorial-industr_yi2JMbBPW9.png',
+    ],
+    name: 'FP-8T 20X', category: 'PTZ Speed Dome-Kamera',
     metaTitle: 'FTronics FP-8T 20X: 4K PTZ mit 20× Zoom & Auto-Tracking',
     metaDescription: 'FTronics FP-8T 20X mit 8 MP Sony IMX415, 20× optischem Zoom, Auto-Tracking, Dual-Light, 100 dB WDR, IP67 und bis 256 Presets.',
     promise: '4K-PTZ mit 20× optischem Zoom, KI-Auto-Tracking und Dual-Light für große Areale.',
@@ -141,7 +198,19 @@ export const extendedProductPageData = {
   }),
 
   'fp-8s-25x': makeProduct({
-    slug: 'fp-8s-25x', coreGround: '#fff', name: 'FP-8S 25X', category: 'PTZ Speed Dome-Kamera',
+    slug: 'fp-8s-25x', coreGround: '#fff',
+    proofImgs: [
+      undefined,
+      '/magnific_preserve-the-exact-suppli_jUOrViMLD0 (1).png',
+      undefined,
+      '/magnific_preserve-the-exact-suppli_ovEX7Pc829 (1).png',
+    ],
+    cardImgs: [
+      '/magnific_premium-editorial-industr_4RGy5Tu9Aa.png',
+      '/magnific_premium-editorial-industr_1lwK8zQr4r.png',
+      '/magnific_premium-editorial-industr_ksU5oMG16B.png',
+    ],
+    name: 'FP-8S 25X', category: 'PTZ Speed Dome-Kamera',
     metaTitle: 'FTronics FP-8S 25X: kompakte 4K PTZ mit 25× Zoom',
     metaDescription: 'FTronics FP-8S 25X mit 8 MP, 25× optischem Zoom, 100 m IR, Auto-Tracking, eingebautem Mikrofon, IP66 und 128 Presets.',
     promise: 'Kompakte 4K-PTZ mit 25× optischem Zoom, 100 m IR und automatischem Personen-Tracking.',
@@ -173,7 +242,14 @@ export const extendedProductPageData = {
   }),
 
   'fe-6l': makeProduct({
-    slug: 'fe-6l', name: 'FE-6L', category: 'Aufzugkamera',
+    slug: 'fe-6l',
+    proofImgs: [
+      undefined,
+      '/magnific_preserve-the-exact-suppli_793U5QbJAL (1).png',
+      '/magnific_preserve-the-exact-suppli_rg7kaFsxtc.png',
+      '/magnific_premium-editorial-industr_ksU5oMG16B.png',
+    ],
+    name: 'FE-6L', category: 'Aufzugkamera',
     metaTitle: 'FTronics FE-6L: kompakte 6-MP-Aufzugkamera mit KI',
     metaDescription: 'FTronics FE-6L mit 6 MP Sony CMOS, 0,01 Lux, Personen- und Fahrzeugerkennung, digitalem WDR, 5–8 m IR, IP65 und optional PoE.',
     promise: 'Kompakte 6-MP-Kamera für Aufzüge und enge Räume mit Sony CMOS und gezielter KI-Erkennung.',
@@ -212,7 +288,6 @@ export const extendedProductPageData = {
       ['Acht Kameras zentral aufzeichnen.', 'Der FN-8 bündelt kleine Gewerbe-, Büro- und Wohnanlagen in einem kompakten Rekorder.'],
       ['4K am Kontrollmonitor.', 'HDMI gibt Livebild und Wiedergabe bis 3840 × 2160 bei 30 Hz aus.'],
       ['Ultra 265 spart Speicher.', 'Effiziente Kompression verlängert die verfügbare Aufzeichnungsdauer bei gleicher Festplatte.'],
-      ['VCA, Zählung und 8 TB.', 'Analysefunktionen und ein SATA-Schacht verbinden Recherche und lokale Speicherung.'],
     ],
     positioning: { eyebrow: 'Kompakte Zentrale', title: 'Acht Kanäle, ein klarer Aufzeichnungspunkt.', text: 'Der FN-8 ist für kleine Unternehmen, Einzelhandel, Büros und Wohngebäude ausgelegt. Er führt Kamera-Streams, 4K-Ausgabe, Suche, Wiedergabe und VCA-Ereignisse in einem lokalen System zusammen.' },
     core: { eyebrow: 'Ultra 265', title: 'Mehr Aufzeichnungszeit aus demselben Speicher.', text: 'Ultra 265, H.265 und H.264 werden unterstützt. Ein SATA-Schacht nimmt eine Festplatte bis 8 TB auf; die tatsächliche Speicherdauer wird aus Kamera- und Ereignisprofil dimensioniert.' },

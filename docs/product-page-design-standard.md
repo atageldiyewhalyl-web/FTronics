@@ -127,6 +127,8 @@ Every generation must use an approved transparent product cutout or approved pro
 
 If no approved product reference exists, create and approve that asset before generating scene imagery.
 
+Do not ship an image-model approximation of the product. Reject any output that changes an identity-critical detail, then regenerate with the current page's approved product asset supplied directly as the identity reference. The generated product must be based on that page asset, never a generic substitute.
+
 ### Master prompt prefix
 
 Use this prefix for every scene, then append the section-specific brief:

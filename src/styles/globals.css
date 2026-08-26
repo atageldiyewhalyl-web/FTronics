@@ -448,7 +448,11 @@ html{font-optical-sizing:auto}
    that edge — the reveal's 22px offset was scrollable overflow inside the rail,
    which is the stray vertical drag. Inside a rail the cards fade in place. */
 .ft-gallery [data-rev]{transform:none}
-.ft-paddle-row{display:flex;gap:var(--sp-2);justify-content:flex-end;margin-bottom:var(--sp-3)}
+.ft-paddle-row{display:flex;gap:var(--sp-2);justify-content:flex-end;align-items:center;margin-bottom:var(--sp-3)}
+/* The row is ranged right for the arrows; an auto margin on the action pushes
+   the gap between them instead of adding a second justification rule, so a
+   rail with no action is untouched and the arrows do not move. */
+.ft-paddle-actions{margin-inline-end:auto}
 .ft-paddle{width:40px;height:40px;border-radius:50%;background:var(--bg-card);border:1px solid var(--border);color:var(--fg);cursor:pointer;display:grid;place-items:center;font-size:15px;transition:background var(--dur-2) var(--ease-out),border-color var(--dur-2) var(--ease-out)}
 .ft-paddle:hover{background:var(--bg-card-hover);border-color:var(--border-strong)}
 /* ---------------- Ring field ----------------
@@ -793,6 +797,7 @@ html{font-optical-sizing:auto}
   padding-inline-end:max(var(--gutter),calc((100% - var(--container)) / 2));
 }
 
+
 /* ---------------- Split rail ---------------- */
 /* The heading and the controls hold a column of their own on the left while
    the cards run past the right edge of the screen. Stacked the ordinary way a
@@ -957,13 +962,6 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
 /* The catalogue tile is the same plane with no render to carry, so its copy
    sits at the foot where the product copy sits and the set still reads as one.
    gap:0 — this one spaces itself with margins. */
-.ft-pcard--cta{
-  gap:0;
-  justify-content:flex-end;
-  align-items:flex-start;
-  padding:var(--sp-8);
-  min-height:420px;
-}
 
 /* ---------------- Placeholder (image slots) ---------------- */
 .ft-ph{
@@ -1819,6 +1817,53 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
   background:transparent;
 }
 
+/* The clip's ground is not quite the section's. The footage sits on
+   rgb(254,254,254) and .ft-section--raised is pure white, so the frame reads
+   as a faint rectangle ruled onto the page. All four seams dissolve here.
+
+   Masked rather than covered by a white gradient laid over the top: the pixels
+   actually fade, so the seam goes on whatever ground the section is painted
+   in and no overlay colour is left behind to drift out of step with the token.
+   Unsupported, it simply does not apply and the near-match carries it.
+
+   Eased over four stops rather than ramped in one, the way the sensorband fade
+   further down does it: a single ramp leaves a visible line where it ends,
+   which is the seam again in a softer form.
+
+   The two ramps are different widths on purpose. 7.1% is 4% scaled by the
+   frame's 854/480 ratio, which is what makes them the same number of pixels
+   rather than the same number of percent — a matched 4% would have laid a 48px
+   fade down the sides and a 26px one across the top, and the corners would
+   have shown it. Stated in percent rather than pixels so the pair stays even
+   as the frame resizes: the box holds the clip's ratio at every width, so the
+   scaling holds with it.
+
+   4% on the sides is deliberately past the point where the ramp is guaranteed
+   to clear the product. Once the camera comes apart the outermost parts reach
+   to 2.7% of the frame at the left and 2.9% at the right and hold there for
+   the rest of the clip. The frame usually letterboxes a little, which pushes
+   those parts out to about 4% of the box and leaves them untouched; on a
+   window tall enough for the letterbox to vanish the ramp grazes the outer rim
+   of the dome and the base ring at roughly 80% opacity. That is the cost of a
+   fade wide enough to read as one, and on an exploded product shot it passes
+   for the vignette such a render would have anyway. Top and bottom have no
+   such problem — nothing comes above 18.5% or below 81.3%, so 7.1% clears the
+   parts by a wide margin. */
+.ft-scrollvideo--fill .ft-scrollvideo-el{
+  --ft-video-edge-fade:linear-gradient(to right,
+                         transparent 0,rgba(0,0,0,.25) 1%,rgba(0,0,0,.62) 2%,rgba(0,0,0,.88) 3%,#000 4%,
+                         #000 96%,rgba(0,0,0,.88) 97%,rgba(0,0,0,.62) 98%,rgba(0,0,0,.25) 99%,transparent 100%),
+                       linear-gradient(to bottom,
+                         transparent 0,rgba(0,0,0,.25) 1.8%,rgba(0,0,0,.62) 3.6%,rgba(0,0,0,.88) 5.3%,#000 7.1%,
+                         #000 92.9%,rgba(0,0,0,.88) 94.7%,rgba(0,0,0,.62) 96.4%,rgba(0,0,0,.25) 98.2%,transparent 100%);
+  -webkit-mask-image:var(--ft-video-edge-fade);
+  mask-image:var(--ft-video-edge-fade);
+  /* Both ramps have to apply at once — the default is to lay the second over
+     the first, which would leave each edge masked by only one of them. */
+  -webkit-mask-composite:source-in;
+  mask-composite:intersect;
+}
+
 /* Arriving is the point, so keep the fade; drop the travel, which is the part
    that triggers motion sensitivity. */
 @media(prefers-reduced-motion:reduce){
@@ -1829,6 +1874,28 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
    at the reading measure, which left the paragraphs far narrower than the
    headline above them; here they wrap to the same width. */
 .ft-pledge{max-width:min(100%,1100px)}
+
+/* The four promises, four across. Fixed at four rather than auto-fit: the row
+   is the set, and a track count that changes with the window would break it
+   into a 3+1 on some monitors and read as an accident. Two up before the cards
+   are too narrow to carry a picture, one up on a phone. */
+.ft-pledge-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:clamp(.9rem,1.4vw,1.25rem);
+  margin-top:clamp(2rem,4vw,3rem);
+}
+/* Four 300px columns against a 500px floor made portholes of the pictures.
+   The floor comes down with the width so the cards stay closer to upright. */
+.ft-pledge-grid .ft-card--tall{min-height:clamp(300px,25vw,420px)}
+@media(max-width:1000px){
+  .ft-pledge-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ft-pledge-grid .ft-card--tall{min-height:clamp(320px,32vw,420px)}
+}
+@media(max-width:560px){
+  .ft-pledge-grid{grid-template-columns:minmax(0,1fr)}
+}
+
 .ft-pledge p{max-width:none}
 /* The last line is the point of the whole block. One step up the scale and a
    heading weight so it lands, instead of trailing off as more body copy. */
@@ -2465,52 +2532,130 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
 }
 
 /* ---------------- Sensor band ---------------- */
-/* Full bleed and a full screen, with the render's own empty upper half held
-   for the copy. The picture was generated to fade toward pale grey at the
-   top; the gradient below carries that last step exactly to --bg, so the
-   section meets the one above it without a visible edge. */
+/* The photograph across the top, dissolving into the section's own ground at
+   its foot, and the words underneath it on that ground.
+
+   This used to be a full screen with the copy set over the plate's empty upper
+   half, held there by a haze behind the type. That works only while the empty
+   half stays empty: as the column narrows the paragraph walks down into the
+   sensor's contacts, and the haze that was protecting the type starts fogging
+   the picture instead — visible as a grey cloud over the middle of the plate.
+   The phone layout already answered this by stacking the two, and the answer
+   is not really about phones. A picture can be a ground without ever having to
+   be a backdrop for type.
+
+   So the stack is the band now at every width, and the phone block below is
+   left holding only what actually differs there: how tall the plate is. */
 .ft-sensorband{
   position:relative;isolation:isolate;overflow:hidden;
-  min-height:100svh;
-  display:flex;align-items:flex-end;
+  display:block;
   background:var(--bg);
   /* --bg as channels. A fade has to end on a transparent stop *of this
      colour*: ending on plain `transparent` interpolates toward transparent
      black and greys out mid-way, which is what showed up as a soft cut across
      the fade. Same reasoning as --hero-ground on the home page hero. */
   --band-ground:244,246,247;
+  /* Tied to the viewport's height rather than its width up here — the plate is
+     a band across the top of a wide screen, not a square. Two thirds of the
+     screen: enough that the whole sensor is in frame with the board around it,
+     and still short enough that the heading under it is on screen at the same
+     time, which is the entire point of having stacked them. */
+  --sensor-photo-h:clamp(520px,92vh,1120px);
 }
 .ft-sensorband-img{
-  position:absolute;inset:0;z-index:-2;
-  width:100%;height:100%;
+  position:absolute;inset:0 0 auto;z-index:-2;
+  width:100%;height:var(--sensor-photo-h);
   object-fit:cover;
-  object-position:center 100%;
+  /* 62%, not centre. The plate is 2400x1792 and the band is about twice as
+     wide as it is tall, so width binds and cover keeps a horizontal slice of
+     roughly the middle two thirds. Centred, a third of that slice was the
+     empty backdrop above the board and the board's own bottom edge fell off
+     the frame. Pulling the window down spends the same height on the board
+     instead — every part of it is in frame, and what dissolves at the foot is
+     the last of the board rather than the last of the grey.
+     No effect on a phone, where the band is taller than it is wide, height
+     binds instead and the full picture is already in frame. */
+  object-position:center 62%;
 }
+/* One fade doing both ends: the pale head of the plate carried to --bg so the
+   band still arrives from the section above without a seam, clear through the
+   middle where the sensor is, then closed to solid by the foot so there is no
+   edge under the copy — only the point where you stop being able to tell there
+   was a photograph. */
 .ft-sensorband::before{
-  content:'';position:absolute;inset:0;z-index:-1;
-  background:linear-gradient(180deg,
-    rgb(var(--band-ground)) 0%,
-    rgba(var(--band-ground),.82) 3%,
-    rgba(var(--band-ground),.32) 9%,
-    rgba(var(--band-ground),0) 17%);
+  content:'';position:absolute;inset:0 0 auto;z-index:-1;
+  height:var(--sensor-photo-h);
+  background:linear-gradient(to bottom,
+    rgb(var(--band-top,var(--band-ground))) 0%,
+    rgba(var(--band-top,var(--band-ground)),.72) 5%,
+    rgba(var(--band-top,var(--band-ground)),0) 11%,
+    rgba(var(--band-ground),0) 72%,
+    rgba(var(--band-ground),.34) 84%,
+    rgba(var(--band-ground),.84) 94%,
+    rgb(var(--band-ground)) 100%);
 }
-.ft-sensorband-inner{width:100%;padding-block:clamp(4rem,11vh,8rem)}
+/* Starts just inside the solid end of that fade, so the first line sits on
+   paper rather than on the last of the picture. */
+.ft-sensorband-inner{
+  width:100%;
+  padding-top:calc(var(--sensor-photo-h) - 1.5rem);
+  padding-bottom:clamp(4rem,9vh,7rem);
+}
 .ft-sensorband-copy{max-width:min(100%,900px);margin-inline:auto;position:relative}
-.ft-sensorband-copy::before{
-  content:'';position:absolute;z-index:-1;
-  left:50%;top:50%;transform:translate(-50%,-50%);
-  width:100vw;height:210%;
-  background:linear-gradient(180deg,
-    rgba(var(--band-ground),0) 0%,
-    rgba(var(--band-ground),.55) 22%,
-    rgba(var(--band-ground),.78) 42%,
-    rgba(var(--band-ground),.78) 62%,
-    rgba(var(--band-ground),.40) 80%,
-    rgba(var(--band-ground),0) 100%);
-  pointer-events:none;
-}
+/* The haze existed to hold type against a photograph. On solid ground it has
+   nothing left to hide, and it only greys the paper it sits on. */
+.ft-sensorband-copy::before{content:none}
 .ft-sensorband-copy p:last-child{max-width:none}
 .ft-sensorband-copy .ft-eyebrow{background:var(--ft-ink-900);color:#fff}
+
+/* ---------------- Band lead-in ----------------
+   The section directly above a sensor band, painted in the band picture's own
+   ground so the two run together rather than meeting at a step. The colour is
+   per product: every one of these was shot on a slightly different studio
+   backdrop, from rgb(201,203,211) to rgb(226,228,232).
+
+   --band-top carries the same channels into the band's own top fade, so the
+   picture's first rows now dissolve into this section instead of into a page
+   grey that is no longer underneath them. Without that the fade would have
+   laid a pale stripe across the top of the plate — the seam moved, not fixed.
+
+   The body copy darkens with the ground, and that is a requirement rather
+   than a preference: --fg-secondary is #5c656c, which reads 5.5:1 on the page
+   but falls to 3.7:1 on the darkest of these backdrops, under the 4.5 AA needs
+   for body text. Redefining the token here rather than overriding `color`
+   means the inline `color: var(--fg-secondary)` these sections already carry
+   picks it up on its own. Headings are unaffected — ink clears 10:1 on all of
+   them. */
+.ft-band-lead-in{
+  /* Arrives out of the page rather than starting on a line. The section above
+     is on --bg, so this ramps --bg to the picture's ground across the head of
+     the block and holds it solid from there down into the band.
+
+     Two opaque colours, never a transparent stop: a fade that ends on plain
+     `transparent` interpolates toward transparent black and greys out through
+     the middle, which is the same trap --band-ground exists to avoid a few
+     rules up. Both ends here are real colours, so there is nothing to
+     interpolate wrongly — and both meet their neighbour exactly, --bg at the
+     top edge and --lead-in-bg where the ramp stops, so neither end can leave a
+     line of its own.
+
+     Eased over four stops for the same reason the band's fades are: a straight
+     ramp between two greys this close shows its own ends as faint bands. The
+     length is carried on a variable so the head of the block scales with the
+     window rather than being a fixed slab on a laptop and a sliver on a wall
+     display. */
+  --lead-in-fade:clamp(110px,15vh,220px);
+  background:
+    linear-gradient(to bottom,
+      var(--bg) 0%,
+      color-mix(in srgb,var(--lead-in-bg,var(--bg)) 25%,var(--bg)) 30%,
+      color-mix(in srgb,var(--lead-in-bg,var(--bg)) 62%,var(--bg)) 58%,
+      color-mix(in srgb,var(--lead-in-bg,var(--bg)) 88%,var(--bg)) 80%,
+      var(--lead-in-bg,var(--bg)) 100%)
+      top/100% var(--lead-in-fade) no-repeat,
+    var(--lead-in-bg,var(--bg));
+  --fg-secondary:color-mix(in srgb,var(--ft-slate-500) 65%,var(--ft-ink-text));
+}
 /* ---------------- Sensor band, phone ----------------
    Full-bleed, the picture is the ground and the words are on it — and on a
    phone the column narrows until the paragraph runs straight across the
@@ -2524,40 +2669,12 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
    binds, and ~104vw is the ratio that keeps the sensor in frame on any phone
    rather than letting the crop wander with the screen. */
 @media(max-width:760px){
-  .ft-sensorband{
-    min-height:0;padding-bottom:0;
-    display:block;
-    --sensor-photo-h:min(104vw,520px);
-  }
-  .ft-sensorband-img{
-    position:absolute;inset:0 0 auto;
-    width:100%;height:var(--sensor-photo-h);
-    object-fit:cover;object-position:center center;
-  }
-  /* One fade doing both ends: the pale head of the plate carried to --bg so
-     the band still arrives without a seam, clear through the middle where the
-     sensor is, then closed to solid by the foot so there is no edge under the
-     copy — only the point where you stop being able to tell there was a
-     photograph. */
-  .ft-sensorband::before{
-    inset:0 0 auto;height:var(--sensor-photo-h);
-    background:linear-gradient(to bottom,
-      rgb(var(--band-ground)) 0%,
-      rgba(var(--band-ground),.72) 5%,
-      rgba(var(--band-ground),0) 16%,
-      rgba(var(--band-ground),0) 58%,
-      rgba(var(--band-ground),.42) 76%,
-      rgba(var(--band-ground),.88) 92%,
-      rgb(var(--band-ground)) 100%);
-  }
-  /* Starts just inside the solid end of that fade. */
-  .ft-sensorband-inner{
-    padding-top:calc(var(--sensor-photo-h) - 1.5rem);
-    padding-bottom:clamp(3rem,9vh,5rem);
-  }
-  /* The haze existed to hold type against a photograph. On solid ground it has
-     nothing left to hide, and it only greys the paper it sits on. */
-  .ft-sensorband-copy::before{display:none}
+  /* Height tied to width down here: cover scales the plate by whichever axis
+     binds, and ~104vw is the ratio that keeps the sensor in frame on any phone
+     rather than letting the crop wander with the screen. Everything else about
+     the stack is now stated above and applies at every width. */
+  .ft-sensorband{--sensor-photo-h:min(104vw,520px)}
+  .ft-sensorband-inner{padding-bottom:clamp(3rem,9vh,5rem)}
 }
 
 /* ---------------- Sensor band, split ----------------
@@ -2585,6 +2702,9 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
 /* Nothing lies over the picture now, so neither scrim has work left to do. */
 .ft-sensorband--split::before,
 .ft-sensorband--split .ft-sensorband-copy::before{content:none}
+/* padding-block:0 at the foot of this rule already takes the stack's top
+   offset back off — the render here is a grid column, not a plate behind the
+   words, so there is nothing to clear. */
 .ft-sensorband--split .ft-sensorband-inner{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));
@@ -3162,4 +3282,85 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
 @media(prefers-reduced-motion:reduce){
   .ft-filter-caret{transition:none}
   .ft-filter-menu,.ft-filter-menu[data-open]{transform:none;transition:opacity 200ms ease,visibility 0s}
+}
+
+/* ---------------- Closing CTA flat lay ----------------
+   The kit laid out under the last call to action, full-bleed and flush to the
+   foot of the section so the page ends on the product rather than on a button.
+
+   White ground rather than the page grey, and that is the picture's
+   requirement rather than a preference: the render is a studio shot on a white
+   sweep, and a levels pass at export put its ground on exactly 255, so against
+   --bg-raised the photograph has no edge of its own. Left on the page grey it
+   would have read as a white slab, and hiding that would have cost either a
+   mask across a row whose objects run to both edges, or a cutout — and cutting
+   the ground takes the studio's contact shadows with it, which are most of
+   what makes the row sit on a surface.
+
+   No bottom hairline: the footer draws its own directly beneath this, and two
+   would land on the same line. */
+.ft-cta-close{
+  background:var(--bg-raised);
+  border-top:1px solid var(--border);
+  padding-bottom:0;
+}
+.ft-cta-flatlay{margin-top:clamp(2.5rem,6vw,4.5rem)}
+
+/* Words left, enquiry right. The right column is held to a measure rather than
+   a fraction so the form keeps a sane field width on a wide monitor while the
+   copy takes the slack — a 50/50 split puts 600px inputs next to a headline. */
+.ft-cta-split{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,clamp(360px,36%,440px));
+  gap:clamp(2.5rem,5vw,5rem);
+  align-items:start;
+  text-align:start;
+}
+/* Centred in its own column rather than pinned to the container's left edge.
+   The column is the wide half of the split, and the copy only ever fills a
+   reading measure of it, so ranged left it sat hard against the gutter with a
+   lane of empty page between it and the form. Held to its own measure and
+   centred, the two halves read as a pair. The text itself stays ranged left —
+   this moves the block, not the setting.
+
+   Centred on the other axis as well. The row's height is the form's, which is
+   the taller of the two by some way, so ranged to the top the copy left a
+   column of empty page under it and the pair hung off a single shared edge.
+   align-self on the copy alone rather than align-items on the grid: the form
+   has nothing to centre against and stays where it is. Both are no-ops in the
+   stacked layout, where each item is its own row. */
+.ft-cta-copy{justify-self:center;max-width:44ch;align-self:center}
+.ft-cta-copy h2{margin:0;max-width:15ch}
+.ft-cta-copy p{max-width:44ch}
+
+/* The panel takes the page grey while the section behind it is white, which is
+   the reverse of the usual card and is what makes it read as a form: the
+   fields inside are --bg-raised, so they stay the light things on it rather
+   than disappearing into a white card on a white ground. */
+.ft-cta-form-panel{
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:var(--r-xl);
+  padding:clamp(1.4rem,2.4vw,2rem);
+}
+
+/* Its own name and keyframe rather than the configurator's .step-in: that one
+   is injected by a <style> on that page and is not here to inherit. */
+@keyframes ftCtaStepIn{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+.ft-cta-step{animation:ftCtaStepIn var(--dur-3) var(--ease-out)}
+@media(prefers-reduced-motion:reduce){.ft-cta-step{animation:none}}
+
+/* One column before the form's own minimum starts squeezing the headline. */
+@media(max-width:900px){
+  .ft-cta-split{grid-template-columns:minmax(0,1fr);gap:2.5rem}
+}
+
+.ft-cta-flatlay img{display:block;width:100%;height:auto}
+
+/* At 2.7:1 across a phone the whole row is about 60px tall and the handset in
+   the middle of it is the size of a caption. Scaled up and held to its centre
+   instead — fewer objects on screen, but the ones there can be read. */
+@media(max-width:700px){
+  .ft-cta-flatlay{overflow:hidden}
+  .ft-cta-flatlay img{width:190%;margin-inline-start:-45%}
 }

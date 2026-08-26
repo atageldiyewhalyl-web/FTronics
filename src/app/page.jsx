@@ -1,10 +1,11 @@
-import { Button, Card, SectionHead, Placeholder, Media } from '@/components/ui'
+import { Button, Card, SectionHead, Media } from '@/components/ui'
 import { PinStack, ScrollGallery } from '@/components/scroll'
 import { HeroField, RingField } from '@/components/hero-field'
 import { HeroScene } from '@/components/hero-scene'
 import { Teardown } from '@/components/teardown'
-import { site } from '@/lib/site'
-import { IconMark, specMarks } from '@/components/spec-marks'
+import { site, cta } from '@/lib/site'
+import { CtaAnfrageForm } from './CtaAnfrageForm'
+import { IconMark, markFor } from '@/components/spec-marks'
 
 export const metadata = {
   title: 'Alarmanlagen & Sicherheitstechnik Mannheim | FT Sicherheitstechnik',
@@ -320,21 +321,18 @@ export default function Startseite() {
 
         </div>
 
-        {/* A snap rail rather than a grid: the pictures earn more room than a
-            four-up row leaves them. It sits outside the shell on purpose —
-            inside the 1260px column a 440px card is sliced by the column's own
-            edge on every monitor however wide, which reads as a clipping bug
-            rather than as a rail that carries on. Bled to the full width, a
-            wider display simply shows more cards and the cut lands at the edge
-            of the screen, where it belongs. */}
-        <div data-rev-group className="ft-rail-bleed">
-          <ScrollGallery label="Unser Bekenntnis" itemWidth={440}>
-            {pledges.map(([t, d, img]) => (
-              <div data-rev key={t}>
-                <Card title={t} media={img} className="ft-card--tall">{d}</Card>
-              </div>
-            ))}
-          </ScrollGallery>
+        {/* Four across, inside the column, all of it on screen at once. This
+            was a bled snap rail so that a 440px card could keep its picture at
+            full size, but it also put three of the four promises off the right
+            edge until someone dragged for them — and these four are a set. The
+            point is the whole list; a reader who sees only the first has been
+            told a quarter of it. The cards give up width for that. */}
+        <div data-rev-group className="ft-shell ft-pledge-grid">
+          {pledges.map(([t, d, img]) => (
+            <div data-rev key={t}>
+              <Card title={t} media={img} className="ft-card--tall">{d}</Card>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -551,53 +549,81 @@ export default function Startseite() {
             full width, a wider display simply shows more of it and the cut
             lands at the edge of the screen, where it belongs. */}
         <div data-rev className="ft-rail-bleed" style={{ marginTop: '2.5rem' }}>
-          <ScrollGallery label="FTronics Produkte">
+          {/* The way through to the catalogue used to be a card at the end of
+              the rail, which put it behind ten drags. Beside the arrows it is
+              on screen from the start, and the rail is left as ten products
+              rather than nine products and an advert. */}
+          <ScrollGallery
+            label="FTronics Produkte"
+            actions={<Button variant="secondary" size="sm" href="/produkte">{cta.products}</Button>}
+          >
+              {/* Ten of the eighteen, one per body style so the rail reads as a
+                  range rather than as a shelf of domes: dome, motor-zoom dome,
+                  mini-PTZ, two bullets, turret, panorama, PTZ, recorder,
+                  speaker. Every one has a detail page and a render of its own —
+                  the card is the link, and the spec marks are derived from the
+                  spec text by markFor, so the copy stays the single source and
+                  no card carries a hand-picked icon key that can drift from it. */}
               {[
                 {
                   kind: 'Dome IP-Kamera', name: 'FC-8D Pro', href: '/produkte/fc-8d-pro',
                   img: '/fc-8d-pro-main.png',
                   desc: 'Kompakte Dome-Kamera mit 4K Auflösung und intelligenter Personenerkennung.',
-                  specs: [
-                    ['res', '4K 8MP'], ['weather', 'IP67'], ['ai', 'KI'],
-                    ['power', 'PoE'], ['sensor', 'Sony IMX415'],
-                  ],
+                  specs: ['4K 8MP', 'IP67', 'KI-Analyse', 'PoE', 'Sony IMX415'],
+                },
+                {
+                  kind: 'Dome IP-Kamera', name: 'FC-8D Zoom', href: '/produkte/fc-8d-zoom',
+                  img: '/fc-8d-zoom-main.png',
+                  desc: 'Premium Dome mit motorisiertem 2.8-8mm Zoom, Gesichtserkennung und vollständiger VCA KI-Suite.',
+                  specs: ['4K 8MP', 'IP67', 'Gesichtserkennung', 'Motorzoom'],
+                },
+                {
+                  kind: 'Mini-PTZ Dome', name: 'FC-6Z Mini', href: '/produkte/fc-6z-mini',
+                  img: '/fc-6z-mini-main.png',
+                  desc: 'Kompakte vandalismusgeschützte Mini-PTZ mit 3x Zoom und vollständiger KI-Suite inkl. Gesichtserkennung.',
+                  specs: ['6MP', 'IP67', '3x Zoom', '100dB WDR'],
                 },
                 {
                   kind: 'Bullet IP-Kamera', name: 'FB-8A Pro', href: '/produkte/fb-8a-pro',
+                  img: '/fb-8a-pro-main.png',
                   desc: 'Premium Bullet-Kamera mit vollständiger KI-Suite inkl. Gesichtserkennung.',
-                  specs: [
-                    ['res', '4K 8MP'], ['weather', 'IP67'],
-                    ['face', 'Gesichtserkennung'], ['power', 'PoE'],
-                  ],
-                },
-                /* The three below have no detail page of their own, so they
-                   point at the catalogue rather than at /kontakt the way the
-                   catalogue's own cards do: there the destination is spelled
-                   out on a link, here the whole card is the target and a
-                   product name should not open a contact form. */
-                {
-                  kind: 'PTZ Speed Dome', name: 'FP-8T 20X', href: '/produkte',
-                  desc: 'Professionelle PTZ mit 20x Zoom, Auto-Tracking und Dual-Light für große Flächen.',
-                  specs: [
-                    ['res', '4K 8MP'], ['weather', 'IP67'],
-                    ['zoom', '20x Zoom'], ['night', 'IR 100m'],
-                  ],
+                  specs: ['4K 8MP', 'IP67', 'Gesichtserkennung', 'PoE'],
                 },
                 {
-                  kind: '180° Panorama Turret', name: 'FT-8P Dual', href: '/produkte',
+                  kind: 'Bullet IP-Kamera', name: 'FB-8A Max', href: '/produkte/fb-8a-max',
+                  img: '/fb-8a-max-main.png',
+                  desc: 'Premium Bullet mit aktiver Abschreckung (Rot/Blau LEDs), Gesichtserkennung und Dual-Light.',
+                  specs: ['4K 8MP', 'IP67', 'Dual-Light', '100dB WDR'],
+                },
+                {
+                  kind: 'Turret IP-Kamera', name: 'FT-8C Pro', href: '/produkte/ft-8c-pro',
+                  img: '/ft-8c-pro-main.jpg',
+                  desc: 'Turret-Kamera mit 24/7 Farbbildgebung, F1.0 Blende und Gesichtserkennung für beste Nachtsicht.',
+                  specs: ['4K 8MP', 'IP67', 'Gesichtserkennung', 'F1.0'],
+                },
+                {
+                  kind: '180° Panorama Turret', name: 'FT-8P Dual', href: '/produkte/ft-8p-dual',
+                  img: '/ft-8p-dual-main.png',
                   desc: 'Dual-Objektiv Panoramakamera mit 180° Weitwinkel, aktiver Abschreckung und Zweiwege-Audio.',
-                  specs: [
-                    ['res', '8MP 180°'], ['weather', 'IP67'],
-                    ['night', 'Dual-Light'], ['audio', '2-Wege Audio'],
-                  ],
+                  specs: ['8MP 180°', 'IP67', 'Dual-Light', '2-Wege Audio'],
                 },
                 {
-                  kind: '16-Kanal 4K NVR', name: 'FN-16', href: '/produkte',
+                  kind: 'PTZ Speed Dome', name: 'FP-8T 20X', href: '/produkte/fp-8t-20x',
+                  img: '/fp-8t-20x-main.png',
+                  desc: 'Professionelle PTZ mit 20x Zoom, Auto-Tracking und Dual-Light für große Flächen.',
+                  specs: ['4K 8MP', 'IP67', 'Auto-Tracking', 'IR 100m'],
+                },
+                {
+                  kind: '16-Kanal 4K NVR', name: 'FN-16', href: '/produkte/fn-16',
+                  img: '/fn-16-main.jpg',
                   desc: 'Leistungsstarker 16-Kanal NVR mit 2x SATA für bis zu 16TB und ANR Technologie.',
-                  specs: [
-                    ['channels', '16 Kanäle'], ['res', '4K'],
-                    ['storage', '2x SATA 16TB'], ['ai', 'ANR'],
-                  ],
+                  specs: ['4K', '16 Kanäle', '2x SATA 16TB', 'ANR'],
+                },
+                {
+                  kind: 'IP-Lautsprecher', name: 'FS-30', href: '/produkte/fs-30',
+                  img: '/fs-30-main.png',
+                  desc: '30W IP-Hornlautsprecher mit 130 dBSPL für Alarm-Durchsagen und NVR-Kopplung.',
+                  specs: ['30W', 'IP66', '130 dBSPL', 'PoE'],
                 },
               ].map((p) => (
                 /* The card is the link. A single "Details ansehen" at the foot
@@ -612,17 +638,13 @@ export default function Startseite() {
                       card stays one plane. The camera's own white base carries
                       enough shading to hold its edge without a panel behind
                       it, and the dark dome anchors the top. */}
-                  {p.img ? (
-                    <Media
-                      src={p.img}
-                      alt=""
-                      ratio="1 / 1"
-                      rounded="var(--r-lg)"
-                      pad="10%"
-                    />
-                  ) : (
-                    <Placeholder ratio="1 / 1" rounded="var(--r-lg)" label={`${p.name}: Produktrender`} />
-                  )}
+                  <Media
+                    src={p.img}
+                    alt=""
+                    ratio="1 / 1"
+                    rounded="var(--r-lg)"
+                    pad="10%"
+                  />
                   <div className="ft-pcard-body">
                     <p className="ft-pcard-kind">{p.kind}</p>
                     <h4>{p.name}</h4>
@@ -630,20 +652,13 @@ export default function Startseite() {
                     {/* aria-hidden on the mark: it repeats the word beside it,
                         and a screen reader should hear "IP67" once. */}
                     <ul className="ft-pcard-specs">
-                      {p.specs.map(([i, t]) => (
-                        <li className="ft-pcard-spec" key={t}>{specMarks[i]}{t}</li>
+                      {p.specs.map((t) => (
+                        <li className="ft-pcard-spec" key={t}>{markFor(t)}{t}</li>
                       ))}
                     </ul>
                   </div>
                 </a>
               ))}
-              <div className="ft-pcard ft-pcard--cta">
-                <h4 style={{ margin: '0 0 .5rem' }}>18 Produkte im Katalog</h4>
-                <p style={{ margin: '0 0 1.2rem', color: 'var(--fg-secondary)', fontSize: 'var(--t-body-sm)' }}>
-                  Kameras, NVR-Rekorder und Zubehör, alle NDAA-konform.
-                </p>
-                <Button variant="secondary" href="/produkte">Produkte ansehen</Button>
-              </div>
           </ScrollGallery>
         </div>
       </section>
@@ -702,33 +717,58 @@ export default function Startseite() {
         </div>
       </section>
 
-      {/* 6.12 Closing CTA */}
-      <section className="ft-section">
-        <div
-          className="ft-shell"
-          style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-        >
-          <h2 data-rev style={{ maxWidth: '18ch', marginLeft: 'auto', marginRight: 'auto' }}>
-            Jetzt kostenlose Beratung anfragen
-          </h2>
-          <p
-            data-rev
-            style={{
-              fontSize: 'var(--t-lead)', lineHeight: 'var(--t-lead-lh)', color: 'var(--fg-secondary)',
-              maxWidth: 600, margin: '1rem auto 2rem',
-            }}
-          >
-            Wir erstellen Ihnen ein unverbindliches Angebot, individuell auf Ihre Bedürfnisse zugeschnitten.
-          </p>
-          <div
-            data-rev
-            style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}
-          >
-            <Button href="/kontakt">Kontakt aufnehmen</Button>
-            <a href={site.phoneHref} style={{ color: 'var(--fg)', fontWeight: 500, textDecoration: 'none', padding: '.85rem 1rem' }}>
-              {site.phone}
-            </a>
+      {/* 6.12 Closing CTA. The words hold the left, the enquiry holds the
+          right, and the kit runs full width beneath both, so the page ends on
+          the product rather than on a button.
+
+          The form asks for what /kontakt's does. Its field and option lists
+          are declared again in CtaAnfrageForm rather than shared, which is a
+          second copy of the same list — worth lifting into one module if a
+          third surface ever asks for it. */}
+      <section className="ft-section ft-cta-close">
+        <div className="ft-shell ft-cta-split">
+          <div className="ft-cta-copy" data-rev-group>
+            <h2 data-rev>Jetzt kostenlose Beratung anfragen</h2>
+            <p
+              data-rev
+              style={{
+                fontSize: 'var(--t-lead)', lineHeight: 'var(--t-lead-lh)', color: 'var(--fg-secondary)',
+                margin: '1rem 0 2rem',
+              }}
+            >
+              Wir erstellen Ihnen ein unverbindliches Angebot, individuell auf Ihre Bedürfnisse zugeschnitten.
+            </p>
+            {/* Secondary now that the form beside it carries a primary of its
+                own: two red buttons in one section put the eye in two places
+                and neither of them is the one that finishes the job here. */}
+            <div data-rev style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+              <Button variant="secondary" href="/kontakt">Kontakt aufnehmen</Button>
+              <a href={site.phoneHref} style={{ color: 'var(--fg)', fontWeight: 500, textDecoration: 'none', padding: '.85rem 1rem' }}>
+                {site.phone}
+              </a>
+            </div>
           </div>
+          <div data-rev>
+            <CtaAnfrageForm />
+          </div>
+        </div>
+        {/* Outside the shell: the row is full-bleed and .ft-shell is max-width
+            capped, so inside it the picture would stop short of both edges and
+            read as a framed photograph rather than as the bench the page ends
+            on. width/height are the asset's own, so the space is reserved
+            before it loads and the copy above does not jump. */}
+        <div data-rev className="ft-cta-flatlay">
+          {/* alt="": the heading and lead above already say what this is, and a
+              describing alt would read the whole range out between the call to
+              action and the phone number. */}
+          <img
+            src="/cta-flatlay.webp"
+            alt=""
+            width={2400}
+            height={896}
+            loading="lazy"
+            decoding="async"
+          />
         </div>
       </section>
     </>

@@ -242,7 +242,16 @@ export default function ProduktFC8DPro() {
       </section>
 
       {/* Premium · Sensor */}
-      <section style={{ padding: 'clamp(9rem,14vw,16rem) 0 clamp(6rem,9vw,10rem)' }}>
+      {/* Painted in the sensor plate's own ground, sampled off the row the
+          band's crop actually starts on, so the picture below runs out of this
+          section rather than starting against the page grey. */}
+      <section
+        className="ft-band-lead-in"
+        style={{
+          padding: 'clamp(4.5rem,8vw,9rem) 0 clamp(3.5rem,6vw,6.5rem)',
+          '--lead-in-bg': 'rgb(226,228,232)',
+        }}
+      >
         <div
           className="ft-shell"
           style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(4rem,6vw,6rem)' }}
@@ -266,7 +275,7 @@ export default function ProduktFC8DPro() {
       {/* Sensor — its own full-bleed band. The render's top half is empty pale
           grey by design, and a gradient carries that last step to the page's
           own ground, so the section arrives without a seam. */}
-      <section className="ft-sensorband">
+      <section className="ft-sensorband" style={{ '--band-top': '226,228,232' }}>
         <img
           className="ft-sensorband-img"
           src="/fc-8d-pro-sensorband.webp"

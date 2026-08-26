@@ -1,4 +1,4 @@
-import { Button, Card, Media, SectionHead } from '@/components/ui'
+import { Button, SectionHead } from '@/components/ui'
 import { Compare } from '@/components/compare'
 import { ScrollGallery } from '@/components/scroll'
 import { FeatureBento } from '@/components/bento'
@@ -38,6 +38,8 @@ const bento = [
   {
     kind: 'dark',
     wide: true,
+    img: '/fc-8d-poe-integrated-chatgpt.webp',
+    alt: 'Die FC-8D mit professionell geschützter Netzwerkverkabelung',
     h: 'PoE optional. 4000 V Blitzschutz.',
     p: 'Flexible Versorgung über 12 V DC oder optional über das Netzwerk — geschützt für professionelle Installationen.',
   },
@@ -213,7 +215,16 @@ export default function ProduktFC8D() {
         </div>
       </section>
 
-      <section style={{ padding: 'clamp(9rem,14vw,16rem) 0 clamp(6rem,9vw,10rem)' }}>
+      {/* Painted in the sensor plate's own ground, sampled off the row the
+          band's crop actually starts on, so the picture below runs out of this
+          section rather than starting against the page grey. */}
+      <section
+        className="ft-band-lead-in"
+        style={{
+          padding: 'clamp(4.5rem,8vw,9rem) 0 clamp(3.5rem,6vw,6.5rem)',
+          '--lead-in-bg': 'rgb(215,216,215)',
+        }}
+      >
         <div className="ft-shell">
           <div className="ft-center" data-rev-group style={{ maxWidth: 'min(100%,900px)', marginInline: 'auto' }}>
             <p className="ft-eyebrow" data-rev>Professionelle Übersicht</p>
@@ -228,7 +239,7 @@ export default function ProduktFC8D() {
         </div>
       </section>
 
-      <section className="ft-sensorband">
+      <section className="ft-sensorband" style={{ '--band-top': '215,216,215' }}>
         <img
           className="ft-sensorband-img"
           src="/fc-8d-sensorband.webp"
@@ -300,16 +311,33 @@ export default function ProduktFC8D() {
               gap: 'clamp(2rem,5vw,5rem)', alignItems: 'center', marginTop: '2.5rem',
             }}
           >
-            <Media src="/fc-8d-2.png" alt="" ratio="1 / 1" rounded="var(--r-lg)" pad="4%" />
+            {/* Bare, not a Media frame: the render is a cutout sitting on the
+                panel's own ground, so a framed box around it only drew a second
+                edge inside the one the panel already has. Same call the
+                generated pages' proof panel makes. */}
+            <img
+              src="/fc-8d-2.png"
+              alt=""
+              loading="lazy"
+              decoding="async"
+              style={{ display: 'block', width: '100%', height: 'auto' }}
+            />
             <div>
               <h3>Ein Bereich. Zwei Zielklassen.</h3>
               <p style={{ color: 'var(--fg-secondary)', marginTop: '.8rem' }}>
                 Personen- und Fahrzeugerkennung arbeiten innerhalb derselben Installation. Zonen und
                 Empfindlichkeit der allgemeinen Bewegungserkennung lassen sich passend zur Szene konfigurieren.
               </p>
-              <div className="ft-grid ft-grid--auto-xs" data-rev-group style={{ marginTop: '2rem' }}>
+              {/* Stacked and borderless, the way the generated pages set the
+                  same three figures. As a row of bordered stat cards these sat
+                  as three frames inside a frame, and the column each one got
+                  was narrow enough to break "2–20 m" across two lines. */}
+              <div className="ft-proof-facts" data-rev-group style={{ marginTop: '2rem' }}>
                 {detectionFacts.map(([value, label]) => (
-                  <div data-rev key={label}><Card variant="stat" title={value}>{label}</Card></div>
+                  <div className="ft-proof-fact" data-rev key={label}>
+                    <span className="ft-proof-fact-num">{value}</span>
+                    <span className="ft-proof-fact-label">{label}</span>
+                  </div>
                 ))}
               </div>
             </div>

@@ -45,6 +45,30 @@ function SpecCard({ groups }) {
 }
 
 export function StandardProductPage({ product }) {
+  /* Which shape the core band takes is decided by what the picture actually
+     is, not by the page. Five products were shot for this: a *-core.webp macro
+     of the optics on a studio backdrop, subject low in a 2400x1792 frame — the
+     same character as the FC-8D's sensor plate, and what the full-bleed stack
+     was built around. The other eleven have no macro, so their `core` falls
+     back to the catalogue's cut-out product render: the whole camera, centred,
+     on near-white. Cover-cropping that into a band twice as wide as it is tall
+     would take the top and bottom off the camera, which is the reason the
+     split variant exists. Give those a macro and they move over on their own. */
+  const coreIsMacro = /-core\.(webp|jpe?g|png)$/.test(product.images.core)
+
+  /* The band picture's own ground, carried up into the section above it so the
+     two meet without a step. Split pages already paint their band --band-solid,
+     so the lead-in simply takes the same colour; stacked pages keep the page
+     ground under their copy and need the channels as well, to start the band's
+     top fade from the picture's grey rather than from --bg.
+     Products with no coreGround — the cut-out PNGs, which have no studio
+     backdrop to match — get neither, and the run stays as it was. */
+  const leadInBg = product.coreGround || null
+  const bandTopChannels =
+    coreIsMacro && /^rgb\(/.test(product.coreGround || '')
+      ? product.coreGround.slice(4, -1).replace(/\s+/g, '')
+      : null
+
   const breadcrumb = breadcrumbJsonLd([
     { name: 'Start', href: '/' },
     { name: 'Produkte', href: '/produkte' },
@@ -88,7 +112,13 @@ export function StandardProductPage({ product }) {
         </div>
       </section>
 
-      <section style={{ padding: 'clamp(9rem,14vw,16rem) 0 clamp(6rem,9vw,10rem)' }}>
+      <section
+        className={leadInBg ? 'ft-band-lead-in' : undefined}
+        style={{
+          padding: 'clamp(4.5rem,8vw,9rem) 0 clamp(3.5rem,6vw,6.5rem)',
+          ...(leadInBg ? { '--lead-in-bg': leadInBg } : null),
+        }}
+      >
         <div className="ft-shell">
           <div className="ft-center" data-rev-group style={{ maxWidth: 'min(100%,900px)', marginInline: 'auto' }}>
             <p className="ft-eyebrow" data-rev>{product.positioning.eyebrow}</p>
@@ -98,28 +128,42 @@ export function StandardProductPage({ product }) {
         </div>
       </section>
 
-      {/* Split rather than full bleed: the picture here is the camera itself,
-          cut out on near-white, not the sensor macro the hand-written FC-8D
-          pages put behind their words. There is no empty half to set copy
-          into, so the render takes a column instead of the whole band. Copy
-          first, which is also the order the columns collapse into. */}
-      <section
-        className="ft-sensorband ft-sensorband--split"
-        /* The render's own ground, sampled off the file's edge pixels, so the
-           picture meets the section with no rectangle around it. Absent on the
-           cut-out PNGs, which have no ground to match — there the band keeps
-           the page's. */
-        style={product.coreGround ? { '--band-solid': product.coreGround } : undefined}
-      >
-        <div className="ft-shell ft-sensorband-inner">
-          <div className="ft-sensorband-copy" data-rev-group>
-            <p className="ft-eyebrow" data-rev>{product.core.eyebrow}</p>
-            <h2 data-rev>{product.core.title}</h2>
-            <p data-rev style={{ color: 'var(--fg-secondary)', marginTop: '1rem', maxWidth: 'none' }}>{product.core.text}</p>
-          </div>
+      {/* The full-bleed stack, same as the hand-written FC-8D pages: the macro
+          across the top dissolving into the page, the words underneath it on
+          that ground. No --band-solid here — the fade ends on the page's own
+          colour, and painting the section the render's grey instead would put
+          the seam back at the foot of the picture. */}
+      {coreIsMacro ? (
+        <section className="ft-sensorband" style={bandTopChannels ? { '--band-top': bandTopChannels } : undefined}>
           <img className="ft-sensorband-img" src={product.images.core} alt={product.alts.core} loading="lazy" decoding="async" />
-        </div>
-      </section>
+          <div className="ft-shell ft-sensorband-inner">
+            <div className="ft-sensorband-copy ft-center" data-rev-group>
+              <p className="ft-eyebrow" data-rev>{product.core.eyebrow}</p>
+              <h2 data-rev>{product.core.title}</h2>
+              <p data-rev style={{ color: 'var(--fg-secondary)', marginTop: '1rem', maxWidth: 'none' }}>{product.core.text}</p>
+            </div>
+          </div>
+        </section>
+      ) : (
+        /* Copy first, which is also the order the columns collapse into. */
+        <section
+          className="ft-sensorband ft-sensorband--split"
+          /* The render's own ground, sampled off the file's edge pixels, so the
+             picture meets the section with no rectangle around it. Absent on the
+             cut-out PNGs, which have no ground to match — there the band keeps
+             the page's. */
+          style={product.coreGround ? { '--band-solid': product.coreGround } : undefined}
+        >
+          <div className="ft-shell ft-sensorband-inner">
+            <div className="ft-sensorband-copy" data-rev-group>
+              <p className="ft-eyebrow" data-rev>{product.core.eyebrow}</p>
+              <h2 data-rev>{product.core.title}</h2>
+              <p data-rev style={{ color: 'var(--fg-secondary)', marginTop: '1rem', maxWidth: 'none' }}>{product.core.text}</p>
+            </div>
+            <img className="ft-sensorband-img" src={product.images.core} alt={product.alts.core} loading="lazy" decoding="async" />
+          </div>
+        </section>
+      )}
 
       <ScanBand className="ft-band ft-band--dark ft-band--scan ft-band--standard-product" data-nav-dark>
         <div className="ft-band-stage">

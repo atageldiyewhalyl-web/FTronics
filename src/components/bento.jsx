@@ -88,7 +88,22 @@ export function FeatureBento({ items, label = 'Produktmerkmale' }) {
               (item.img ? ' ft-bento-tile--framed' : '')
             }
           >
-            {item.img ? <img className="ft-bento-img" src={item.img} alt={item.alt} loading="lazy" decoding="async" /> : null}
+            {/* `pos` is the tile's own crop anchor. A tall tile is far taller
+                than the 16:9 scenes these are, so cover throws most of the
+                width away and the centred default can drop the camera clean
+                out of frame — which is what it did here. Per item rather than
+                per tile class: each photograph puts its subject somewhere
+                different, and nothing else should move because one did. */}
+            {item.img ? (
+              <img
+                className="ft-bento-img"
+                src={item.img}
+                alt={item.alt}
+                loading="lazy"
+                decoding="async"
+                style={item.pos ? { objectPosition: item.pos } : undefined}
+              />
+            ) : null}
             <h3>{item.h}</h3>
             <p>{item.p}</p>
           </div>

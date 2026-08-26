@@ -90,7 +90,11 @@ export function Field({ label, type = 'text', textarea, options, error, id, name
       {textarea ? (
         <textarea {...shared} />
       ) : options ? (
-        <select {...shared} defaultValue="">
+        /* defaultValue only when the caller is not driving this itself. A
+           select carrying both it and a value is neither controlled nor
+           uncontrolled as far as React is concerned, and it warns; every
+           existing caller passes no value and still gets the empty default. */
+        <select {...shared} {...(rest.value === undefined ? { defaultValue: '' } : null)}>
           {options.map((o, i) =>
             i === 0 ? (
               <option key={o} value="" disabled>{o}</option>
