@@ -2727,6 +2727,13 @@ a.ft-pcard:focus-visible{outline:2px solid var(--ring);outline-offset:3px;border
   border-radius:var(--r-lg);
   background:rgba(255,255,255,.05);
 }
+.ft-band--standard-product .ft-scan-card-img{
+  height:auto;
+  aspect-ratio:4 / 3;
+  object-fit:cover;
+  object-position:center;
+  background:rgba(255,255,255,.07);
+}
 .ft-scan-card-body{display:flex;flex-direction:column;gap:6px}
 .ft-scan-card-body h4{
   margin:0;color:#fff;

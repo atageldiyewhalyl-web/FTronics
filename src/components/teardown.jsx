@@ -42,7 +42,7 @@ const spread = (n) =>
         n === 1 ? WINDOW[0] : WINDOW[0] + ((WINDOW[1] - WINDOW[0]) * i) / (n - 1)
       )
 
-export function Teardown({ captions, ctaHref, ctaLabel, head, src = '/camera-video.mp4', stops }) {
+export function Teardown({ captions, ctaHref, ctaLabel, head, src = '/camera-video-hq.webm', stops }) {
   const [progress, setProgress] = useState(0)
 
   const marks = stops || spread(captions.length)

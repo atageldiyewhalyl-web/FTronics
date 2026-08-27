@@ -530,7 +530,13 @@ export default function ProduktFC8DPro() {
                 Komplettes PDF mit allen technischen Parametern, Maßzeichnung und Anschlussdiagramm.
               </p>
             </div>
-            <Button variant="secondary" href="#">FC-8D Pro Datenblatt (PDF · ca. 800 KB)</Button>
+            <Button
+              variant="secondary"
+              href="/assets/ftronics-fc8d-pro-datenblatt.pdf"
+              download="ftronics-fc8d-pro-datenblatt.pdf"
+            >
+              FC-8D Pro Datenblatt (PDF)
+            </Button>
           </div>
 
           {/* The conditions attached to the numbers above. A specifier who
