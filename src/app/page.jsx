@@ -259,11 +259,16 @@ export default function Startseite() {
             <HeroField />
             {/* No fixed ratio: the leftover height sizes the box and the cutout
                 is contain-fitted inside it, so the whole hero clears the fold. */}
+            {/* sizes matches .hero-media-wrap's own width:min(100%,clamp(340px,
+                52vw,820px)) — the Media default (420px) under-served this by
+                nearly 2x (measured 749px rendered at 1440 viewport), upscaled
+                by the browser into visible blur on the hero's own cutout. */}
             <Media
               bare
               ratio={null}
               pad="0"
               className="hero-media"
+              sizes="(max-width: 860px) 90vw, 820px"
               src="/fc-8d-pro-main.webp"
               alt="FTronics FC-8D Pro: 4K Dome-Kamera mit Sony IMX415 Sensor"
             />
@@ -318,10 +323,16 @@ export default function Startseite() {
           </div>
 
           <div data-rev className="pledge-figure">
+            {/* sizes: this runs the near-full width of .ft-shell (measured
+                1194px rendered at 1440 viewport), not the Media default's
+                420px card size — that mismatch had the browser upscale a
+                420px fetch to fill an 1194px box, visibly blurring the one
+                installer photo on the homepage. */}
             <Media
               ratio={null}
               fit="cover"
               className="pledge-media"
+              sizes="(max-width: 1260px) 92vw, 1160px"
               src="/pledge-installation.webp"
               alt="Techniker der FT Sicherheitstechnik setzt eine Dome-Kamera in die Holzverkleidung des Dachüberstands ein, die Zuleitung liegt unsichtbar dahinter"
             />

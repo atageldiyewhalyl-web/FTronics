@@ -140,7 +140,12 @@ export function Placeholder({ label, ratio = '16 / 9', rounded = 'var(--r-xl)', 
    contain default exists for product cutouts and would letterbox a photo. */
 /* `sizes` describes how wide this frame actually renders, so the browser can
    pick a sensibly small file. The default suits the card grids Media is
-   mostly used in; pass a narrower or wider one where the frame differs. */
+   mostly used in; pass a narrower or wider one where the frame differs — this
+   is not optional for a hero/full-width usage. Leaving the 420px default on
+   the homepage's hero cutout and the pledge-section photo (both render at
+   700px+) shipped visible upscaled blur on two of the site's most-seen
+   images; measure the real rendered width with getBoundingClientRect before
+   trusting the default anywhere the frame isn't a small card. */
 export function Media({ src, alt, ratio = '16 / 9', rounded = 'var(--r-xl)', pad = '0', tint, bare = false, fit = 'contain', className = '', sizes = '(max-width: 700px) 90vw, (max-width: 1200px) 45vw, 420px' }) {
   return (
     <div
