@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Allgemeine Geschäftsbedingungen (AGB)',
+  title: 'AGB',
   description:
     'Allgemeine Geschäftsbedingungen (AGB) der FT Sicherheitstechnik Mannheim. Gültig für alle Dienstleistungen und Produkte.',
   alternates: { canonical: '/agb' },

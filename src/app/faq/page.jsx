@@ -2,11 +2,12 @@ import { Button, CtaFlatlay } from '@/components/ui'
 import { site, cta, jsonLd, breadcrumbJsonLd } from '@/lib/site'
 import { FaqBrowser } from './FaqBrowser'
 import { CtaAnfrageForm } from '../CtaAnfrageForm'
+import { WhatsAppButton } from '@/components/WhatsAppButton'
 
 export const metadata = {
   /* The root layout appends " | FT Sicherheitstechnik" via title.template,
      which reproduces the live title exactly without doubling the suffix. */
-  title: 'Häufige Fragen zu Alarmanlagen & Sicherheitstechnik',
+  title: 'FAQ zur Sicherheitstechnik',
   description:
     'Antworten auf 31 häufige Fragen zu Alarmanlagen, Videoüberwachung, Smart Home, Brandschutz, Kosten & Wartung. FT Sicherheitstechnik Mannheim berät Sie.',
   alternates: { canonical: '/faq' },
@@ -273,6 +274,9 @@ export default function FAQ() {
                 Kontaktieren Sie uns. Wir beantworten Ihre Fragen persönlich und beraten Sie
                 individuell.
               </p>
+              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: '1.5rem' }}>
+                <WhatsAppButton />
+              </div>
             </div>
             <CtaAnfrageForm />
           </div>

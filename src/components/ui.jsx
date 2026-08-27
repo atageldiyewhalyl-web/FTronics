@@ -1,3 +1,5 @@
+import Image from 'next/image'
+import { sizeOf } from '@/lib/image-sizes'
 import Link from 'next/link'
 
 /* ============================================================
@@ -136,7 +138,10 @@ export function Placeholder({ label, ratio = '16 / 9', rounded = 'var(--r-xl)', 
  */
 /* `fit="cover"` for photographs, which are meant to fill the frame — the
    contain default exists for product cutouts and would letterbox a photo. */
-export function Media({ src, alt, ratio = '16 / 9', rounded = 'var(--r-xl)', pad = '0', tint, bare = false, fit = 'contain', className = '' }) {
+/* `sizes` describes how wide this frame actually renders, so the browser can
+   pick a sensibly small file. The default suits the card grids Media is
+   mostly used in; pass a narrower or wider one where the frame differs. */
+export function Media({ src, alt, ratio = '16 / 9', rounded = 'var(--r-xl)', pad = '0', tint, bare = false, fit = 'contain', className = '', sizes = '(max-width: 700px) 90vw, (max-width: 1200px) 45vw, 420px' }) {
   return (
     <div
       className={`ft-media${bare ? ' ft-media--bare' : ''} ${className}`}
@@ -147,12 +152,16 @@ export function Media({ src, alt, ratio = '16 / 9', rounded = 'var(--r-xl)', pad
         padding: pad,
       }}
     >
-      <img
+      {/* Real width/height rather than `fill`: .ft-media has no positioning
+          context, and several call sites re-point the image with
+          object-position in a media query — `fill` would write inline styles
+          over both. */}
+      <Image
         className={`ft-media-img${fit === 'cover' ? ' ft-media-img--cover' : ''}`}
         src={src}
         alt={alt}
-        loading="lazy"
-        decoding="async"
+        {...sizeOf(src)}
+        sizes={sizes}
       />
     </div>
   )
@@ -164,13 +173,12 @@ export function Media({ src, alt, ratio = '16 / 9', rounded = 'var(--r-xl)', pad
 export function CtaFlatlay() {
   return (
     <div data-rev className="ft-cta-flatlay">
-      <img
+      <Image
         src="/cta-flatlay.webp"
         alt=""
         width={2400}
         height={896}
-        loading="lazy"
-        decoding="async"
+        sizes="100vw"
       />
     </div>
   )

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Button, Field } from '@/components/ui'
+import { submitLead } from '@/lib/lead-submit'
 
 /* ============================================================
    Konfigurator — the 4-step system configurator.
@@ -103,6 +104,8 @@ export function KonfiguratorForm() {
   const [step, setStep] = useState(1)
   const [picked, setPicked] = useState({ objekt: null, bereiche: [], funktionen: [] })
   const [submitted, setSubmitted] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [error, setError] = useState('')
 
   const current = steps[step - 1]
 
@@ -127,9 +130,37 @@ export function KonfiguratorForm() {
   }
 
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
-    setSubmitted(true)
+    setSending(true)
+    setError('')
+
+    const form = new FormData(e.currentTarget)
+    const selectedFunctions = picked.funktionen.join(', ')
+    const notes = String(form.get('anmerkungen') || '').trim()
+    const summary = [
+      `Objekttyp: ${picked.objekt || '-'}`,
+      `Bereiche: ${picked.bereiche.join(', ') || '-'}`,
+      `Funktionen: ${selectedFunctions || '-'}`,
+      notes ? `Anmerkungen: ${notes}` : '',
+    ].filter(Boolean).join('\n')
+
+    try {
+      await submitLead({
+        fullName: String(form.get('name') || ''),
+        email: String(form.get('email') || ''),
+        phone: String(form.get('telefon') || ''),
+        subject: selectedFunctions || 'System-Konfigurator',
+        message: summary,
+        formName: 'System-Konfigurator',
+        configurator: picked,
+      })
+      setSubmitted(true)
+    } catch {
+      setError('Die Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut oder rufen Sie uns direkt an.')
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
@@ -238,6 +269,11 @@ export function KonfiguratorForm() {
                       {formFields.map((f) => (
                         <Field key={f.name} {...f} />
                       ))}
+                      {error && (
+                        <p role="alert" style={{ color: 'var(--ft-red-brand)', fontSize: 'var(--t-body-sm)', margin: '0 0 1rem' }}>
+                          {error}
+                        </p>
+                      )}
                       <label
                         style={{
                           display: 'flex', gap: 10, alignItems: 'flex-start',
@@ -256,7 +292,9 @@ export function KonfiguratorForm() {
                           Datenschutzerklärung zu. *
                         </span>
                       </label>
-                      <Button type="submit">Unverbindliches Angebot anfordern</Button>
+                      <Button type="submit" disabled={sending}>
+                        {sending ? 'Wird gesendet...' : 'Unverbindliches Angebot anfordern'}
+                      </Button>
                     </form>
                   ))}
               </div>

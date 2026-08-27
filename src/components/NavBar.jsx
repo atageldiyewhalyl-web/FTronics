@@ -251,7 +251,7 @@ export function NavBar() {
           <span className="ft-nav-logo-wrap">
             <Image
               className="ft-nav-logo ft-nav-logo--ink"
-              src="/logo-black.png"
+              src="/logo-black.webp"
               alt="FT Sicherheitstechnik: Beratung, Verkauf, Service, Schulung"
               width={800}
               height={164}
@@ -259,7 +259,7 @@ export function NavBar() {
             />
             <Image
               className="ft-nav-logo ft-nav-logo--light"
-              src="/logo.png"
+              src="/logo.webp"
               alt=""
               aria-hidden="true"
               width={800}

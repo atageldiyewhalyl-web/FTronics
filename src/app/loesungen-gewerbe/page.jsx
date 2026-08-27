@@ -2,12 +2,12 @@ import Link from 'next/link'
 import { Button, SectionHead } from '@/components/ui'
 import { TrustMarks } from '@/components/trust-marks'
 import { Plan } from '@/components/plan'
-import { breadcrumbJsonLd, cta, jsonLd } from '@/lib/site'
+import { breadcrumbJsonLd, cta, jsonLd, servicesJsonLd } from '@/lib/site'
 
 export const metadata = {
   /* `absolute` because the root layout's title template would otherwise
      append a second " | FT Sicherheitstechnik" to the verified title. */
-  title: { absolute: 'Sicherheitstechnik für Gewerbe & Industrie | FT Sicherheitstechnik Mannheim' },
+  title: { absolute: 'Sicherheitstechnik für Gewerbe in Mannheim' },
   description:
     'Gewerbliche Sicherheitslösungen in Mannheim: Alarmanlagen, Videoüberwachung, Zutrittskontrolle & Zeiterfassung. DSGVO-konform, persönliche Beratung vor Ort. Jetzt anfragen!',
   alternates: { canonical: '/loesungen-gewerbe' },
@@ -90,6 +90,14 @@ const loesungen = [
     link: { label: 'Angebot anfragen →', href: '/kontakt' },
   },
 ]
+
+/* Service schema for the six disciplines, derived from the same card copy
+   rather than written twice — the first bullet of each card is a real,
+   specific sentence about what the service covers, so it doubles as the
+   Service description. */
+const services = servicesJsonLd(
+  loesungen.map((l) => ({ name: l.title, description: l.items[0], href: l.link.href }))
+)
 
 /* The six disciplines again, as marks on the plan: where on the render each
    one's hardware actually sits, as a percentage of the picture. flipPop opens a
@@ -225,6 +233,7 @@ export default function LoesungenGewerbe() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(breadcrumb)} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(services)} />
       <style href="loesungen-gewerbe" precedence="default">{css}</style>
 
       {/* 9.1 Hero — the claim first, centred, and the site it protects under

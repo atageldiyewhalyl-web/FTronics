@@ -6,9 +6,17 @@ import { Teardown } from '@/components/teardown'
 import { site, cta } from '@/lib/site'
 import { CtaAnfrageForm } from './CtaAnfrageForm'
 import { IconMark, markFor } from '@/components/spec-marks'
+import { WhatsAppButton } from '@/components/WhatsAppButton'
 
 export const metadata = {
-  title: 'Alarmanlagen & Sicherheitstechnik Mannheim | FT Sicherheitstechnik',
+  /* `absolute`, and deliberately without the brand suffix: the domain
+     (ftsicherheitstechnik.com) sits directly above the title in the SERP and
+     already carries the brand, so the 24 characters are better spent on the
+     two head terms plus the city. This matters while audit finding C2 is
+     open — /alarmanlagen-mannheim.html is being retired, and this is the only
+     remaining title carrying "Alarmanlagen". Revisit once that page is
+     rebuilt. */
+  title: { absolute: 'Alarmanlagen & Sicherheitstechnik Mannheim' },
   alternates: { canonical: '/' },
 }
 
@@ -223,7 +231,7 @@ export default function Startseite() {
       <section className="hero">
         {/* Hidden behind the page colour until a pointer sweeps the hero. */}
         <HeroScene
-          src="/szene-morgen.jpg"
+          src="/szene-morgen.webp"
           srcMobile="/szene-morgen-mobil.webp"
           alt="Wohnhaus am Morgen: eine Person mit Hund auf der Einfahrt, erfasst von der Überwachungskamera"
         />
@@ -256,7 +264,7 @@ export default function Startseite() {
               ratio={null}
               pad="0"
               className="hero-media"
-              src="/fc-8d-pro-main.png"
+              src="/fc-8d-pro-main.webp"
               alt="FTronics FC-8D Pro: 4K Dome-Kamera mit Sony IMX415 Sensor"
             />
             {/* The torch handle, shown only where there is no pointer to sweep
@@ -418,7 +426,10 @@ export default function Startseite() {
             <div data-rev>
               <div className="ft-card ft-award">
                 <span className="ft-award-sealbox">
-                  <img className="ft-award-seal" src="/plus-x-award-2026.jpg" alt="" />
+                  {/* alt="": the h4 right below already states this exact award
+                      name — a descriptive alt would have a screen reader read
+                      it twice in a row rather than filling a real gap. */}
+                  <img className="ft-award-seal" src="/plus-x-award-2026.webp" alt="" />
                 </span>
                 <div className="ft-card-body">
                   <h4>Plus X Award 2026</h4>
@@ -431,7 +442,10 @@ export default function Startseite() {
             <div data-rev>
               <div className="ft-card ft-award">
                 <span className="ft-award-sealbox">
-                  <img className="ft-award-seal" src="/dipmb-kundenzufriedenheit-2024.jpg" alt="" />
+                  {/* alt="": the h4 right below already states this exact award
+                      name — a descriptive alt would have a screen reader read
+                      it twice in a row rather than filling a real gap. */}
+                  <img className="ft-award-seal" src="/dipmb-kundenzufriedenheit-2024.webp" alt="" />
                 </span>
                 <div className="ft-card-body">
                   <h4>Hohe Kundenzufriedenheit 2024</h4>
@@ -569,61 +583,61 @@ export default function Startseite() {
               {[
                 {
                   kind: 'Dome IP-Kamera', name: 'FC-8D Pro', href: '/produkte/fc-8d-pro',
-                  img: '/fc-8d-pro-main.png',
+                  img: '/fc-8d-pro-main.webp',
                   desc: 'Kompakte Dome-Kamera mit 4K Auflösung und intelligenter Personenerkennung.',
                   specs: ['4K 8MP', 'IP67', 'KI-Analyse', 'PoE', 'Sony IMX415'],
                 },
                 {
                   kind: 'Dome IP-Kamera', name: 'FC-8D Zoom', href: '/produkte/fc-8d-zoom',
-                  img: '/fc-8d-zoom-main.png',
+                  img: '/fc-8d-zoom-main.webp',
                   desc: 'Premium Dome mit motorisiertem 2.8-8mm Zoom, Gesichtserkennung und vollständiger VCA KI-Suite.',
                   specs: ['4K 8MP', 'IP67', 'Gesichtserkennung', 'Motorzoom'],
                 },
                 {
                   kind: 'Mini-PTZ Dome', name: 'FC-6Z Mini', href: '/produkte/fc-6z-mini',
-                  img: '/fc-6z-mini-main.png',
+                  img: '/fc-6z-mini-main.webp',
                   desc: 'Kompakte vandalismusgeschützte Mini-PTZ mit 3x Zoom und vollständiger KI-Suite inkl. Gesichtserkennung.',
                   specs: ['6MP', 'IP67', '3x Zoom', '100dB WDR'],
                 },
                 {
                   kind: 'Bullet IP-Kamera', name: 'FB-8A Pro', href: '/produkte/fb-8a-pro',
-                  img: '/fb-8a-pro-main.png',
+                  img: '/fb-8a-pro-main.webp',
                   desc: 'Premium Bullet-Kamera mit vollständiger KI-Suite inkl. Gesichtserkennung.',
                   specs: ['4K 8MP', 'IP67', 'Gesichtserkennung', 'PoE'],
                 },
                 {
                   kind: 'Bullet IP-Kamera', name: 'FB-8A Max', href: '/produkte/fb-8a-max',
-                  img: '/fb-8a-max-main.png',
+                  img: '/fb-8a-max-main.webp',
                   desc: 'Premium Bullet mit aktiver Abschreckung (Rot/Blau LEDs), Gesichtserkennung und Dual-Light.',
                   specs: ['4K 8MP', 'IP67', 'Dual-Light', '100dB WDR'],
                 },
                 {
                   kind: 'Turret IP-Kamera', name: 'FT-8C Pro', href: '/produkte/ft-8c-pro',
-                  img: '/ft-8c-pro-main.jpg',
+                  img: '/ft-8c-pro-main.webp',
                   desc: 'Turret-Kamera mit 24/7 Farbbildgebung, F1.0 Blende und Gesichtserkennung für beste Nachtsicht.',
                   specs: ['4K 8MP', 'IP67', 'Gesichtserkennung', 'F1.0'],
                 },
                 {
                   kind: '180° Panorama Turret', name: 'FT-8P Dual', href: '/produkte/ft-8p-dual',
-                  img: '/ft-8p-dual-main.png',
+                  img: '/ft-8p-dual-main.webp',
                   desc: 'Dual-Objektiv Panoramakamera mit 180° Weitwinkel, aktiver Abschreckung und Zweiwege-Audio.',
                   specs: ['8MP 180°', 'IP67', 'Dual-Light', '2-Wege Audio'],
                 },
                 {
                   kind: 'PTZ Speed Dome', name: 'FP-8T 20X', href: '/produkte/fp-8t-20x',
-                  img: '/fp-8t-20x-main.png',
+                  img: '/fp-8t-20x-main.webp',
                   desc: 'Professionelle PTZ mit 20x Zoom, Auto-Tracking und Dual-Light für große Flächen.',
                   specs: ['4K 8MP', 'IP67', 'Auto-Tracking', 'IR 100m'],
                 },
                 {
                   kind: '16-Kanal 4K NVR', name: 'FN-16', href: '/produkte/fn-16',
-                  img: '/fn-16-main.jpg',
+                  img: '/fn-16-main.webp',
                   desc: 'Leistungsstarker 16-Kanal NVR mit 2x SATA für bis zu 16TB und ANR Technologie.',
                   specs: ['4K', '16 Kanäle', '2x SATA 16TB', 'ANR'],
                 },
                 {
                   kind: 'IP-Lautsprecher', name: 'FS-30', href: '/produkte/fs-30',
-                  img: '/fs-30-main.png',
+                  img: '/fs-30-main.webp',
                   desc: '30W IP-Hornlautsprecher mit 130 dBSPL für Alarm-Durchsagen und NVR-Kopplung.',
                   specs: ['30W', 'IP66', '130 dBSPL', 'PoE'],
                 },
@@ -680,7 +694,7 @@ export default function Startseite() {
             eyebrow={
               <>
                 <GoogleMark />
-                <span className="ft-rating-score">5,0</span>
+                <span className="ft-rating-score">{site.rating.value.replace('.', ',')}</span>
                 {/* aria-hidden: the score and the source beside it already say
                     it in words, and five repeated glyphs read as "black star,
                     black star…" out loud. */}
@@ -690,7 +704,7 @@ export default function Startseite() {
               </>
             }
             title="In der Region weiterempfohlen"
-            lead="19 Bewertungen aus Mannheim und der Metropolregion Rhein-Neckar. 100% unserer Kunden empfehlen uns weiter."
+            lead={`${site.rating.count} Bewertungen aus Mannheim und der Metropolregion Rhein-Neckar. 100% unserer Kunden empfehlen uns weiter.`}
           />
           <ScrollGallery label="Kundenbewertungen">
             {reviews.map(([quote, name]) => (
@@ -745,6 +759,7 @@ export default function Startseite() {
                 and neither of them is the one that finishes the job here. */}
             <div data-rev style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
               <Button variant="secondary" href="/kontakt">Kontakt aufnehmen</Button>
+              <WhatsAppButton />
               <a href={site.phoneHref} style={{ color: 'var(--fg)', fontWeight: 500, textDecoration: 'none', padding: '.85rem 1rem' }}>
                 {site.phone}
               </a>

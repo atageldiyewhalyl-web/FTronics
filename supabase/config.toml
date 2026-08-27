@@ -1,0 +1,2 @@
+[functions.ft-lead-anfrage]
+verify_jwt = false

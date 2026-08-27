@@ -1,3 +1,5 @@
+import Image from 'next/image'
+import { sizeOf } from '@/lib/image-sizes'
 import { Button, CtaFlatlay, SectionHead } from '@/components/ui'
 import { ScrollGallery } from '@/components/scroll'
 import { FeatureBento } from '@/components/bento'
@@ -92,7 +94,20 @@ export function StandardProductPage({ product }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(productSchema)} />
 
       <section className="ft-phero">
-        <img className="ft-phero-img" src={product.images.hero} alt={product.alts.hero} />
+        {/* Full-bleed hero and the LCP element on this page. Real width/height
+            rather than `fill`: .ft-phero-img is resized by a media query below
+            the tablet breakpoint, and `fill` writes height/inset as inline
+            styles that would override it. With explicit dimensions next/image
+            emits no layout styles, so the stylesheet stays in charge.
+            `priority` preloads it instead of lazy-loading. */}
+        <Image
+          className="ft-phero-img"
+          src={product.images.hero}
+          alt={product.alts.hero}
+          {...sizeOf(product.images.hero)}
+          sizes="100vw"
+          priority
+        />
         <div className="ft-shell ft-phero-inner">
           <div className="ft-phero-copy" data-rev-group>
             <p className="ft-eyebrow" data-rev>FTronics · {product.category}</p>
@@ -135,7 +150,7 @@ export function StandardProductPage({ product }) {
           the seam back at the foot of the picture. */}
       {coreIsMacro ? (
         <section className="ft-sensorband" style={bandTopChannels ? { '--band-top': bandTopChannels } : undefined}>
-          <img className="ft-sensorband-img" src={product.images.core} alt={product.alts.core} loading="lazy" decoding="async" />
+          <Image className="ft-sensorband-img" src={product.images.core} alt={product.alts.core} {...sizeOf(product.images.core)} sizes="100vw" />
           <div className="ft-shell ft-sensorband-inner">
             <div className="ft-sensorband-copy ft-center" data-rev-group>
               <p className="ft-eyebrow" data-rev>{product.core.eyebrow}</p>
@@ -160,14 +175,14 @@ export function StandardProductPage({ product }) {
               <h2 data-rev>{product.core.title}</h2>
               <p data-rev style={{ color: 'var(--fg-secondary)', marginTop: '1rem', maxWidth: 'none' }}>{product.core.text}</p>
             </div>
-            <img className="ft-sensorband-img" src={product.images.core} alt={product.alts.core} loading="lazy" decoding="async" />
+            <Image className="ft-sensorband-img" src={product.images.core} alt={product.alts.core} {...sizeOf(product.images.core)} sizes="100vw" />
           </div>
         </section>
       )}
 
       <ScanBand className="ft-band ft-band--dark ft-band--scan ft-band--standard-product" data-nav-dark>
         <div className="ft-band-stage">
-          <img className="ft-band-img" src={product.images.feature} alt={product.alts.feature} loading="lazy" decoding="async" />
+          <Image className="ft-band-img" src={product.images.feature} alt={product.alts.feature} {...sizeOf(product.images.feature)} sizes="100vw" />
           <div className="ft-shell ft-band-inner">
             <div className="ft-band-copy" lang="de">
               <p className="ft-eyebrow">{product.intelligence.eyebrow}</p>
@@ -181,7 +196,7 @@ export function StandardProductPage({ product }) {
                 {product.intelligence.cards.map((item) => (
                   <div key={item.h}>
                     <div className="ft-scan-card">
-                      <img className="ft-scan-card-img" src={item.img} alt={item.alt} loading="lazy" decoding="async" />
+                      <Image className="ft-scan-card-img" src={item.img} alt={item.alt} {...sizeOf(item.img)} sizes="(max-width: 900px) 80vw, 420px" />
                       <div className="ft-scan-card-body"><h4>{item.h}</h4><p>{item.p}</p></div>
                     </div>
                   </div>
@@ -200,11 +215,11 @@ export function StandardProductPage({ product }) {
             {/* No media frame here: the render is a cutout on the panel's own
                 ground, so a box around it only drew a second edge inside the
                 one the panel already has. */}
-            <img
+            <Image
               src={product.images.product}
               alt={product.alts.product}
-              loading="lazy"
-              decoding="async"
+              {...sizeOf(product.images.product)}
+              sizes="(max-width: 900px) 90vw, 560px"
               style={{ display: 'block', width: '100%', height: 'auto' }}
             />
             <div>
@@ -226,7 +241,7 @@ export function StandardProductPage({ product }) {
       <section style={{ padding: '0 0 clamp(5rem,7vw,8rem)' }}>
         <div className="ft-shell">
           <div className="ft-weather-panel" data-rev>
-            <img className="ft-weather-panel-img" src={product.images.weather} alt={product.alts.weather} loading="lazy" decoding="async" />
+            <Image className="ft-weather-panel-img" src={product.images.weather} alt={product.alts.weather} {...sizeOf(product.images.weather)} sizes="100vw" />
             <div className="ft-weather-panel-copy" data-rev-group>
               <p className="ft-eyebrow" data-rev>{product.resilience.eyebrow}</p>
               <h2 data-rev>{product.resilience.title}</h2>

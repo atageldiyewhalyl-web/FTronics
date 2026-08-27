@@ -1,3 +1,5 @@
+import Image from 'next/image'
+import { sizeOf } from '@/lib/image-sizes'
 import { Button, CtaFlatlay, SectionHead } from '@/components/ui'
 import { Compare } from '@/components/compare'
 import { ScrollGallery } from '@/components/scroll'
@@ -6,7 +8,10 @@ import { ScanBand } from '@/components/scan-band'
 import { site, cta, jsonLd, breadcrumbJsonLd } from '@/lib/site'
 
 export const metadata = {
-  title: 'FTronics FC-8D: 4K Dome IP-Kamera mit Personen- & Fahrzeugerkennung',
+  /* `absolute`: the title already opens with the FTronics brand, so the
+     root layout's " | FT Sicherheitstechnik" suffix would only repeat it
+     and push the tag past the SERP truncation point. */
+  title: { absolute: 'FTronics FC-8D: 4K Dome-Kamera mit Personenerkennung' },
   description:
     'FTronics FC-8D Dome-Kamera: 4K Ultra HD mit 30 fps, Sony IMX415, Personen- und Fahrzeugerkennung, 20–30 m IR, IP67 und 120 dB WDR.',
   alternates: { canonical: '/produkte/fc-8d' },
@@ -189,10 +194,19 @@ export default function ProduktFC8D() {
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(productSchema)} />
 
       <section className="ft-phero">
-        <img
+        {/* Full-bleed hero and the LCP element on this page. Real width/height
+            rather than `fill`: .ft-phero-img is resized by a media query below
+            the tablet breakpoint, and `fill` writes height/inset as inline
+            styles that would override it. With explicit dimensions next/image
+            emits no layout styles, so the stylesheet stays in charge.
+            `priority` preloads it instead of lazy-loading. */}
+        <Image
           className="ft-phero-img"
           src="/fc-8d-hero.webp"
           alt="Die FTronics FC-8D ist unter einem Betonvorsprung an einem Gewerbegebäude montiert"
+          {...sizeOf("/fc-8d-hero.webp")}
+          sizes="100vw"
+          priority
         />
         <div className="ft-shell ft-phero-inner">
           <div className="ft-phero-copy" data-rev-group>
@@ -316,7 +330,7 @@ export default function ProduktFC8D() {
                 edge inside the one the panel already has. Same call the
                 generated pages' proof panel makes. */}
             <img
-              src="/fc-8d-2.png"
+              src="/fc-8d-2.webp"
               alt=""
               loading="lazy"
               decoding="async"

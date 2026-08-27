@@ -17,6 +17,8 @@ export const site = {
   country: 'DE',
   phone: '+49 621 159 647 34',
   phoneHref: 'tel:+4962115964734',
+  whatsapp: '+49 176 32956300',
+  whatsappHref: 'https://wa.me/4917632956300?text=Hallo%20FT%20Sicherheitstechnik%2C%20ich%20komme%20%C3%BCber%20Ihre%20Website%20und%20m%C3%B6chte%20mich%20beraten%20lassen.',
   fax: '0621 762 207 36',
   email: 'info@ftst.eu',
   careersEmail: 'karriere@ftst.eu',
@@ -24,6 +26,9 @@ export const site = {
   lat: 49.5204,
   lng: 8.5093,
   hours: 'Mo–Fr · 08:00–17:00',
+  /* Display only — the visible Google rating on the homepage. Must never be
+     emitted as `aggregateRating` in JSON-LD; see the note in
+     localBusinessJsonLd(). */
   rating: { value: '5.0', count: '19' },
   social: {
     facebook: 'https://facebook.com/FTST68',
@@ -50,6 +55,7 @@ export const navItems = [
     ],
   },
   { label: 'Produkte', href: '/produkte' },
+  { label: 'Ratgeber', href: '/ratgeber' },
   { label: 'Kontakt', href: '/kontakt' },
   { label: 'Konfigurator', href: '/konfigurator' },
 ]
@@ -103,7 +109,13 @@ export const cta = {
 export function localBusinessJsonLd() {
   return {
     '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
+    /* Array rather than swapping to a single narrower type: schema.org has no
+       dedicated "security systems installer" type, and the closest
+       LocalBusiness subtype (HomeAndConstructionBusiness — Electrician,
+       Locksmith, Plumber, …) undersells the B2B/commercial NVR and
+       multi-site installs this business also does. Declaring both keeps the
+       safe generic type and adds the closer signal, which JSON-LD permits. */
+    '@type': ['LocalBusiness', 'HomeAndConstructionBusiness'],
     '@id': `${site.url}/#organization`,
     name: site.name,
     alternateName: site.altName,
@@ -131,13 +143,15 @@ export function localBusinessJsonLd() {
     ],
     priceRange: '€€',
     sameAs: [site.social.facebook, site.social.instagram, site.social.youtube],
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: site.rating.value,
-      reviewCount: site.rating.count,
-      bestRating: '5',
-      worstRating: '1',
-    },
+    /* NO `aggregateRating` HERE — deliberately, do not re-add it.
+       This entity is injected by the root layout on every page, so marking up
+       our own 5.0/19 rating would be self-serving review markup: Google's
+       structured-data policy makes it ineligible for rich results and it is a
+       manual-action risk. It also claimed a rating on 38 pages that show no
+       reviews at all. The rating stays where it belongs — as visible content
+       on the homepage, attributed to Google — and Google sources the stars for
+       the SERP from the Business Profile instead. `site.rating` still feeds
+       that on-page display. */
     areaServed: {
       '@type': 'GeoCircle',
       geoMidpoint: { '@type': 'GeoCoordinates', latitude: 49.4875, longitude: 8.466 },
@@ -156,6 +170,39 @@ export function localBusinessJsonLd() {
     },
     award: ['Plus X Award Top 100 (2026)', 'DIPMB Hohe Kundenzufriedenheit (2024)'],
     founder: { '@type': 'Person', name: site.founder },
+  }
+}
+
+/** Service entities for a solutions page, as an ItemList of Offers.
+    `provider` ties every Service back to the LocalBusiness entity the layout
+    already injects on every page (@id), rather than repeating the business's
+    identity — the same pattern breadcrumbJsonLd and localBusinessJsonLd's own
+    hasOfferCatalog use. Keeps /loesungen-gewerbe and /loesungen-privat
+    connected to that catalogue instead of describing the six/five
+    disciplines only in visible copy. */
+export function servicesJsonLd(services) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: services.map((s, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'Service',
+        name: s.name,
+        description: s.description,
+        provider: { '@id': `${site.url}/#organization` },
+        /* Same 50 km circle as localBusinessJsonLd's own areaServed — kept
+           inline rather than as an @id reference, since a Place has no @id
+           declared anywhere else to point at. */
+        areaServed: {
+          '@type': 'GeoCircle',
+          geoMidpoint: { '@type': 'GeoCoordinates', latitude: 49.4875, longitude: 8.466 },
+          geoRadius: '50000',
+        },
+        ...(s.href && { url: `${site.url}${s.href}` }),
+      },
+    })),
   }
 }
 

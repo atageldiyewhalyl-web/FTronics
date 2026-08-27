@@ -5,7 +5,7 @@ export const metadata = {
   /* The live site publishes no Karriere <title>/description pair in the
      content inventory — this follows the naming pattern of every other
      page, and the root layout appends " | FT Sicherheitstechnik". */
-  title: 'Offene Stellen & Ausbildung in Mannheim',
+  title: 'Karriere & Ausbildung in Mannheim',
   description:
     'Karriere bei FT Sicherheitstechnik Mannheim: Servicetechniker (m/w/d) und Ausbildung zum Elektroniker für Sicherheitstechnik. Unbefristet, Firmenfahrzeug, Weiterbildungen.',
   alternates: { canonical: '/karriere' },

@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "redirects:htaccess": "node scripts/generate-htaccess.mjs",
+    "images:sizes": "node scripts/generate-image-sizes.mjs",
+    "favicon": "node scripts/generate-favicon-ico.mjs"
   },
   "dependencies": {
     "next": "^15.1.6",

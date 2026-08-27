@@ -1,3 +1,5 @@
+import Image from 'next/image'
+import { sizeOf } from '@/lib/image-sizes'
 import { Button, Card, Chip, ChipRow, CtaFlatlay, SectionHead, Media, Placeholder } from '@/components/ui'
 import { Compare } from '@/components/compare'
 import { Teardown } from '@/components/teardown'
@@ -7,7 +9,10 @@ import { ScanBand } from '@/components/scan-band'
 import { site, cta, jsonLd, breadcrumbJsonLd } from '@/lib/site'
 
 export const metadata = {
-  title: 'FTronics FC-8D Pro: 4K Dome IP-Kamera mit KI-Personenerkennung',
+  /* `absolute`: the title already opens with the FTronics brand, so the
+     root layout's " | FT Sicherheitstechnik" suffix would only repeat it
+     and push the tag past the SERP truncation point. */
+  title: { absolute: 'FTronics FC-8D Pro: 4K Dome-Kamera mit KI-Erkennung' },
   description:
     'FTronics FC-8D Pro Dome-Kamera: 4K Ultra HD, Sony IMX415 Sensor, KI-Personenerkennung, IP67, PoE, Nachtsicht 30m. Technische Daten & Beratung.',
   alternates: { canonical: '/produkte/fc-8d-pro' },
@@ -204,10 +209,19 @@ export default function ProduktFC8DPro() {
           into the empty half of the picture, sized so the bar and the band
           together are exactly one screen. See .ft-phero. */}
       <section className="ft-phero">
-        <img
+        {/* Full-bleed hero and the LCP element on this page. Real width/height
+            rather than `fill`: .ft-phero-img is resized by a media query below
+            the tablet breakpoint, and `fill` writes height/inset as inline
+            styles that would override it. With explicit dimensions next/image
+            emits no layout styles, so the stylesheet stays in charge.
+            `priority` preloads it instead of lazy-loading. */}
+        <Image
           className="ft-phero-img"
           src="/fc-8d-pro-hero.webp"
           alt="Die FTronics FC-8D Pro, montiert unter dem Dachüberstand eines hellen Gebäudes"
+          {...sizeOf("/fc-8d-pro-hero.webp")}
+          sizes="100vw"
+          priority
         />
         <div className="ft-shell ft-phero-inner">
           <div className="ft-phero-copy" data-rev-group>

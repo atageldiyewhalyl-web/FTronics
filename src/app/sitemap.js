@@ -1,4 +1,5 @@
 import { site } from '@/lib/site'
+import { getPostSlugs } from '@/lib/ratgeber-posts'
 
 const routes = [
   ['/', 1.0, 'weekly'],
@@ -27,6 +28,7 @@ const routes = [
   ['/kontakt', 0.8, 'monthly'],
   ['/faq', 0.7, 'monthly'],
   ['/ratgeber', 0.7, 'monthly'],
+  ...getPostSlugs().map((slug) => [`/ratgeber/${slug}`, 0.6, 'monthly']),
   ['/support', 0.6, 'monthly'],
   ['/partner', 0.6, 'monthly'],
   ['/ueber-uns', 0.6, 'monthly'],

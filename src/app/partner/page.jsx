@@ -1,11 +1,12 @@
 import { Button, Card, ChipRow, CtaFlatlay, SectionHead } from '@/components/ui'
 import { cta, jsonLd, breadcrumbJsonLd } from '@/lib/site'
 import { CtaAnfrageForm } from '../CtaAnfrageForm'
+import { WhatsAppButton } from '@/components/WhatsAppButton'
 
 export const metadata = {
   /* The root layout appends " | FT Sicherheitstechnik" via title.template,
      which reproduces the live title exactly without doubling the suffix. */
-  title: 'Partner: Ajax, Dahua, Jablotron, Akuvox',
+  title: 'Partner: Ajax, Dahua & Jablotron',
   description:
     'Unsere Technologie-Partner: Ajax Systems, Dahua, Jablotron, Akuvox und mehr. FT Sicherheitstechnik setzt auf führende Hersteller der Sicherheitsbranche.',
   alternates: { canonical: '/partner' },
@@ -192,6 +193,9 @@ export default function Partner() {
                 Wir finden die passende Technologie für Ihr Objekt. Kostenlose Erstberatung vor Ort
                 in der Metropolregion Rhein-Neckar.
               </p>
+              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: '1.5rem' }}>
+                <WhatsAppButton />
+              </div>
             </div>
             <CtaAnfrageForm />
           </div>

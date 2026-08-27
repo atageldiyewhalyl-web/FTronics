@@ -86,7 +86,13 @@ export function Teardown({ captions, ctaHref, ctaLabel, head, src = '/camera-vid
               </div>
             ))}
             <div className="ft-teardown-cta">
-              <Button variant="quiet" href={ctaHref}>{ctaLabel}</Button>
+              <Button variant="quiet" className="ft-swipe-cue" href={ctaHref}>
+                <span className="ft-swipe-cue-mark" aria-hidden="true">
+                  <span />
+                  <span />
+                </span>
+                <span>{ctaLabel}</span>
+              </Button>
             </div>
           </div>
           </div>

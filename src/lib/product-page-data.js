@@ -7,10 +7,10 @@ export const productPageData = {
   ...extendedProductPageData,
   'fc-8d-zoom': {
     slug: 'fc-8d-zoom', coreGround: 'rgb(201,203,211)', name: 'FC-8D Zoom', category: 'Dome IP-Kamera',
-    metaTitle: 'FTronics FC-8D Zoom: 4K Dome-Kamera mit Motorzoom & KI-Suite',
+    metaTitle: 'FTronics FC-8D Zoom: 4K Dome-Kamera mit Motorzoom',
     metaDescription: 'FTronics FC-8D Zoom: 4K Dome IP-Kamera mit motorisiertem 2,8–8-mm-Objektiv, Gesichtserkennung, Perimeterschutz, IP67 und PoE.',
     promise: '4K-Dome mit motorisiertem 2,8–8-mm-Zoom und vollständiger KI-Suite für flexibel geplante Bildausschnitte.',
-    images: { hero: '/fc-8d-zoom-hero.webp', core: '/fc-8d-zoom-core.webp', feature: '/fc-8d-zoom-feature.webp', weather: '/fc-8d-zoom-weather.webp', product: '/fc-8d-zoom-2.png' },
+    images: { hero: '/fc-8d-zoom-hero.webp', core: '/fc-8d-zoom-core.webp', feature: '/fc-8d-zoom-feature.webp', weather: '/fc-8d-zoom-weather.webp', product: '/fc-8d-zoom-2.webp' },
     alts: {
       hero: 'Die FTronics FC-8D Zoom ist an einem Gewerbegebäude installiert',
       core: 'Nahaufnahme des motorisierten Objektivs der FC-8D Zoom',
@@ -56,7 +56,7 @@ export const productPageData = {
     metaTitle: 'FTronics FC-6Z Mini: 6 MP Mini-PTZ mit 3× Zoom & KI-Suite',
     metaDescription: 'FTronics FC-6Z Mini: kompakte 6-MP-Mini-PTZ-Dome-Kamera mit 3× optischem Zoom, IK10, Gesichtserkennung, IP67 und PoE.',
     promise: 'Kompakte 6-MP-Mini-PTZ mit 3× optischem Zoom, IK10 und vollständiger KI-Suite.',
-    images: { hero: '/fc-6z-mini-hero.webp', core: '/fc-6z-mini-core.webp', feature: '/fc-6z-mini-feature.webp', weather: '/fc-6z-mini-weather.webp', product: '/fc-6z-mini-2.png' },
+    images: { hero: '/fc-6z-mini-hero.webp', core: '/fc-6z-mini-core.webp', feature: '/fc-6z-mini-feature.webp', weather: '/fc-6z-mini-weather.webp', product: '/fc-6z-mini-2.webp' },
     alts: { hero: 'Die FC-6Z Mini ist in einem modernen Eingangsbereich installiert', core: 'Nahaufnahme der PTZ-Optik und des Metallgehäuses', feature: 'Überwachter Büroempfang bei Nacht', weather: 'Die FC-6Z Mini überwacht einen regennassen Eingang', product: 'FTronics FC-6Z Mini in einer zweiten Produktansicht' },
     proofs: [
       { kind: 'dark', tall: true, img: '/fc-6z-mini-feature.webp', pos: 'left center', alt: '', h: 'Volle KI im kleinen Dome.', p: 'Gesichter, Personen, Fahrzeuge, Linien und Perimeterbereiche werden direkt in der Kamera analysiert.' },
@@ -89,10 +89,10 @@ export const productPageData = {
 
   'fb-8a-pro': {
     slug: 'fb-8a-pro', coreGround: 'rgb(214,215,219)', name: 'FB-8A Pro', category: 'Bullet IP-Kamera',
-    metaTitle: 'FTronics FB-8A Pro: 4K Bullet-Kamera mit vollständiger KI-Suite',
+    metaTitle: 'FTronics FB-8A Pro: 4K Bullet-Kamera mit KI-Suite',
     metaDescription: 'FTronics FB-8A Pro: 4K Bullet IP-Kamera mit Sony IMX415, Gesichts-, Personen-, Fahrzeug- und Haustiererkennung, IP67 und PoE.',
     promise: '4K-Bullet-Kamera mit vollständiger KI-Suite für Gesicht, Person, Fahrzeug, Haustier, Linie und Perimeter.',
-    images: { hero: '/fb-8a-pro-hero.webp', core: '/fb-8a-pro-core.webp', feature: '/fb-8a-pro-feature.webp', weather: '/fb-8a-pro-weather.webp', product: '/fb-8a-pro-main.png' },
+    images: { hero: '/fb-8a-pro-hero.webp', core: '/fb-8a-pro-core.webp', feature: '/fb-8a-pro-feature.webp', weather: '/fb-8a-pro-weather.webp', product: '/fb-8a-pro-main.webp' },
     alts: { hero: 'Die FB-8A Pro ist an einer Gewerbehalle installiert', core: 'Nahaufnahme der Optik und IR-LEDs der FB-8A Pro', feature: 'Überwachter Betriebshof mit Person Fahrzeug und Hund', weather: 'Die FB-8A Pro arbeitet bei starkem Regen', product: 'FTronics FB-8A Pro Produktansicht' },
     proofs: [
       { kind: 'dark', tall: true, img: '/fb-8a-pro-feature.webp', alt: '', h: 'Sechs Analysefunktionen.', p: 'Gesicht, Person, Fahrzeug und Haustier werden mit Linien- und Perimeterregeln kombiniert.' },
@@ -125,10 +125,10 @@ export const productPageData = {
 
   'fb-8a-max': {
     slug: 'fb-8a-max', coreGround: 'rgb(203,203,203)', name: 'FB-8A Max', category: 'Bullet IP-Kamera',
-    metaTitle: 'FTronics FB-8A Max: 4K Bullet-Kamera mit aktiver Abschreckung',
+    metaTitle: 'FTronics FB-8A Max: 4K Bullet-Kamera mit Abschreckung',
     metaDescription: 'FTronics FB-8A Max: 4K Bullet IP-Kamera mit Dual-Light, Rot-Blau-LEDs, Lautsprecher, vollständiger KI-Suite, IP67 und 100 dB WDR.',
     promise: '4K-Bullet-Kamera mit vollständiger KI-Suite, Dual-Light, Rot-Blau-Warnlicht und integrierter Sprachsirene.',
-    images: { hero: '/fb-8a-max-hero.webp', core: '/fb-8a-max-core.webp', feature: '/fb-8a-max-feature.webp', weather: '/fb-8a-max-weather.webp', product: '/fb-8a-max-2.png' },
+    images: { hero: '/fb-8a-max-hero.webp', core: '/fb-8a-max-core.webp', feature: '/fb-8a-max-feature.webp', weather: '/fb-8a-max-weather.webp', product: '/fb-8a-max-2.webp' },
     alts: { hero: 'Die FB-8A Max ist an einem Fahrzeugtor installiert', core: 'Nahaufnahme der Dual-Light- und Warnlicht-Einheit', feature: 'Aktive Abschreckung an einem nächtlichen Lagertor', weather: 'Die FB-8A Max arbeitet bei Regen an einer Zufahrt', product: 'FTronics FB-8A Max in einer zweiten Produktansicht' },
     proofs: [
       { kind: 'dark', tall: true, img: '/fb-8a-max-feature.webp', pos: 'left center', alt: '', h: 'Erkennen und aktiv reagieren.', p: 'Analyseereignisse können Rot-Blau-Blitz, Weißlicht, Sprachsirene, Aufnahme oder Schnappschuss auslösen.' },
@@ -164,7 +164,7 @@ export const productPageData = {
     metaTitle: 'FTronics FB-8B: 4K Bullet-Kamera mit 30 fps & Sony IMX415',
     metaDescription: 'FTronics FB-8B: 4K Bullet IP-Kamera mit 30 fps, Sony IMX415, Personen- und Fahrzeugerkennung, 120 dB WDR, IP67 und IR bis 30 m.',
     promise: '4K mit 30 Bildern pro Sekunde, Sony IMX415 und gezielter Personen- und Fahrzeugerkennung für lange Außenachsen.',
-    images: { hero: '/fb-8b-hero.webp', core: '/fb-8b-core.webp', feature: '/fb-8b-feature.webp', weather: '/fb-8b-weather.webp', product: '/fb-8b-2.png' },
+    images: { hero: '/fb-8b-hero.webp', core: '/fb-8b-core.webp', feature: '/fb-8b-feature.webp', weather: '/fb-8b-weather.webp', product: '/fb-8b-2.webp' },
     alts: { hero: 'Die FB-8B ist an einer langen Lagerfassade installiert', core: 'Nahaufnahme der Optik und IR-LEDs der FB-8B', feature: 'Fahrzeug und Person in einer nächtlichen Zufahrt', weather: 'Die FB-8B überwacht bei Regen eine Ladespur', product: 'FTronics FB-8B in einer zweiten Produktansicht' },
     proofs: [
       { kind: 'dark', tall: true, img: '/fb-8b-feature.webp', pos: 'left center', alt: '', h: '4K mit 30 fps.', p: 'Schnelle Bewegungen in Zufahrten und Ladezonen werden mit voller 8-MP-Auflösung flüssig erfasst.' },

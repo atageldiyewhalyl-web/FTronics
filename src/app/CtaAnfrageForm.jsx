@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Button, Field } from '@/components/ui'
+import { submitLead } from '@/lib/lead-submit'
 
 /* ============================================================
    CTA-Anfrageformular — the closing call to action's own form.
@@ -51,6 +52,8 @@ const empty = {
 export function CtaAnfrageForm() {
   const [step, setStep] = useState(1)
   const [sent, setSent] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [error, setError] = useState('')
   const [data, setData] = useState(empty)
 
   const set = (key) => (e) => setData((d) => ({ ...d, [key]: e.target.value }))
@@ -70,10 +73,31 @@ export function CtaAnfrageForm() {
   return (
     <form
       className="ft-cta-form-panel"
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault()
-        if (step < 2) setStep(2)
-        else setSent(true)
+        setError('')
+        if (step < 2) {
+          setStep(2)
+          return
+        }
+
+        setSending(true)
+        try {
+          await submitLead({
+            fullName: data.name,
+            email: data.email,
+            phone: data.telefon,
+            subject: data.betreff,
+            customerType: data.kundentyp,
+            message: data.nachricht,
+            formName: 'Startseite CTA',
+          })
+          setSent(true)
+        } catch {
+          setError('Die Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut oder rufen Sie uns direkt an.')
+        } finally {
+          setSending(false)
+        }
       }}
     >
       {/* Progress. Same two marks the configurator uses — the rail's name on
@@ -181,8 +205,13 @@ export function CtaAnfrageForm() {
             Zurück
           </Button>
         )}
-        <Button type="submit">{step === 1 ? 'Weiter' : 'Anfrage senden'}</Button>
+        <Button type="submit" disabled={sending}>{sending ? 'Wird gesendet...' : step === 1 ? 'Weiter' : 'Anfrage senden'}</Button>
       </div>
+      {error && (
+        <p role="alert" style={{ color: 'var(--ft-red-brand)', fontSize: 'var(--t-body-sm)', margin: '1rem 0 0' }}>
+          {error}
+        </p>
+      )}
     </form>
   )
 }

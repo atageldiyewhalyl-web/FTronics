@@ -2,6 +2,7 @@ import { Button, Chip, CtaFlatlay, SectionHead } from '@/components/ui'
 import { ScrollGallery } from '@/components/scroll'
 import { cta, jsonLd, breadcrumbJsonLd } from '@/lib/site'
 import { CtaAnfrageForm } from '../CtaAnfrageForm'
+import { WhatsAppButton } from '@/components/WhatsAppButton'
 
 export const metadata = {
   /* Root layout appends " | FT Sicherheitstechnik" via the title template. */
@@ -191,6 +192,9 @@ export default function Support() {
                 Unser Support-Team steht Ihnen bei allen Fragen rund um Installation und Bedienung
                 zur Seite.
               </p>
+              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: '1.5rem' }}>
+                <WhatsAppButton />
+              </div>
             </div>
             <CtaAnfrageForm />
           </div>

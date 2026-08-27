@@ -1,6 +1,7 @@
 import { Button, Card, CtaFlatlay, SectionHead, Placeholder } from '@/components/ui'
 import { cta, jsonLd, breadcrumbJsonLd } from '@/lib/site'
 import { CtaAnfrageForm } from '../CtaAnfrageForm'
+import { WhatsAppButton } from '@/components/WhatsAppButton'
 
 export const metadata = {
   /* The root layout appends " | FT Sicherheitstechnik" via title.template. */
@@ -259,6 +260,9 @@ export default function UeberUns() {
                 Vereinbaren Sie ein unverbindliches Erstgespräch. Wir freuen uns darauf, Sie
                 persönlich zu beraten.
               </p>
+              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: '1.5rem' }}>
+                <WhatsAppButton />
+              </div>
             </div>
             <CtaAnfrageForm />
           </div>

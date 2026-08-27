@@ -1,73 +1,21 @@
-import { Button, Chip, CtaFlatlay, SectionHead, Placeholder } from '@/components/ui'
+import Image from 'next/image'
+import Link from 'next/link'
+import { Chip, CtaFlatlay, SectionHead } from '@/components/ui'
 import { cta, jsonLd, breadcrumbJsonLd } from '@/lib/site'
 import { ReadingProgress } from './ReadingProgress'
 import { CtaAnfrageForm } from '../CtaAnfrageForm'
+import { WhatsAppButton } from '@/components/WhatsAppButton'
+import { getAllPosts } from '@/lib/ratgeber-posts'
 
 export const metadata = {
-  title: 'Ratgeber: Tipps zu Alarmanlagen & Sicherheit',
+  title: 'Ratgeber Sicherheitstechnik',
   description:
-    'Expertenwissen zu Sicherheitstechnik: Ratgeber-Artikel zu Alarmanlagen, Videoüberwachung, Einbruchschutz & Smart Home. Kostenlos lesen!',
+    'Fachartikel zu Alarmanlagen, Videoüberwachung, Zutrittskontrolle, Brandschutz und Sicherheitstechnik im Rhein-Neckar-Raum.',
   alternates: { canonical: '/ratgeber' },
 }
 
-/* ---------------- section data ---------------- */
-
-/* Seven article teasers. The live site has no article detail pages yet —
-   the artboard links every card to "#", so the CTA stays inert. */
-const articles = [
-  {
-    cat: 'Alarmanlagen & Einbruchschutz',
-    title: 'Einbruchschutz im Urlaub 2026: Was die Statistik in Mannheim zeigt und wie Technik hilft',
-    teaser:
-      'Aktuelle Zahlen aus Mannheim, Checkliste sowie Tipps zu Alarmanlage, Videoüberwachung und KfW-Förderung für ein sicheres Zuhause.',
-    img: 'Artikelbild: Einbruchschutz Urlaub',
-  },
-  {
-    cat: 'Einbruchschutz',
-    title: '5 Tipps gegen Einbruch: so schützen Sie Ihr Zuhause',
-    teaser:
-      'Laut Polizeistatistik scheitern über 45 % aller Einbruchsversuche an wirksamer Sicherheitstechnik. Erfahren Sie, welche Maßnahmen Ihr Zuhause effektiv schützen.',
-    img: 'Artikelbild: 5 Tipps gegen Einbruch',
-  },
-  {
-    cat: 'Videoüberwachung',
-    title: 'Welche Kamera für welchen Einsatz? Ein Überblick',
-    teaser:
-      'Dome, Bullet oder PTZ: jeder Kameratyp hat seine Stärken. Wir erklären die Unterschiede, typische Einsatzbereiche und worauf Sie achten sollten.',
-    img: 'Artikelbild: Kameratypen',
-  },
-  {
-    cat: 'Recht & Datenschutz',
-    title: 'DSGVO und Videoüberwachung: was ist erlaubt?',
-    teaser:
-      'Videoüberwachung unterliegt strengen Datenschutzregeln. Wir erläutern die rechtlichen Anforderungen für private und gewerbliche Videoüberwachung in Deutschland.',
-    img: 'Artikelbild: DSGVO',
-  },
-  {
-    cat: 'Smart Home',
-    title: 'Smart Home Sicherheit: Alarmanlagen mit App-Steuerung',
-    teaser:
-      'Moderne Alarmsysteme lassen sich per Smartphone steuern und in bestehende Smart-Home-Systeme integrieren. So machen Automatisierungen Ihren Alltag sicherer.',
-    img: 'Artikelbild: Smart Home',
-  },
-  {
-    cat: 'Brandschutz',
-    title: 'Brandschutz für Privathaushalte: Pflichten und Empfehlungen',
-    teaser:
-      'Die Rauchmelderpflicht gilt in allen Bundesländern, doch welche Geräte sind empfehlenswert? Wir erklären Vorgaben, Montageort und vernetzte Systeme.',
-    img: 'Artikelbild: Brandschutz',
-  },
-  {
-    cat: 'Technologie',
-    title: 'KI in der Videoüberwachung: Person- und Fahrzeugerkennung',
-    teaser:
-      'Intelligente Kameraanalyse erkennt Personen und Fahrzeuge in Echtzeit und reduziert Fehlalarme um bis zu 95 %. So funktioniert KI-basierte Videoüberwachung.',
-    img: 'Artikelbild: KI Videoüberwachung',
-  },
-]
-
-/* .ft-card gives background, border, radius and the hover lift; the teaser
-   card only overrides the padding so the 16:9 image can sit flush. */
+/* .ft-card gives background, border, radius and the hover lift; the teaser card
+   only overrides the padding so the 16:9 image can sit flush. */
 const teaserCard = {
   padding: 0,
   overflow: 'hidden',
@@ -85,6 +33,8 @@ const readMore = {
 /* ---------------- page ---------------- */
 
 export default function Ratgeber() {
+  const articles = getAllPosts()
+
   return (
     <>
       <script
@@ -112,8 +62,8 @@ export default function Ratgeber() {
                 color: 'var(--fg-secondary)', margin: '1rem 0 0',
               }}
             >
-              Praktische Tipps, Expertenwissen und aktuelle Informationen rund um Einbruchschutz,
-              Videoüberwachung, Smart Home und Brandschutz, direkt von unseren Fachberatern.
+              Fachartikel für Betriebe: von Einbruchschutz und Videoüberwachung bis
+              Zutrittskontrolle, Brandschutz und regionaler Planung rund um Mannheim.
             </p>
           </div>
         </div>
@@ -124,8 +74,8 @@ export default function Ratgeber() {
         <div className="ft-shell">
           <SectionHead
             eyebrow="Ratgeber & Fachartikel"
-            title="Aktuelles aus der Sicherheitsbranche"
-            lead="Von Einbruchschutz bis KI-Technologie: unsere Fachartikel helfen Ihnen, die richtige Entscheidung für Ihre Sicherheit zu treffen."
+            title="Sicherheitstechnik im Betrieb richtig entscheiden"
+            lead="Praxisnah, regional und ohne Pauschalversprechen: diese Ratgeber helfen bei Planung, Pflichten und Systemauswahl."
           />
           <div
             data-rev-group
@@ -134,22 +84,33 @@ export default function Ratgeber() {
               gap: '1.25rem', marginTop: '3rem',
             }}
           >
-            {articles.map((a) => (
-              <div data-rev key={a.title}>
+            {articles.map((a, index) => (
+              <div data-rev key={a.slug}>
                 <article className="ft-card" style={teaserCard}>
-                  <div style={{ borderBottom: '1px solid var(--border)' }}>
-                    <Placeholder ratio="16 / 9" rounded="0" label={a.img} />
-                  </div>
+                  <Link href={a.path} className="ft-ratgeber-card-img">
+                    <Image
+                      src={a.image.src}
+                      alt={a.image.alt}
+                      width={a.image.width}
+                      height={a.image.height}
+                      sizes="(max-width: 900px) 100vw, 380px"
+                      priority={index === 0}
+                    />
+                  </Link>
                   <div
                     style={{
                       padding: '1.6rem', display: 'flex', flexDirection: 'column',
                       gap: 10, flex: 1,
                     }}
                   >
-                    <Chip style={{ alignSelf: 'flex-start' }}>{a.cat}</Chip>
-                    <h4 style={{ margin: 0 }}>{a.title}</h4>
-                    <p style={{ flex: 1 }}>{a.teaser}</p>
-                    <a href="#" style={readMore}>Weiterlesen →</a>
+                    <Chip style={{ alignSelf: 'flex-start' }}>{a.category}</Chip>
+                    <h4 style={{ margin: 0 }}>
+                      <Link href={a.path} style={{ color: 'inherit', textDecoration: 'none' }}>
+                        {a.title}
+                      </Link>
+                    </h4>
+                    <p style={{ flex: 1 }}>{a.excerpt}</p>
+                    <Link href={a.path} style={readMore}>Weiterlesen →</Link>
                   </div>
                 </article>
               </div>
@@ -176,6 +137,9 @@ export default function Ratgeber() {
                 Sie haben Fragen zu einem unserer Themen oder wünschen eine persönliche Beratung?
                 Unser Expertenteam steht Ihnen jederzeit zur Verfügung.
               </p>
+              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: '1.5rem' }}>
+                <WhatsAppButton />
+              </div>
             </div>
             <CtaAnfrageForm />
           </div>

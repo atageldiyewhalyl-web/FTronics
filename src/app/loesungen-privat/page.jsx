@@ -1,12 +1,12 @@
 import { Button } from '@/components/ui'
 import { Plan } from '@/components/plan'
 import { TrustMarks } from '@/components/trust-marks'
-import { cta, jsonLd, breadcrumbJsonLd } from '@/lib/site'
+import { cta, jsonLd, breadcrumbJsonLd, servicesJsonLd } from '@/lib/site'
 
 export const metadata = {
   /* `absolute` because the root layout's title template would otherwise
      append a second " | FT Sicherheitstechnik" to the verified title. */
-  title: { absolute: 'Alarmanlagen & Sicherheit für Privat | FT Sicherheitstechnik Mannheim' },
+  title: { absolute: 'Alarmanlagen für Zuhause in Mannheim' },
   description:
     'Professionelle Sicherheitslösungen für Ihr Zuhause in Mannheim & Rhein-Neckar: Alarmanlagen, Videoüberwachung, Smart Home & Brandwarnanlagen. Kostenlose Beratung!',
   alternates: { canonical: '/loesungen-privat' },
@@ -101,6 +101,14 @@ const solutions = [
   },
 ]
 
+/* Service schema for the five disciplines, derived from the same list copy
+   rather than written twice — the first bullet of each block is a real,
+   specific sentence about what the service covers, so it doubles as the
+   Service description. */
+const services = servicesJsonLd(
+  solutions.map((s) => ({ name: s.h, description: s.li[0], href: s.href }))
+)
+
 /* Page-scoped CSS: the alternating media/copy row. Lives here rather than in
    globals.css because this page is the only one that uses it (the Gewerbe
    sibling lays its disciplines out as Cards) — and the min-width flip cannot
@@ -159,6 +167,7 @@ export default function LoesungenPrivat() {
           ])
         )}
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(services)} />
       <style href="loesungen-privat" precedence="default">{css}</style>
 
       {/* 8.1 Hero — the page's own screen. Centred, and held to one viewport

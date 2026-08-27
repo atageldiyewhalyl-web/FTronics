@@ -6,6 +6,9 @@ node_modules/
 out/
 build/
 
+# Supabase local metadata
+supabase/.temp/
+
 # Environment
 .env
 .env.local

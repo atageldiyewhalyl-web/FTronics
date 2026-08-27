@@ -7,7 +7,7 @@ import { KonfiguratorForm } from './KonfiguratorForm'
 export const metadata = {
   /* `absolute` because the root layout's title template would otherwise
      append a second " | FT Sicherheitstechnik" to the verified title. */
-  title: { absolute: 'Sicherheitssystem-Konfigurator | FT Sicherheitstechnik Mannheim' },
+  title: { absolute: 'Sicherheitssystem-Konfigurator | FT Sicherheitstechnik' },
   description:
     'Konfigurieren Sie Ihr individuelles Sicherheitssystem online: Alarmanlagen, Videoüberwachung, Zutrittskontrolle. Kostenloses Angebot in Minuten. FT Sicherheitstechnik.',
   alternates: { canonical: '/konfigurator' },

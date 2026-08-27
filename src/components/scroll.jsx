@@ -193,7 +193,15 @@ export function PinStack({ panels, children }) {
 
   return (
     <div className="pin-stack" ref={stackRef} style={{ height: `${(n + 1) * 100}vh` }}>
-      <div className="pin-stage">{children}</div>
+      <div className="pin-stage">
+        {children}
+        <span className="pin-swipe-cue" aria-hidden="true">
+          <span className="ft-swipe-cue-mark">
+            <span />
+            <span />
+          </span>
+        </span>
+      </div>
     </div>
   )
 }

@@ -1,0 +1,53 @@
+# ============================================================
+# Legacy .html → clean URL redirects
+# GENERATED FILE — do not edit by hand.
+# Source: src/lib/redirects.mjs   Regenerate: npm run redirects:htaccess
+# ============================================================
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  RewriteRule ^index\.html$ / [R=301,L]
+  RewriteRule ^agb\.html$ /agb [R=301,L]
+  RewriteRule ^datenschutz\.html$ /datenschutz [R=301,L]
+  RewriteRule ^faq\.html$ /faq [R=301,L]
+  RewriteRule ^impressum\.html$ /impressum [R=301,L]
+  RewriteRule ^karriere\.html$ /karriere [R=301,L]
+  RewriteRule ^konfigurator\.html$ /konfigurator [R=301,L]
+  RewriteRule ^kontakt\.html$ /kontakt [R=301,L]
+  RewriteRule ^loesungen-gewerbe\.html$ /loesungen-gewerbe [R=301,L]
+  RewriteRule ^loesungen-privat\.html$ /loesungen-privat [R=301,L]
+  RewriteRule ^partner\.html$ /partner [R=301,L]
+  RewriteRule ^produkte\.html$ /produkte [R=301,L]
+  RewriteRule ^ratgeber\.html$ /ratgeber [R=301,L]
+  RewriteRule ^support\.html$ /support [R=301,L]
+  RewriteRule ^ueber-uns\.html$ /ueber-uns [R=301,L]
+  RewriteRule ^produkt-detail-fb-8a-max\.html$ /produkte/fb-8a-max [R=301,L]
+  RewriteRule ^produkt-detail-fb-8b\.html$ /produkte/fb-8b [R=301,L]
+  RewriteRule ^produkt-detail-fc-6z-mini\.html$ /produkte/fc-6z-mini [R=301,L]
+  RewriteRule ^produkt-detail-fc-8d\.html$ /produkte/fc-8d [R=301,L]
+  RewriteRule ^produkt-detail-fc-8d-zoom\.html$ /produkte/fc-8d-zoom [R=301,L]
+  RewriteRule ^produkt-detail-fe-6l\.html$ /produkte/fe-6l [R=301,L]
+  RewriteRule ^produkt-detail-fn-8\.html$ /produkte/fn-8 [R=301,L]
+  RewriteRule ^produkt-detail-fn-16\.html$ /produkte/fn-16 [R=301,L]
+  RewriteRule ^produkt-detail-fn-32\.html$ /produkte/fn-32 [R=301,L]
+  RewriteRule ^produkt-detail-fn-64-pro\.html$ /produkte/fn-64-pro [R=301,L]
+  RewriteRule ^produkt-detail-fp-8s-25x\.html$ /produkte/fp-8s-25x [R=301,L]
+  RewriteRule ^produkt-detail-fp-8t-20x\.html$ /produkte/fp-8t-20x [R=301,L]
+  RewriteRule ^produkt-detail-fr-8x\.html$ /produkte/fr-8x [R=301,L]
+  RewriteRule ^produkt-detail-fs-30\.html$ /produkte/fs-30 [R=301,L]
+  RewriteRule ^produkt-detail-ft-8c-pro\.html$ /produkte/ft-8c-pro [R=301,L]
+  RewriteRule ^produkt-detail-ft-8p-dual\.html$ /produkte/ft-8p-dual [R=301,L]
+  RewriteRule ^produkt-detail-fb8a\.html$ /produkte/fb-8a-pro [R=301,L]
+  RewriteRule ^produkt-detail-fc8d\.html$ /produkte/fc-8d-pro [R=301,L]
+  RewriteRule ^alarmanlagen-mannheim\.html$ /loesungen-gewerbe [R=301,L]
+  RewriteRule ^videoueberwachung-mannheim\.html$ /loesungen-gewerbe [R=301,L]
+  RewriteRule ^sicherheitstechnik-heidelberg\.html$ /ratgeber/sicherheitstechnik-rhein-neckar-einzugsgebiet [R=301,L]
+  RewriteRule ^sicherheitstechnik-ludwigshafen\.html$ /ratgeber/sicherheitstechnik-rhein-neckar-einzugsgebiet [R=301,L]
+  RewriteRule ^referenzen\.html$ /ueber-uns [R=301,L]
+
+  # Safety net: any other legacy .html URL loses the extension.
+  # Product detail pages are excluded — they are all listed above.
+  RewriteCond %{REQUEST_URI} !^/produkt-detail-
+  RewriteRule ^(.+)\.html$ /$1 [R=301,L]
+</IfModule>

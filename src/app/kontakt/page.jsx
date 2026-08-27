@@ -2,7 +2,7 @@ import { site, jsonLd, breadcrumbJsonLd } from '@/lib/site'
 import { KontaktForm } from './KontaktForm'
 
 export const metadata = {
-  title: 'Kontakt: Persönliche Beratung & Anfrage',
+  title: 'Kontakt: Beratung anfragen',
   description:
     'Kontakt zu FT Sicherheitstechnik Mannheim: Hafenbahnstraße 15, +49 621 159 647 34, info@ftst.eu. Anfrage senden, Antwort innerhalb von 24 Stunden garantiert.',
   alternates: { canonical: '/kontakt' },

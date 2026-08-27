@@ -1,9 +1,9 @@
 const standardProtocols = 'HTTP(S) / RTSP / FTP / SMTP / DHCP / NTP / RTP / RTMP / P2P / IPv4 / IPv6 / NFS'
 
 function makeProduct(p) {
-  const main = `/${p.slug}-main.${p.mainExt || 'png'}`
-  const hero = `/${p.slug}-hero.jpg`
-  const feature = `/${p.slug}-feature.jpg`
+  const main = `/${p.slug}-main.webp`
+  const hero = `/${p.slug}-hero.webp`
+  const feature = `/${p.slug}-feature.webp`
   const cardImages = [main, feature, hero]
 
   return {
@@ -61,7 +61,7 @@ const recorderNotes = [
 
 export const extendedProductPageData = {
   'ft-8c-pro': makeProduct({
-    slug: 'ft-8c-pro', coreGround: '#fff', name: 'FT-8C Pro', category: 'Turret IP-Kamera', mainExt: 'jpg',
+    slug: 'ft-8c-pro', coreGround: '#fff', name: 'FT-8C Pro', category: 'Turret IP-Kamera',
     /* Tiles 1–3 are shot for their own claims. Tile 0 keeps the derived
        feature photo until a proof for it exists. */
     proofImgs: [undefined, '/ft-8c-pro-proof-core.webp', '/ft-8c-pro-proof-analysis.webp', '/ft-8c-pro-proof-integration.webp'],
@@ -157,14 +157,14 @@ export const extendedProductPageData = {
     proofPos: ['left center'],
     proofImgs: [
       undefined,
-      '/magnific_preserve-the-exact-suppli_O6Z7A81ynm.png',
-      '/magnific_preserve-the-exact-suppli_p8hMa2Uehw.png',
-      '/magnific_preserve-the-exact-suppli_dtapEmUXSL.png',
+      '/magnific_preserve-the-exact-suppli_O6Z7A81ynm.webp',
+      '/magnific_preserve-the-exact-suppli_p8hMa2Uehw.webp',
+      '/magnific_preserve-the-exact-suppli_dtapEmUXSL.webp',
     ],
     cardImgs: [
-      '/magnific_premium-editorial-industr_SyNlYTMUb8.png',
-      '/magnific_premium-editorial-industr_BhCd1OSoQR.png',
-      '/magnific_premium-editorial-industr_yi2JMbBPW9.png',
+      '/magnific_premium-editorial-industr_SyNlYTMUb8.webp',
+      '/magnific_premium-editorial-industr_BhCd1OSoQR.webp',
+      '/magnific_premium-editorial-industr_yi2JMbBPW9.webp',
     ],
     name: 'FP-8T 20X', category: 'PTZ Speed Dome-Kamera',
     metaTitle: 'FTronics FP-8T 20X: 4K PTZ mit 20× Zoom & Auto-Tracking',
@@ -201,14 +201,14 @@ export const extendedProductPageData = {
     slug: 'fp-8s-25x', coreGround: '#fff',
     proofImgs: [
       undefined,
-      '/magnific_preserve-the-exact-suppli_jUOrViMLD0 (1).png',
+      '/magnific_preserve-the-exact-suppli_jUOrViMLD0-1.webp',
       undefined,
-      '/magnific_preserve-the-exact-suppli_ovEX7Pc829 (1).png',
+      '/magnific_preserve-the-exact-suppli_ovEX7Pc829-1.webp',
     ],
     cardImgs: [
-      '/magnific_premium-editorial-industr_4RGy5Tu9Aa.png',
-      '/magnific_premium-editorial-industr_1lwK8zQr4r.png',
-      '/magnific_premium-editorial-industr_ksU5oMG16B.png',
+      '/magnific_premium-editorial-industr_4RGy5Tu9Aa.webp',
+      '/magnific_premium-editorial-industr_1lwK8zQr4r.webp',
+      '/magnific_premium-editorial-industr_ksU5oMG16B.webp',
     ],
     name: 'FP-8S 25X', category: 'PTZ Speed Dome-Kamera',
     metaTitle: 'FTronics FP-8S 25X: kompakte 4K PTZ mit 25× Zoom',
@@ -245,9 +245,9 @@ export const extendedProductPageData = {
     slug: 'fe-6l',
     proofImgs: [
       undefined,
-      '/magnific_preserve-the-exact-suppli_793U5QbJAL (1).png',
-      '/magnific_preserve-the-exact-suppli_rg7kaFsxtc.png',
-      '/magnific_premium-editorial-industr_ksU5oMG16B.png',
+      '/magnific_preserve-the-exact-suppli_793U5QbJAL-1.webp',
+      '/magnific_preserve-the-exact-suppli_rg7kaFsxtc.webp',
+      '/magnific_premium-editorial-industr_ksU5oMG16B.webp',
     ],
     name: 'FE-6L', category: 'Aufzugkamera',
     metaTitle: 'FTronics FE-6L: kompakte 6-MP-Aufzugkamera mit KI',
@@ -280,7 +280,7 @@ export const extendedProductPageData = {
   }),
 
   'fn-8': makeProduct({
-    slug: 'fn-8', coreGround: '#fff', name: 'FN-8', category: '8-Kanal Netzwerk-Videorekorder', mainExt: 'jpg',
+    slug: 'fn-8', coreGround: '#fff', name: 'FN-8', category: '8-Kanal Netzwerk-Videorekorder',
     metaTitle: 'FTronics FN-8: kompakter 8-Kanal 4K NVR mit Ultra 265',
     metaDescription: 'FTronics FN-8 NVR mit 8 IP-Kanälen, 64 Mbps, 4K HDMI, Ultra 265, VCA, Personenzählung und einem SATA-Schacht bis 8 TB.',
     promise: 'Kompakter 8-Kanal-NVR mit 4K-Ausgabe, Ultra-265-Kompression und integrierter Videoanalyse.',
@@ -310,7 +310,7 @@ export const extendedProductPageData = {
   }),
 
   'fn-16': makeProduct({
-    slug: 'fn-16', coreGround: '#fff', name: 'FN-16', category: '16-Kanal Netzwerk-Videorekorder', mainExt: 'jpg',
+    slug: 'fn-16', coreGround: '#fff', name: 'FN-16', category: '16-Kanal Netzwerk-Videorekorder',
     metaTitle: 'FTronics FN-16: 16-Kanal 4K NVR mit 2× SATA',
     metaDescription: 'FTronics FN-16 NVR mit 16 IP-Kanälen, 160 Mbps, 4K HDMI, Ultra 265, VCA, Personenzählung und 2× SATA bis 16 TB gesamt.',
     promise: '16-Kanal-NVR mit 160 Mbps, 4K-Ausgabe, VCA und zwei SATA-Schächten für mittlere Anlagen.',
@@ -341,7 +341,7 @@ export const extendedProductPageData = {
   }),
 
   'fn-32': makeProduct({
-    slug: 'fn-32', coreGround: '#fff', name: 'FN-32', category: '32-Kanal Netzwerk-Videorekorder', mainExt: 'jpg',
+    slug: 'fn-32', coreGround: '#fff', name: 'FN-32', category: '32-Kanal Netzwerk-Videorekorder',
     metaTitle: 'FTronics FN-32: 32-Kanal 4K NVR für große Anlagen',
     metaDescription: 'FTronics FN-32 NVR mit 32 IP-Kanälen, 160 Mbps, 4K HDMI, 16-Kanal-Wiedergabe, Ultra 265, VCA und 2× SATA bis 16 TB.',
     promise: '32-Kanal-NVR mit 4K-Ausgabe, 16-facher Wiedergabe und zentraler VCA für große Anlagen.',
@@ -435,7 +435,7 @@ export const extendedProductPageData = {
 
   'fs-30': makeProduct({
     slug: 'fs-30', name: 'FS-30', category: 'IP-Hornlautsprecher',
-    metaTitle: 'FTronics FS-30: 30-W-IP-Hornlautsprecher mit PoE & NVR-Kopplung',
+    metaTitle: 'FTronics FS-30: 30-W-IP-Hornlautsprecher mit PoE',
     metaDescription: 'FTronics FS-30 IP-Hornlautsprecher mit 30 W, maximal 130 dBSPL, PoE IEEE 802.3at, Zweiwege-Audio, 64 MB Speicher, 100 Audiodateien und IP66.',
     promise: '30-W-IP-Hornlautsprecher für Alarmdurchsagen, Zweiwege-Audio und direkte NVR-Kopplung.',
     highlights: [

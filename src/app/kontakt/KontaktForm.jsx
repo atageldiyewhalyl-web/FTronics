@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Button, Field } from '@/components/ui'
+import { submitLead } from '@/lib/lead-submit'
 
 /* ============================================================
    Anfrage-Formular — the only interactive part of /kontakt.
@@ -24,6 +25,8 @@ const kundentypen = ['Privat', 'Gewerbe']
 
 export function KontaktForm() {
   const [sent, setSent] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [error, setError] = useState('')
 
   if (sent) {
     return (
@@ -45,9 +48,29 @@ export function KontaktForm() {
 
   return (
     <form
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault()
-        setSent(true)
+        setSending(true)
+        setError('')
+
+        const form = new FormData(e.currentTarget)
+
+        try {
+          await submitLead({
+            fullName: String(form.get('name') || ''),
+            email: String(form.get('email') || ''),
+            phone: String(form.get('telefon') || ''),
+            subject: String(form.get('betreff') || ''),
+            customerType: String(form.get('kundentyp') || ''),
+            message: String(form.get('nachricht') || ''),
+            formName: 'Kontaktseite',
+          })
+          setSent(true)
+        } catch {
+          setError('Die Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut oder rufen Sie uns direkt an.')
+        } finally {
+          setSending(false)
+        }
       }}
     >
       <Field label="Name *" name="name" autoComplete="name" required />
@@ -99,7 +122,13 @@ export function KontaktForm() {
         <span>Ich stimme der Verarbeitung meiner Daten gemäß der Datenschutzerklärung zu. *</span>
       </label>
 
-      <Button type="submit">Anfrage senden</Button>
+      {error && (
+        <p role="alert" style={{ color: 'var(--ft-red-brand)', fontSize: 'var(--t-body-sm)', margin: '0 0 1rem' }}>
+          {error}
+        </p>
+      )}
+
+      <Button type="submit" disabled={sending}>{sending ? 'Wird gesendet...' : 'Anfrage senden'}</Button>
     </form>
   )
 }
