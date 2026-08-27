@@ -131,7 +131,20 @@ const css = `
    below 960, copy first — the house is the proof, and proof follows the
    claim. */
 @media(min-width:961px){
-  .ft-plan{
+  /* Scoped to .ft-privat-ground, like every other rule in this file — not
+     decoration, load-bearing. .ft-plan/.ft-plan-img/.ft-hero-copy are the
+     Plan component's own generic classes, shared with /loesungen-gewerbe's
+     very different building layout. React's <style href precedence> resource
+     does not get removed from <head> on client-side navigation away from this
+     page — confirmed live: after a soft nav to Gewerbekunden, this stylesheet
+     is still present alongside the new page's. An unscoped .ft-plan rule here
+     would keep matching Gewerbekunden's Plan (position:absolute + 62% width
+     colliding with its own clear:both + margin-top rule, since CSS cascades
+     per property, not per block) until a full page reload replaces <head>
+     wholesale. Scoping to an ancestor that only exists in THIS page's DOM
+     makes the stale rule inert everywhere else, regardless of whether React
+     ever cleans it up. */
+  .ft-privat-ground .ft-plan{
     position:absolute;inset:0 0 0 auto;
     width:min(62%,1040px);margin:0;
     display:flex;align-items:center;pointer-events:none;
@@ -142,13 +155,13 @@ const css = `
      carries its own soft floor shadow, which stops dead where the file does.
      A short fade over the empty strip in front of the house — 14%, which is
      just short of its left wall — and there is nothing left to see. */
-  .ft-plan-img{
+  .ft-privat-ground .ft-plan-img{
     border-radius:0;
     -webkit-mask-image:linear-gradient(to right,rgba(0,0,0,0) 0,#000 14%);
     mask-image:linear-gradient(to right,rgba(0,0,0,0) 0,#000 14%);
   }
   /* The words keep the left, at a measure rather than a margin. */
-  .ft-hero-copy{max-width:min(46%,540px)}
+  .ft-privat-ground .ft-hero-copy{max-width:min(46%,540px)}
 }
 
 `
