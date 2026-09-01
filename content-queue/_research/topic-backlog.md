@@ -22,7 +22,7 @@ the current SERP, minus cannibalisation risk with existing routes.
 | Kameraplanung Lager & Logistik: Ladezonen, Tore, Rampen | videoüberwachung lagerhalle | commercial | 8.0 | strong FTronics product tie-in (FP-8T 20X, FT-8P Dual) |
 | Analog auf IP migrieren ohne Neuverkabelung (Hybrid-XVR) | analoge kameras auf ip umrüsten | commercial | 7.8 | FR-8X hero product |
 | KI-Videoanalyse: Fehlalarme reduzieren, Ereignisse statt Bewegung | ki videoüberwachung personenerkennung | informational | 7.6 | teaser already promised on /ratgeber |
-| Kameratypen: Dome, Bullet, Turret, PTZ im Vergleich | dome bullet turret unterschied | informational | 7.4 | teaser already promised on /ratgeber; feeds all 20 product pages |
+| Kameratypen: Dome, Bullet, Turret, PTZ im Vergleich | dome bullet turret unterschied | informational | 7.4 | **written:2026-09-02** — slug kameratypen-dome-bullet-turret-ptz-vergleich. Fulfils the /ratgeber teaser; maps every bauform to a FTronics model; feeds the 20 product pages. Links to videoueberwachung-unternehmen-dsgvo (publish together). |
 | Perimeterschutz für Betriebsgelände und Außenlager | perimeterschutz gelände | commercial | 7.2 | |
 | Sicherheitstechnik für Arztpraxen / Kanzleien in Mannheim | alarmanlage praxis | local/commercial | 7.0 | branch-specific spin-off of post #1 |
 | Speicherdauer und Löschkonzept im NVR technisch umsetzen | videoüberwachung speicherdauer einstellen | informational | 6.8 | spin-off of post #2, avoid cannibalising it |

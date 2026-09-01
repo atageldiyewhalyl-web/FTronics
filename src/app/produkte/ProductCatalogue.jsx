@@ -261,6 +261,34 @@ export function ProductCatalogue() {
         </div>
       </div>
 
+      <section style={{ padding: '2rem 0 0' }}>
+        <div
+          className="ft-shell"
+          data-rev
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '1rem',
+            flexWrap: 'wrap',
+            paddingBlock: '1.25rem',
+            borderBlock: '1px solid var(--border)',
+          }}
+        >
+          <div style={{ maxWidth: 660 }}>
+            <p className="ft-eyebrow" style={{ marginBottom: '.45rem' }}>Ratgeber</p>
+            <h3 style={{ margin: 0 }}>Welcher Kameratyp passt zu welchem Punkt?</h3>
+            <p style={{ margin: '.55rem 0 0', color: 'var(--fg-secondary)' }}>
+              Dome, Bullet, Turret und PTZ unterscheiden sich bei Montage, Reichweite,
+              Nachtsicht und Abschreckung.
+            </p>
+          </div>
+          <Button href="/ratgeber/kameratypen-dome-bullet-turret-ptz-vergleich" variant="secondary">
+            Kameratypen vergleichen →
+          </Button>
+        </div>
+      </section>
+
       <section style={{ padding: '3rem 0 clamp(5rem,7vw,8rem)' }}>
         <div className="ft-shell ft-grid ft-prod-grid">
           {products.map((p) => (

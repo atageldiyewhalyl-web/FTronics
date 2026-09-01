@@ -12,6 +12,7 @@ import { site } from './site'
 const posts = [
   'alarmanlage-gewerbe-mannheim',
   'videoueberwachung-unternehmen-dsgvo',
+  'kameratypen-dome-bullet-turret-ptz-vergleich',
   'zutrittskontrolle-unternehmen-systeme-vergleich',
   'brandmeldeanlage-wartung-pflichten-betrieb',
   'sicherheitstechnik-rhein-neckar-einzugsgebiet',
@@ -20,6 +21,7 @@ const posts = [
 const packageBySlug = {
   'alarmanlage-gewerbe-mannheim': '2026-08-27-alarmanlage-gewerbe-mannheim',
   'videoueberwachung-unternehmen-dsgvo': '2026-08-27-videoueberwachung-unternehmen-dsgvo',
+  'kameratypen-dome-bullet-turret-ptz-vergleich': '2026-09-02-kameratypen-dome-bullet-turret-ptz-vergleich',
   'zutrittskontrolle-unternehmen-systeme-vergleich': '2026-08-27-zutrittskontrolle-unternehmen-systeme-vergleich',
   'brandmeldeanlage-wartung-pflichten-betrieb': '2026-08-27-brandmeldeanlage-wartung-pflichten-betrieb',
   'sicherheitstechnik-rhein-neckar-einzugsgebiet': '2026-08-27-sicherheitstechnik-rhein-neckar-einzugsgebiet',
@@ -40,6 +42,12 @@ const images = {
     width: 2400,
     height: 1339,
     alt: 'Videoüberwachung im Unternehmen: Kamera an einem Gewerbeobjekt',
+  },
+  'kameratypen-dome-bullet-turret-ptz-vergleich': {
+    src: '/produkte-hero.webp',
+    width: 2400,
+    height: 1018,
+    alt: 'Kameratypen im Vergleich: Dome, Bullet, Turret und PTZ',
   },
   'zutrittskontrolle-unternehmen-systeme-vergleich': {
     src: '/loesungen-band.webp',
@@ -82,7 +90,7 @@ function stripMarkdown(value) {
 }
 
 function extractFaq(markdown) {
-  const match = markdown.match(/## Häufige Fragen\n([\s\S]*?)(?=\n## |$)/)
+  const match = markdown.match(/## Häufige Fragen[^\n]*\n([\s\S]*?)(?=\n## |$)/)
   if (!match) return []
   const faqs = []
   const re = /\*\*([^*]+)\*\*\n([\s\S]*?)(?=\n\*\*[^*]+\*\*\n|$)/g

@@ -40,7 +40,7 @@ export async function generateMetadata({ params }) {
 
 function inline(text) {
   const parts = []
-  const re = /(\*\*[^*]+\*\*|`[^`]+`|\[[^\]]+\]\([^)]+\))/g
+  const re = /(\*\*[^*]+\*\*|\*[^*\n]+\*|`[^`]+`|\[[^\]]+\]\([^)]+\))/g
   let last = 0
   let match
   while ((match = re.exec(text))) {
@@ -48,6 +48,8 @@ function inline(text) {
     const token = match[0]
     if (token.startsWith('**')) {
       parts.push(<strong key={parts.length}>{token.slice(2, -2)}</strong>)
+    } else if (token.startsWith('*')) {
+      parts.push(<em key={parts.length}>{token.slice(1, -1)}</em>)
     } else if (token.startsWith('`')) {
       parts.push(<code key={parts.length}>{token.slice(1, -1)}</code>)
     } else {
