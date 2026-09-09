@@ -1,6 +1,6 @@
 import { Button, Chip, CtaFlatlay, SectionHead } from '@/components/ui'
 import { ScrollGallery } from '@/components/scroll'
-import { cta, jsonLd, breadcrumbJsonLd } from '@/lib/site'
+import { jsonLd, breadcrumbJsonLd } from '@/lib/site'
 import { CtaAnfrageForm } from '../CtaAnfrageForm'
 import { WhatsAppButton } from '@/components/WhatsAppButton'
 
@@ -25,23 +25,45 @@ const guardStationFeatures = [
   'Verwaltung von bis zu 50 Benutzern',
 ]
 
-/* The installer binaries are not part of the handoff — the artboard links
-   both download buttons to "#", so the CTA stays inert until assets exist. */
+const guardStationBlob = 'https://lc0vcpr1ftmj8gtl.public.blob.vercel-storage.com/downloads'
+
 const downloads = [
-  ['Guard Station für Windows', '.exe · Win 10/11'],
-  ['Guard Station für Mac', '.pkg · macOS 11+'],
+  ['Guard Station für Windows', '.exe · Win 10/11', `${guardStationBlob}/guard-station-windows.exe`],
+  ['Guard Station für Mac', '.pkg · macOS 11+', `${guardStationBlob}/guard-station-mac.pkg`],
 ]
 
 const tutorials = [
-  ['Guard Station', 'Cloud-Anmeldung'],
-  ['Guard Station', 'Aufnahmen anschauen'],
-  ['Guard Viewer App', 'Zeiteinstellung'],
-  ['Guard Viewer App', 'Videos abspielen'],
-  ['Guard Viewer App', 'Push-Benachrichtigung aktivieren'],
-  ['Guard Viewer App', 'Meldungen löschen'],
-  ['Türsprechanlage', 'Türsprechanlage in App einlernen'],
-  ['Türsprechanlage', 'Push-Benachrichtigung aktivieren (DMSS)'],
+  {
+    category: 'Guard Station',
+    title: 'Cloud-Anmeldung',
+    description: 'Konto verbinden und Ihre Anlage für sicheren Fernzugriff vorbereiten.',
+    href: 'https://www.youtube.com/watch?v=JTx29pUpL3k',
+    thumbnail: 'https://i.ytimg.com/vi/JTx29pUpL3k/hqdefault.jpg',
+  },
+  {
+    category: 'Guard Station',
+    title: 'Aufnahmen anschauen',
+    description: 'Gespeicherte Ereignisse finden, Zeitleiste lesen und relevante Clips prüfen.',
+    href: 'https://www.youtube.com/watch?v=LrZnw9JI20E',
+    thumbnail: 'https://i.ytimg.com/vi/LrZnw9JI20E/hqdefault.jpg',
+  },
+  {
+    category: 'Guard Viewer App',
+    title: 'Zeiteinstellung',
+    description: 'Datum und Uhrzeit in der App kontrollieren, damit Aufnahmen sauber zugeordnet werden.',
+    href: 'https://www.youtube.com/shorts/N_KOSwgt4_g',
+    thumbnail: 'https://i.ytimg.com/vi/N_KOSwgt4_g/hq2.jpg',
+  },
 ]
+
+const quickHelp = [
+  ['01', 'Video ansehen', 'Viele Bedienfragen lassen sich mit den Akademie-Videos direkt lösen.'],
+  ['02', 'Gerätedaten bereithalten', 'Notieren Sie Kameraname, Standort und eine kurze Fehlerbeschreibung.'],
+  ['03', 'Support kontaktieren', 'Schreiben Sie uns per WhatsApp, damit wir gezielt nachfassen können.'],
+]
+
+const youtubeChannel = 'https://www.youtube.com/@ftronics2673'
+const anydeskDownload = 'https://anydesk.com/de/downloads'
 
 const panel = {
   background: 'var(--bg-card)',
@@ -106,7 +128,7 @@ export default function Support() {
               gap: '1.25rem', marginTop: '3rem',
             }}
           >
-            {downloads.map(([name, format]) => (
+            {downloads.map(([name, format, href]) => (
               <div
                 data-rev
                 key={name}
@@ -124,7 +146,7 @@ export default function Support() {
                 <ul className="ft-list" style={{ margin: '0 0 1.5rem', gap: 7, flex: 1 }}>
                   {guardStationFeatures.map((f) => <li key={f}>{f}</li>)}
                 </ul>
-                <Button variant="secondary" href="#">Guard Station herunterladen</Button>
+                <Button variant="secondary" href={href} download>Guard Station herunterladen</Button>
               </div>
             ))}
           </div>
@@ -146,7 +168,33 @@ export default function Support() {
                 System.
               </p>
             </div>
-            <Button href="#">AnyDesk herunterladen</Button>
+            <Button href={anydeskDownload} target="_blank" rel="noopener noreferrer">
+              AnyDesk herunterladen
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      <section className="ft-section ft-section--raised" style={{ marginTop: 'clamp(4rem,6vw,6rem)' }}>
+        <div className="ft-shell">
+          <SectionHead
+            eyebrow="Schnelle Hilfe"
+            title="So kommen Sie am schnellsten zur Lösung"
+            lead="Starten Sie mit dem passenden Tutorial. Wenn etwas offen bleibt, helfen wir mit genau den Informationen weiter, die unsere Techniker brauchen."
+          />
+
+          <div
+            data-rev-group
+            className="ft-grid ft-grid--auto-sm"
+            style={{ marginTop: '2.5rem' }}
+          >
+            {quickHelp.map(([step, title, text]) => (
+              <article key={step} data-rev className="ft-card ft-card--flat">
+                <Chip>{step}</Chip>
+                <h4 style={{ marginTop: '1rem' }}>{title}</h4>
+                <p>{text}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
@@ -156,26 +204,110 @@ export default function Support() {
         <div className="ft-shell">
           <SectionHead
             eyebrow="FTronics Akademie"
-            title="Video-Tutorials"
-            lead="Schritt-für-Schritt-Anleitungen für Ihre Sicherheitstechnik, direkt von unseren Experten."
+            title="Video-Tutorials direkt auf YouTube"
+            lead="Schritt-für-Schritt-Anleitungen für Guard Station und die Guard Viewer App, direkt aus dem offiziellen FTronics-Kanal."
           />
 
           <div data-rev style={{ marginTop: '2.5rem' }}>
-            <ScrollGallery label="Video-Tutorials" itemWidth={320}>
-              {tutorials.map(([cat, title]) => (
+            <ScrollGallery
+              label="Video-Tutorials"
+              itemWidth={360}
+              paddles={false}
+              actions={
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  href={youtubeChannel}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  YouTube-Kanal öffnen
+                </Button>
+              }
+            >
+              {tutorials.map((video) => (
                 <article
-                  key={title}
+                  key={video.href}
                   style={{
-                    ...panel, padding: '1.6rem', display: 'flex', flexDirection: 'column',
-                    gap: 10, minHeight: 150,
+                    ...panel, overflow: 'hidden', display: 'flex', flexDirection: 'column',
+                    minHeight: 430,
                   }}
                 >
-                  <Chip style={{ alignSelf: 'flex-start' }}>{cat}</Chip>
-                  <h4 style={{ margin: 0, flex: 1 }}>{title}</h4>
-                  <a href="#" style={tutorialLink}>Tutorial ansehen →</a>
+                  <a
+                    href={video.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${video.title} auf YouTube ansehen`}
+                    style={{
+                      position: 'relative', display: 'block', aspectRatio: '16 / 10',
+                      background: 'var(--bg-raised)', overflow: 'hidden',
+                    }}
+                  >
+                    <img
+                      src={video.thumbnail}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                    />
+                    <span
+                      aria-hidden="true"
+                      style={{
+                        position: 'absolute', inset: 0, display: 'grid', placeItems: 'center',
+                        background: 'linear-gradient(to top, rgba(10,12,14,.35), rgba(10,12,14,.05))',
+                      }}
+                    >
+                      <span
+                        style={{
+                          width: 58, height: 58, borderRadius: '50%',
+                          background: 'rgba(255,255,255,.92)', color: 'var(--ft-red-brand)',
+                          display: 'grid', placeItems: 'center', boxShadow: '0 12px 36px rgba(10,12,14,.18)',
+                          fontSize: 22, lineHeight: 1, paddingLeft: 4,
+                        }}
+                      >
+                        ▶
+                      </span>
+                    </span>
+                  </a>
+                  <div style={{ padding: '1.6rem', display: 'flex', flexDirection: 'column', gap: 10, flex: 1 }}>
+                    <Chip style={{ alignSelf: 'flex-start' }}>{video.category}</Chip>
+                    <h4 style={{ margin: 0 }}>{video.title}</h4>
+                    <p style={{ margin: 0, color: 'var(--fg-secondary)', fontSize: 'var(--t-body-sm)' }}>
+                      {video.description}
+                    </p>
+                    <a
+                      href={video.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ ...tutorialLink, marginTop: 'auto' }}
+                    >
+                      Tutorial ansehen →
+                    </a>
+                  </div>
                 </article>
               ))}
             </ScrollGallery>
+          </div>
+
+          <div
+            data-rev
+            style={{
+              ...panel, marginTop: '1.25rem', padding: '1.5rem',
+              display: 'flex', flexWrap: 'wrap', alignItems: 'center',
+              justifyContent: 'space-between', gap: '1rem',
+            }}
+          >
+            <p style={{ margin: 0, color: 'var(--fg-secondary)', fontSize: 'var(--t-body-sm)' }}>
+              Neue Anleitungen veröffentlichen wir laufend in der FTronics Akademie auf YouTube.
+            </p>
+            <Button
+              href={youtubeChannel}
+              variant="quiet"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Alle Videos ansehen →
+            </Button>
           </div>
 
           <div
