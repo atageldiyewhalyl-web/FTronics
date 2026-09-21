@@ -3,10 +3,12 @@ import Script from 'next/script'
 import { NavBar } from '@/components/NavBar'
 import { SiteFooter } from '@/components/SiteFooter'
 import { ScrollFX } from '@/components/scroll'
+import { LeadInteractionTracking } from '@/components/LeadInteractionTracking'
 import { site, localBusinessJsonLd, jsonLd } from '@/lib/site'
 import { DevTranslate } from '@/dev'
 
 const GTM_ID = 'GTM-545QDZB7'
+const GOOGLE_ADS_ID = 'AW-960863776'
 
 export const metadata = {
   metadataBase: new URL(site.url),
@@ -37,6 +39,19 @@ export default function RootLayout({ children }) {
   return (
     <html lang="de">
       <head>
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-ads-tag" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            window.gtag = window.gtag || gtag;
+            window.gtag('js', new Date());
+            window.gtag('config', '${GOOGLE_ADS_ID}');
+          `}
+        </Script>
         <Script id="google-tag-manager" strategy="afterInteractive">
           {`
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -62,6 +77,7 @@ export default function RootLayout({ children }) {
         <main id="inhalt">{children}</main>
         <SiteFooter />
         <ScrollFX />
+        <LeadInteractionTracking />
         {/* Dev-only DE↔EN preview overlay — compiles to nothing in production. */}
         <DevTranslate />
       </body>

@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Button, Field } from '@/components/ui'
 import { submitLead } from '@/lib/lead-submit'
+import { trackConfiguratorProgress } from '@/lib/analytics'
 
 /* ============================================================
    Konfigurator — the 4-step system configurator.
@@ -106,6 +107,7 @@ export function KonfiguratorForm() {
   const [submitted, setSubmitted] = useState(false)
   const [sending, setSending] = useState(false)
   const [error, setError] = useState('')
+  const trackedStages = useRef(new Set())
 
   const current = steps[step - 1]
 
@@ -118,7 +120,17 @@ export function KonfiguratorForm() {
   const isOn = (cfg, label) =>
     cfg.multi ? picked[cfg.key].includes(label) : picked[cfg.key] === label
 
+  function trackStageOnce(stage, stepNumber, parameters) {
+    if (trackedStages.current.has(stage)) return
+    trackedStages.current.add(stage)
+    trackConfiguratorProgress(stage, stepNumber, parameters)
+  }
+
   function choose(cfg, label) {
+    if (step === 1) {
+      trackStageOnce('start', 1, { object_type: label })
+    }
+
     setPicked((p) => {
       if (!cfg.multi) return { ...p, [cfg.key]: label }
       const cur = p[cfg.key]
@@ -315,7 +327,14 @@ export function KonfiguratorForm() {
                     type="button"
                     disabled={nextDisabled}
                     onClick={() => {
-                      if (!nextDisabled) setStep((s) => Math.min(4, s + 1))
+                      if (nextDisabled) return
+                      if (step === 3) {
+                        trackStageOnce('final_step', 4, {
+                          object_type: picked.objekt || 'Nicht angegeben',
+                          selected_function_count: picked.funktionen.length,
+                        })
+                      }
+                      setStep((s) => Math.min(4, s + 1))
                     }}
                   >
                     Weiter
