@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Button, Field } from '@/components/ui'
+import { trackLeadConversion } from '@/lib/google-ads'
 import { submitLead } from '@/lib/lead-submit'
 
 /* ============================================================
@@ -65,6 +66,7 @@ export function KontaktForm() {
             message: String(form.get('nachricht') || ''),
             formName: 'Kontaktseite',
           })
+          trackLeadConversion('contact')
           setSent(true)
         } catch {
           setError('Die Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut oder rufen Sie uns direkt an.')
