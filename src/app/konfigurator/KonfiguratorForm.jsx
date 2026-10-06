@@ -2,7 +2,6 @@
 
 import { useRef, useState } from 'react'
 import { Button, Field } from '@/components/ui'
-import { trackLeadConversion } from '@/lib/google-ads'
 import { submitLead } from '@/lib/lead-submit'
 import { trackConfiguratorProgress } from '@/lib/analytics'
 
@@ -168,7 +167,6 @@ export function KonfiguratorForm() {
         formName: 'System-Konfigurator',
         configurator: picked,
       })
-      trackLeadConversion('configurator')
       setSubmitted(true)
     } catch {
       setError('Die Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut oder rufen Sie uns direkt an.')
