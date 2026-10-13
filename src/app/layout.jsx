@@ -7,7 +7,7 @@ import { LeadInteractionTracking } from '@/components/LeadInteractionTracking'
 import { site, localBusinessJsonLd, jsonLd } from '@/lib/site'
 import { DevTranslate } from '@/dev'
 
-const GTM_ID = 'GTM-545QDZB7'
+const GTM_ID = 'GTM-KJCW2GKZ'
 const GOOGLE_ADS_ID = 'AW-960863776'
 
 export const metadata = {
@@ -39,6 +39,15 @@ export default function RootLayout({ children }) {
   return (
     <html lang="de">
       <head>
+        <Script id="google-tag-manager" strategy="beforeInteractive">
+          {`
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','${GTM_ID}');
+          `}
+        </Script>
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}`}
           strategy="afterInteractive"
@@ -50,15 +59,6 @@ export default function RootLayout({ children }) {
             window.gtag = window.gtag || gtag;
             window.gtag('js', new Date());
             window.gtag('config', '${GOOGLE_ADS_ID}');
-          `}
-        </Script>
-        <Script id="google-tag-manager" strategy="afterInteractive">
-          {`
-            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','${GTM_ID}');
           `}
         </Script>
       </head>
