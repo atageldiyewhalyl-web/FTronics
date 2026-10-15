@@ -20,14 +20,6 @@ export async function submitLead(payload) {
     throw new Error('Missing lead capture endpoint.')
   }
 
-  try {
-    const stored = JSON.parse(window.localStorage.getItem('ft_lead_anfragen') || '[]')
-    stored.push(lead)
-    window.localStorage.setItem('ft_lead_anfragen', JSON.stringify(stored.slice(-100)))
-  } catch {
-    // Local storage is only a best-effort browser-side backup.
-  }
-
   const response = await fetch(leadEndpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

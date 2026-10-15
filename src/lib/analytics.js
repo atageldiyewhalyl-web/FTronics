@@ -1,3 +1,5 @@
+import { hasConsent } from '@/lib/privacy-consent'
+
 function currentPagePath() {
   if (typeof window === 'undefined') return ''
   return `${window.location.pathname}${window.location.search}`
@@ -18,18 +20,20 @@ export function createAnalyticsEventId() {
 }
 
 export function pushDataLayer(event, parameters = {}) {
-  if (typeof window === 'undefined') return
+  if (typeof window === 'undefined' || !hasConsent('marketing')) return
 
   window.dataLayer = window.dataLayer || []
-  window.dataLayer.push({
-    event,
+  window.gtag = window.gtag || function gtag() {
+    window.dataLayer.push(arguments)
+  }
+  window.gtag('event', event, {
     page_path: currentPagePath(),
     ...parameters,
   })
 }
 
 function trackGoogleAdsConversion(leadType, eventId) {
-  if (typeof window === 'undefined') return
+  if (typeof window === 'undefined' || !hasConsent('marketing')) return
 
   const conversionLabel = GOOGLE_ADS_CONVERSION_LABELS[leadType]
   if (!conversionLabel) return

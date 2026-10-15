@@ -38,21 +38,21 @@ const tutorials = [
     title: 'Cloud-Anmeldung',
     description: 'Konto verbinden und Ihre Anlage für sicheren Fernzugriff vorbereiten.',
     href: 'https://www.youtube.com/watch?v=JTx29pUpL3k',
-    thumbnail: 'https://i.ytimg.com/vi/JTx29pUpL3k/hqdefault.jpg',
+    thumbnail: '/tutorial-cloud-anmeldung.jpg',
   },
   {
     category: 'Guard Station',
     title: 'Aufnahmen anschauen',
     description: 'Gespeicherte Ereignisse finden, Zeitleiste lesen und relevante Clips prüfen.',
     href: 'https://www.youtube.com/watch?v=LrZnw9JI20E',
-    thumbnail: 'https://i.ytimg.com/vi/LrZnw9JI20E/hqdefault.jpg',
+    thumbnail: '/tutorial-aufnahmen.jpg',
   },
   {
     category: 'Guard Viewer App',
     title: 'Zeiteinstellung',
     description: 'Datum und Uhrzeit in der App kontrollieren, damit Aufnahmen sauber zugeordnet werden.',
     href: 'https://www.youtube.com/shorts/N_KOSwgt4_g',
-    thumbnail: 'https://i.ytimg.com/vi/N_KOSwgt4_g/hq2.jpg',
+    thumbnail: '/tutorial-zeiteinstellung.jpg',
   },
 ]
 

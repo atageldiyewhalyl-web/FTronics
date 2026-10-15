@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { site, footerColumns, legalLinks } from '@/lib/site'
+import { PrivacySettingsButton } from '@/components/PrivacySettingsButton'
 
 export function SiteFooter() {
   return (
@@ -43,6 +44,7 @@ export function SiteFooter() {
             {legalLinks.map((l) => (
               <Link key={l.href} href={l.href}>{l.label}</Link>
             ))}
+            <PrivacySettingsButton />
           </nav>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { site, jsonLd, breadcrumbJsonLd } from '@/lib/site'
 import { KontaktForm } from './KontaktForm'
+import { ConsentMap } from '@/components/ConsentMap'
 
 export const metadata = {
   title: 'Kontakt: Beratung anfragen',
@@ -108,19 +109,7 @@ export default function Kontakt() {
               </div>
 
               <div data-rev>
-                {/* The address comes from site.js rather than being typed here,
-                    so the map cannot drift from the details listed above it.
-                    output=embed is the keyless Maps embed; title carries the
-                    place for anyone who cannot see the frame. */}
-                <iframe
-                  className="ft-map"
-                  title={`Karte: ${site.street}, ${site.postalCode} ${site.city}`}
-                  src={`https://www.google.com/maps?q=${encodeURIComponent(
-                    `${site.street}, ${site.postalCode} ${site.city}`
-                  )}&z=16&output=embed`}
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                />
+                <ConsentMap address={`${site.street}, ${site.postalCode} ${site.city}`} />
               </div>
             </div>
           </div>

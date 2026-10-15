@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react'
 import { Button, Field } from '@/components/ui'
+import { FormPrivacyNotice } from '@/components/FormPrivacyNotice'
 import { submitLead } from '@/lib/lead-submit'
 import { trackConfiguratorProgress } from '@/lib/analytics'
 
@@ -286,24 +287,7 @@ export function KonfiguratorForm() {
                           {error}
                         </p>
                       )}
-                      <label
-                        style={{
-                          display: 'flex', gap: 10, alignItems: 'flex-start',
-                          fontSize: 'var(--t-body-sm)', color: 'var(--fg-secondary)',
-                          margin: '.5rem 0 1.2rem', cursor: 'pointer',
-                        }}
-                      >
-                        <input
-                          type="checkbox"
-                          name="datenschutz"
-                          required
-                          style={{ marginTop: 3, accentColor: 'var(--ft-ink-900)' }}
-                        />
-                        <span>
-                          Ich stimme der Verarbeitung meiner Daten gemäß der
-                          Datenschutzerklärung zu. *
-                        </span>
-                      </label>
+                      <FormPrivacyNotice />
                       <Button type="submit" disabled={sending}>
                         {sending ? 'Wird gesendet...' : 'Unverbindliches Angebot anfordern'}
                       </Button>

@@ -1,14 +1,25 @@
 import '@/styles/globals.css'
-import Script from 'next/script'
+import { DM_Mono, DM_Sans } from 'next/font/google'
 import { NavBar } from '@/components/NavBar'
 import { SiteFooter } from '@/components/SiteFooter'
 import { ScrollFX } from '@/components/scroll'
 import { LeadInteractionTracking } from '@/components/LeadInteractionTracking'
+import { PrivacyConsentManager } from '@/components/PrivacyConsentManager'
 import { site, localBusinessJsonLd, jsonLd } from '@/lib/site'
 import { DevTranslate } from '@/dev'
 
-const GTM_ID = 'GTM-KJCW2GKZ'
-const GOOGLE_ADS_ID = 'AW-960863776'
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-dm-sans',
+})
+
+const dmMono = DM_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  display: 'swap',
+  variable: '--font-dm-mono',
+})
 
 export const metadata = {
   metadataBase: new URL(site.url),
@@ -37,40 +48,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="de">
-      <head>
-        <Script id="google-tag-manager" strategy="beforeInteractive">
-          {`
-            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','${GTM_ID}');
-          `}
-        </Script>
-        <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}`}
-          strategy="afterInteractive"
-        />
-        <Script id="google-ads-tag" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            window.gtag = window.gtag || gtag;
-            window.gtag('js', new Date());
-            window.gtag('config', '${GOOGLE_ADS_ID}');
-          `}
-        </Script>
-      </head>
+    <html lang="de" className={`${dmSans.variable} ${dmMono.variable}`}>
       <body>
-        <noscript>
-          <iframe
-            src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
-            height="0"
-            width="0"
-            style={{ display: 'none', visibility: 'hidden' }}
-          />
-        </noscript>
         <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(localBusinessJsonLd())} />
         <a className="ft-skip" href="#inhalt">Zum Inhalt springen</a>
         <NavBar />
@@ -78,6 +57,7 @@ export default function RootLayout({ children }) {
         <SiteFooter />
         <ScrollFX />
         <LeadInteractionTracking />
+        <PrivacyConsentManager />
         {/* Dev-only DE↔EN preview overlay — compiles to nothing in production. */}
         <DevTranslate />
       </body>

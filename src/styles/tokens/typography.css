@@ -1,9 +1,9 @@
 /* FT Sicherheitstechnik — type tokens. One family (DM Sans): h1 at 700,
    every other heading at 600, h4 and UI labels at 500. */
 :root{
-  --font-display:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif; /* @kind font */
-  --font-ui:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif; /* @kind font */
-  --font-mono:'DM Mono',ui-monospace,SFMono-Regular,Menlo,monospace; /* @kind font */
+  --font-display:var(--font-dm-sans),system-ui,-apple-system,'Segoe UI',sans-serif; /* @kind font */
+  --font-ui:var(--font-dm-sans),system-ui,-apple-system,'Segoe UI',sans-serif; /* @kind font */
+  --font-mono:var(--font-dm-mono),ui-monospace,SFMono-Regular,Menlo,monospace; /* @kind font */
   --t-eyebrow:clamp(0.95rem,0.30vw + 0.88rem,1.20rem); /* @kind other */
   --t-body-sm:clamp(0.88rem,0.15vw + 0.84rem,0.95rem); /* @kind other */
   --t-body:clamp(1.00rem,0.25vw + 0.94rem,1.15rem); /* @kind other */

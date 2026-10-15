@@ -87,6 +87,7 @@ export const footerColumns = {
 export const legalLinks = [
   { label: 'Impressum', href: '/impressum' },
   { label: 'Datenschutz', href: '/datenschutz' },
+  { label: 'Cookies', href: '/cookie-richtlinie' },
   { label: 'AGB', href: '/agb' },
 ]
 
