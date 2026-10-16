@@ -29,54 +29,13 @@ export function ScrollVideo({ src, label, stickyTop = 96, ratio = '854 / 480', f
   const wrapRef = useRef(null)
   const videoRef = useRef(null)
   const [ready, setReady] = useState(false)
-  const [videoSrc, setVideoSrc] = useState('')
   const [top, setTop] = useState(stickyTop)
   // Held in a ref so a new callback identity never re-binds the scroll listener.
   const onProgressRef = useRef(onProgress)
   onProgressRef.current = onProgress
 
   useEffect(() => {
-    let cancelled = false
-    let objectUrl = ''
-    const controller = new AbortController()
-
     setReady(false)
-    setVideoSrc('')
-
-    const fallback = () => {
-      if (!cancelled) setVideoSrc(src)
-    }
-
-    if (!src || src.startsWith('blob:') || typeof fetch !== 'function' || typeof URL === 'undefined') {
-      fallback()
-      return () => {
-        cancelled = true
-        controller.abort()
-      }
-    }
-
-    /* Production occasionally gives the video element a slow or awkward range
-       request on first page load. The clip is tiny and meant to be scrubbed,
-       so fetching it once into memory makes every later seek local. */
-    fetch(src, { cache: 'force-cache', signal: controller.signal })
-      .then((response) => {
-        if (!response.ok) throw new Error(`Video request failed: ${response.status}`)
-        return response.blob()
-      })
-      .then((blob) => {
-        if (cancelled) return
-        objectUrl = URL.createObjectURL(blob)
-        setVideoSrc(objectUrl)
-      })
-      .catch((error) => {
-        if (error?.name !== 'AbortError') fallback()
-      })
-
-    return () => {
-      cancelled = true
-      controller.abort()
-      if (objectUrl) URL.revokeObjectURL(objectUrl)
-    }
   }, [src])
 
   /*
@@ -106,7 +65,7 @@ export function ScrollVideo({ src, label, stickyTop = 96, ratio = '854 / 480', f
     const video = videoRef.current
     // The sticky column's parent is the run of scroll the clip maps onto.
     const track = wrap?.closest('[data-scrollvideo-track]') || wrap?.parentElement?.parentElement
-    if (!wrap || !video || !track || !videoSrc) return
+    if (!wrap || !video || !track || !src) return
 
     /* Reduced motion must not switch the section off. Bailing out here used
        to kill the progress callbacks along with the seeks, and the captions
@@ -247,7 +206,7 @@ export function ScrollVideo({ src, label, stickyTop = 96, ratio = '854 / 480', f
     }
     // `top` moves only on resize, so re-binding here costs nothing and keeps
     // the progress maths and the sticky offset from drifting apart.
-  }, [top, fill, videoSrc])
+  }, [top, fill, src])
 
   return (
     <div
@@ -258,7 +217,7 @@ export function ScrollVideo({ src, label, stickyTop = 96, ratio = '854 / 480', f
       <video
         ref={videoRef}
         className="ft-scrollvideo-el"
-        src={videoSrc || undefined}
+        src={src || undefined}
         preload="auto"
         muted
         playsInline

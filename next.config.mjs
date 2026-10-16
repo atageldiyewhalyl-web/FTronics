@@ -12,7 +12,7 @@ const contentSecurityPolicy = [
   "img-src 'self' data: blob: https://www.google.com https://www.google.de https://*.gstatic.com https://*.doubleclick.net https://*.googleadservices.com",
   "connect-src 'self' https://*.supabase.co https://www.google.com https://www.google.de https://www.google-analytics.com https://region1.google-analytics.com https://*.doubleclick.net https://*.googleadservices.com",
   "frame-src 'self' https://www.google.com https://*.doubleclick.net",
-  "media-src 'self'",
+  "media-src 'self' blob:",
   'upgrade-insecure-requests',
 ].join('; ')
 
