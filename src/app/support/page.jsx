@@ -26,8 +26,8 @@ const guardStationFeatures = [
 ]
 
 /* Keep these large installers on the vendor download server. Serving them from
-   the site's Vercel Blob store exhausted its transfer allowance and caused
-   every download to return HTTP 403. */
+   the site's suspended Vercel Blob store caused every download to return
+   HTTP 403. */
 const downloads = [
   [
     'Guard Station für Windows',
