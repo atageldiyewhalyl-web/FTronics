@@ -25,11 +25,20 @@ const guardStationFeatures = [
   'Verwaltung von bis zu 50 Benutzern',
 ]
 
-const guardStationBlob = 'https://lc0vcpr1ftmj8gtl.public.blob.vercel-storage.com/downloads'
-
+/* Keep these large installers on the vendor download server. Serving them from
+   the site's Vercel Blob store exhausted its transfer allowance and caused
+   every download to return HTTP 403. */
 const downloads = [
-  ['Guard Station für Windows', '.exe · Win 10/11', `${guardStationBlob}/guard-station-windows.exe`],
-  ['Guard Station für Mac', '.pkg · macOS 11+', `${guardStationBlob}/guard-station-mac.pkg`],
+  [
+    'Guard Station für Windows',
+    '.zip · Win 10/11',
+    'https://www.mydownload.store/U_Series_NVR_IPC/GuardStation_forWin64_B1130.3.18.1%28IN%29.zip',
+  ],
+  [
+    'Guard Station für Mac',
+    '.pkg · macOS 11+',
+    'https://www.mydownload.store/U_Series_NVR_IPC/GuardStation_Mac-B1113.3.13.1.L04%28IN%29.pkg',
+  ],
 ]
 
 const tutorials = [
@@ -146,7 +155,9 @@ export default function Support() {
                 <ul className="ft-list" style={{ margin: '0 0 1.5rem', gap: 7, flex: 1 }}>
                   {guardStationFeatures.map((f) => <li key={f}>{f}</li>)}
                 </ul>
-                <Button variant="secondary" href={href} download>Guard Station herunterladen</Button>
+                <Button variant="secondary" href={href} referrerPolicy="no-referrer">
+                  Guard Station herunterladen
+                </Button>
               </div>
             ))}
           </div>
