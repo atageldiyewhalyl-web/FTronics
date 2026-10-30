@@ -43,7 +43,7 @@ const loesungen = [
       'DSGVO-konforme Speicherung',
       'Skalierbar von 4 bis 128+ Kameras',
     ],
-    link: { label: 'Produkte ansehen →', href: '/produkte' },
+    link: { label: 'Videoüberwachung für Gewerbe →', href: '/videoueberwachung-gewerbe' },
   },
   {
     title: 'Zutrittskontrolle',

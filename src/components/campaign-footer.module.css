@@ -1,0 +1,9 @@
+.footer{background:#f4f6f7;color:#555f66;border-top:1px solid #d0d5d8}
+.inner{max-width:1280px;margin:auto;padding:32px;display:flex;justify-content:space-between;align-items:center;gap:24px;font-size:12px}
+.business{display:grid;gap:5px}.business strong{font-size:14px;color:#1d1d1f}
+.business a{text-underline-offset:3px}
+.legal{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.legal a{text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+.legal a:hover{text-decoration:underline}
+.legal :global(.ft-privacy-settings-button){color:inherit;font-size:12px;min-height:44px}
+@media(max-width:767px){.inner{padding:28px 20px 108px;display:grid;gap:20px}.legal{gap:4px 20px}}

@@ -1,0 +1,10 @@
+.header{position:sticky;top:0;z-index:50;background:var(--bg-raised);border-bottom:1px solid var(--border)}
+.inner{max-width:1280px;margin:auto;padding:0 32px;min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{width:225px;height:auto;display:block}
+.contact{display:flex;align-items:center;gap:28px}
+.phone{font-size:15px;font-weight:600;text-decoration:none;line-height:1.35}
+.phone span{display:block;color:var(--fg-secondary);font-size:11px;font-weight:400}
+.button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 20px;background:var(--ft-red-brand);color:white;border-radius:999px;font-size:14px;font-weight:600;text-decoration:none}
+.button:hover{background:var(--ft-red-brand-hover);color:white}
+@media(max-width:767px){.inner{padding:0 20px;min-height:68px;gap:12px}.logo{width:178px}.contact{gap:0}.button{display:none}.phone{font-size:12px}.phone span{font-size:10px}}
+@media(max-width:359px){.logo{width:145px}.inner{padding-inline:16px}.phone{font-size:11px}}

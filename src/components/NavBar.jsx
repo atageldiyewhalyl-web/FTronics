@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { navItems } from '@/lib/site'
 import { Button } from './ui'
+import { CampaignHeader } from './CampaignHeader'
 
 /* Below this the links collapse into the sheet. Matches the @media in
    globals.css — the sheet is hidden by CSS above it, and this copy is what
@@ -232,6 +233,8 @@ export function NavBar() {
     const next = e.key === 'ArrowDown' ? i + 1 : i - 1
     links[(next + links.length) % links.length].focus()
   }
+
+  if (pathname === '/videoueberwachung-gewerbe') return <CampaignHeader />
 
   return (
     <nav

@@ -238,7 +238,13 @@ export function Chevron({ back = false }) {
    the row still appears for a rail that wants an action but no arrows. */
 export function ScrollGallery({ itemWidth = 420, label = 'Galerie', paddles = true, actions, children }) {
   const ref = useRef(null)
-  const by = (d) => ref.current?.scrollBy({ left: d * (itemWidth + 24), behavior: 'smooth' })
+  const by = (d) => {
+    const rail = ref.current
+    if (!rail) return
+    const width = rail.firstElementChild?.getBoundingClientRect().width || itemWidth
+    const gap = parseFloat(getComputedStyle(rail).columnGap) || 24
+    rail.scrollBy({ left: d * (width + gap), behavior: reduced() ? 'auto' : 'smooth' })
+  }
 
   return (
     /* Named so the paddles can be ordered against the rail without touching

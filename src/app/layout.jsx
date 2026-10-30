@@ -2,6 +2,7 @@ import '@/styles/globals.css'
 import { DM_Mono, DM_Sans } from 'next/font/google'
 import { NavBar } from '@/components/NavBar'
 import { SiteFooter } from '@/components/SiteFooter'
+import { CampaignFooter } from '@/components/CampaignFooter'
 import { ScrollFX } from '@/components/scroll'
 import { LeadInteractionTracking } from '@/components/LeadInteractionTracking'
 import { PrivacyConsentManager } from '@/components/PrivacyConsentManager'
@@ -54,7 +55,7 @@ export default function RootLayout({ children }) {
         <a className="ft-skip" href="#inhalt">Zum Inhalt springen</a>
         <NavBar />
         <main id="inhalt">{children}</main>
-        <SiteFooter />
+        <CampaignFooter><SiteFooter /></CampaignFooter>
         <ScrollFX />
         <LeadInteractionTracking />
         <PrivacyConsentManager />
