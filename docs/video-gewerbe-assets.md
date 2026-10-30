@@ -82,3 +82,27 @@ Prompt: Use case: photorealistic-natural. One panoramic architectural photograph
 - Removed the visible image-generation captions at the user's request. Asset provenance and prompts remain recorded here.
 - Removed automatic dark variants from the campaign page, header and footer; native controls use the light color scheme on this route.
 - Production build passed. The refreshed browser reported a dark device preference with white page, header and input backgrounds, no image-generation labels and no desktop overflow. The mobile preview also displays the light layout.
+
+## Mannheim messaging and mobile revision
+
+- Mannheim is now in the main headline, installation section, inquiry introduction and final address block.
+- Desktop keeps its split hero, visible inquiry form and original image compositions. Mobile uses a simpler sequence, fewer repeated images, smaller product cards and plain cost/contact sections.
+- On mobile, native `#anfrage` navigation reveals the form. Returning to the overview hides it without unmounting it or losing entered values. Desktop always shows the form. The floating contact bar waits until the hero action has passed, and hides when the form or final actions are visible.
+- Responsive `<picture>` sources select mobile compositions at widths up to 767px. Both new assets use 4:3 framing, saved at 960 × 720; total source size is approximately 144 KiB.
+- Production build and diff checks passed. Browser checks at 320, 390, 430, 820 and 1440px found no horizontal overflow and confirmed the correct image source. Mobile form opening, closing, input retention, bottom CTA and product carousel navigation passed. No real lead was submitted.
+
+### mobile-entrance
+
+Final asset: `public/campaigns/video-gewerbe/mobile-entrance.webp`
+
+Generated with the built-in image-generation tool. Original: `exec-3fdcdbc0-db77-4993-b262-2e7a5b2803a1.png` in the conversation's Codex generated-images directory.
+
+Prompt: Use case: ads-marketing. Generate one new photorealistic image for the MOBILE hero of a German commercial CCTV installer website. Aspect ratio 4:3 landscape, composed to be immediately readable at only 350 pixels wide. A single small unbranded white bullet surveillance camera mounted correctly on the corner of a pale grey commercial building, photographed at close range from slightly below, with a simple glass business entrance and softly blurred courtyard behind it. The camera and its short mounting arm are the clear central subject, occupying roughly one third of image width, entire camera visible with generous safe space around it. Neutral daylight, clean white and cool grey materials, restrained black lens detail, premium architectural photography, realistic proportions. Only one camera, one entrance, no clutter, no people, no wide aerial view, no miniatures, no screens, no maps, no text, no logos, no overlays, no watermarks. Fictional illustrative scene, not a claimed customer installation or specific product model. The image will sit below an HTML headline on a white mobile landing page, with no text over the photograph.
+
+### mobile-after-hours
+
+Final asset: `public/campaigns/video-gewerbe/mobile-after-hours.webp`
+
+Generated with the built-in image-generation tool. Original: `exec-c6c31abd-6a04-42f7-a233-9b544fe60129.png` in the conversation's Codex generated-images directory.
+
+Prompt: Use case: ads-marketing. Create one photorealistic 4:3 landscape photograph composed specifically for a MOBILE German commercial video surveillance landing page, readable at 350 pixels wide. A simple compact warehouse entrance after closing, straight-on architectural view at blue hour: one closed grey loading door in the center, a small pedestrian door on the right with warm practical lighting, one discreet realistic white CCTV camera visible above the doorway. Tight balanced composition of this ONE entrance area only, not an entire industrial estate. Full loading door and security camera within frame, just a little empty pavement foreground, crisp believable materials. Deep slate blue with restrained warm light. Calm and professional, no danger or crime scene. No people, vehicles, text, logos, UI, labels, watermarks or detection boxes. Fictional illustration. This photo is displayed as a standalone 4:3 image with HTML caption BELOW it, so no negative text space or dark overlay is needed.

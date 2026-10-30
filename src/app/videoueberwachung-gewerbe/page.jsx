@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image, { getImageProps } from 'next/image'
 import { ScrollGallery } from '@/components/scroll'
 import { site, jsonLd, breadcrumbJsonLd } from '@/lib/site'
 import { InquiryForm } from './InquiryForm'
@@ -41,6 +41,19 @@ function AdviceLink({ children = 'Beratung anfragen' }) {
   return <a href="#anfrage" className={styles.primary}>{children}<span aria-hidden="true">↗</span></a>
 }
 
+// Art direction keeps the desktop composition and loads one simpler mobile image.
+function CampaignImage({ desktopSrc, mobileSrc, alt, sizes, eager = false, className }) {
+  const common = { alt, loading: eager ? 'eager' : 'lazy', ...(eager ? { fetchPriority: 'high' } : {}) }
+  const { props: desktop } = getImageProps({ ...common, src: desktopSrc, width: 1536, height: 1024, sizes })
+  const { props: mobile } = getImageProps({ ...common, src: mobileSrc, width: 960, height: 720, sizes: 'calc(100vw - 40px)' })
+  return (
+    <picture className={className}>
+      <source media="(max-width: 767px)" srcSet={mobile.srcSet} sizes={mobile.sizes} width={960} height={720} />
+      <img {...desktop} />
+    </picture>
+  )
+}
+
 export default function CommercialVideoPage() {
   return (
     <div className={styles.page}>
@@ -49,22 +62,22 @@ export default function CommercialVideoPage() {
 
       <section className={`${styles.hero} ${styles.shell}`} aria-labelledby="page-title">
         <div className={styles.heroCopy}>
-          <p className={styles.eyebrow}>Für Unternehmen in Mannheim & Rhein-Neckar</p>
-          <h1 id="page-title">Videoüberwachung für Ihr Gewerbe.</h1>
-          <p className={styles.lead}>Ihr Betrieb im Blick. Kameras, Installation und Betreuung aus einer Hand.</p>
-          <div className={styles.heroActions}><AdviceLink /><a href="#loesung" className={styles.textLink}>Welche Lösung passt zu mir? <span aria-hidden="true">↓</span></a></div>
+          <p className={styles.eyebrow}>Ihr Fachbetrieb für Mannheim & Rhein-Neckar</p>
+          <h1 id="page-title" tabIndex={-1}>Videoüberwachung für Gewerbe in Mannheim.</h1>
+          <p className={styles.lead}>Kameras, Montage und Betreuung. Persönlich vor Ort, aus einer Hand.</p>
+          <div id="hero-actions" className={styles.heroActions}><AdviceLink /><a href="#loesung" className={styles.textLink}>Welche Lösung passt zu mir? <span aria-hidden="true">↓</span></a></div>
         </div>
         <figure className={styles.heroVisual}>
-          <Image src="/campaigns/video-gewerbe/site.webp" alt="Illustration eines Gewerbeobjekts: Kameras an Lagerhalle, Büro und Zufahrt" width={1536} height={1024} sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1100px) 55vw, 720px" loading="eager" fetchPriority="high" />
+          <CampaignImage desktopSrc="/campaigns/video-gewerbe/site.webp" mobileSrc="/campaigns/video-gewerbe/mobile-entrance.webp" alt="Videoüberwachung am Gewerbeobjekt" sizes="(max-width: 1100px) 55vw, 720px" eager />
         </figure>
         <InquiryForm />
       </section>
 
       <div className={styles.assurances}>
-        <div className={styles.shell}><span>Planung passend zu Ihrem Objekt</span><span>Montage & Einweisung</span><span>Lokale Speicherung möglich</span><span>Betreuung aus Mannheim</span></div>
+        <div className={styles.shell}><span>Planung & Montage</span><span>Persönliche Einweisung</span><span>Lokale Speicherung möglich</span><span>Betreuung aus Mannheim</span></div>
       </div>
 
-      <section id="loesung" className={`${styles.section} ${styles.shell}`} aria-labelledby="property-heading">
+      <section id="loesung" className={`${styles.section} ${styles.shell} ${styles.propertySection}`} aria-labelledby="property-heading">
         <h2 id="property-heading">Wo brauchen Sie den Überblick?</h2>
         <p className={styles.sectionLead}>Die richtigen Kameras. An den entscheidenden Stellen.</p>
         <div className={styles.properties}>
@@ -85,7 +98,7 @@ export default function CommercialVideoPage() {
           <p className={styles.sectionLead}>Erkennen. Nachsehen. Lokal aufzeichnen.</p>
           <div className={styles.benefitGrid}>
             <article className={styles.nightVisual}>
-              <Image src="/campaigns/video-gewerbe/after-hours.webp" alt="Überwachte Lagerzufahrt nach Geschäftsschluss" fill sizes="(max-width: 767px) 100vw, 65vw" />
+              <CampaignImage className={styles.nightPicture} desktopSrc="/campaigns/video-gewerbe/after-hours.webp" mobileSrc="/campaigns/video-gewerbe/mobile-after-hours.webp" alt="Überwachter Lagereingang nach Geschäftsschluss" sizes="65vw" />
               <div><h3>Feierabend.<br />Ihr Gelände bleibt im Blick.</h3><p>Ereignisse prüfen und bei Bedarf aus der Ferne nachsehen.</p></div>
             </article>
             <article className={styles.benefitCard}>
@@ -103,7 +116,7 @@ export default function CommercialVideoPage() {
       <section id="technik" className={`${styles.section} ${styles.productSection}`} aria-labelledby="products-heading">
         <div className={styles.shell}><p className={styles.eyebrow}>FTronics. Unsere Marke für Videotechnik.</p><h2 id="products-heading">Die Technik hinter Ihrem Überblick.</h2><p className={styles.sectionLead}>Vom einzelnen Eingang bis zum gesamten Betriebsgelände.</p></div>
         <div className={`ft-rail-bleed ${styles.productRail}`}>
-          <ScrollGallery itemWidth={330} label="FTronics Kameras und Rekorder" actions={<a href="#anfrage" className={styles.textLink}>Passende Technik finden <span aria-hidden="true">↗</span></a>}>
+          <ScrollGallery itemWidth={330} label="FTronics Kameras und Rekorder" actions={<a href="#anfrage" className={styles.textLink}>Beratung anfragen <span aria-hidden="true">↗</span></a>}>
             {products.map(product => <a className={styles.productCard} key={product.slug} href={`/produkte/${product.slug}`}>
               <p className={styles.productPurpose}>{product.purpose}</p>
               <div className={styles.productImage}><Image src={`/${product.slug}-main.webp`} alt="" width={product.width} height={product.height} sizes="(max-width: 767px) 78vw, 330px" /></div>
@@ -116,7 +129,7 @@ export default function CommercialVideoPage() {
       <section className={`${styles.installSection} ${styles.shell}`} aria-labelledby="process-heading">
         <figure className={styles.installVisual}><Image src="/campaigns/video-gewerbe/installation.webp" alt="Montage einer Überwachungskamera" width={1440} height={960} sizes="(max-width: 767px) 100vw, 55vw" /></figure>
         <div className={styles.installCopy}>
-          <h2 id="process-heading">Wir kümmern uns um die Technik.</h2>
+          <h2 id="process-heading">Ihr Fachbetrieb aus Mannheim.</h2>
           <ol className={styles.installSteps}>
             <li><h3>Gemeinsam planen</h3><p>Objekt ansehen. Bedarf klären. Angebot erhalten.</p></li>
             <li><h3>Fachgerecht installieren</h3><p>Montage, Einrichtung und Einweisung durch FT.</p></li>
@@ -142,7 +155,7 @@ export default function CommercialVideoPage() {
 
       <section className={styles.finalScene} aria-labelledby="final-heading">
         <Image src="/campaigns/video-gewerbe/contact-background.webp" alt="" fill sizes="100vw" />
-        <div className={`${styles.shell} ${styles.finalContent}`}><p className={styles.eyebrow}>FT Sicherheitstechnik in Mannheim</p><h2 id="final-heading">Ihr Objekt.<br />Unsere nächste Aufgabe.</h2><div className={styles.finalActions}><AdviceLink /><a href={site.phoneHref} className={styles.textLink}>{site.phone}</a></div><address>{site.street}, {site.postalCode} {site.city}</address></div>
+        <div className={`${styles.shell} ${styles.finalContent}`}><p className={styles.eyebrow}>FT Sicherheitstechnik</p><h2 id="final-heading">In Mannheim.<br />Für Ihren Betrieb.</h2><address>{site.street}<br />{site.postalCode} {site.city}</address><div id="final-actions" className={styles.finalActions}><AdviceLink /><a href={site.phoneHref} className={styles.textLink}>{site.phone}</a></div></div>
       </section>
       <MobileContact />
     </div>

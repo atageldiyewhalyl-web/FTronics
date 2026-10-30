@@ -49,7 +49,8 @@ export function InquiryForm() {
   }
 
   return (
-    <section id="anfrage" className={styles.formPanel} aria-labelledby="inquiry-heading">
+    <section id="anfrage" className={styles.formPanel} aria-labelledby="inquiry-heading" tabIndex={-1}>
+      <a href="#page-title" className={styles.formBack}>Zurück zur Übersicht <span aria-hidden="true">↑</span></a>
       {state === 'success' ? (
         <div ref={resultRef} tabIndex={-1} role="status" className={styles.success}>
           <span className={styles.successMark} aria-hidden="true">✓</span>
@@ -61,7 +62,7 @@ export function InquiryForm() {
       ) : (
         <>
           <h2 id="inquiry-heading">Was möchten Sie absichern?</h2>
-          <p className={styles.formIntro}>Die passende Lösung beginnt mit einem Gespräch.</p>
+          <p className={styles.formIntro}>Unser Team in Mannheim berät Sie persönlich.</p>
           <form onSubmit={handleSubmit} aria-busy={state === 'sending'}>
             <fieldset disabled={state === 'sending'} className={styles.fields}>
               <label>Firmenname <span>*</span><input name="company" autoComplete="organization" maxLength={160} required onInput={e => e.target.setCustomValidity('')} /></label>
