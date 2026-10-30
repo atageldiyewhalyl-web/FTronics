@@ -36,9 +36,16 @@ subject `Videoüberwachung für Gewerbe`. Company, property type, location and
 the request are included in the message; name, email, phone and page URL are
 stored separately. The page URL preserves campaign query parameters.
 
-The current server recipient is `halyl@xn--nll-hoa.com` (`halyl@nüll.com`).
+Campaign notifications go to both `info@ftst.eu` and `halyl@xn--nll-hoa.com`
+(`halyl@nüll.com`). Other website forms retain their existing Halyl-only routing.
 Recipient changes must be made in the server-side allowlist/routing: the browser's
 `NEXT_PUBLIC_LEAD_NOTIFY_EMAILS` setting cannot add an unapproved recipient.
+
+Do not send test inquiries to the client. The live connection test on 2026-10-30
+was completed while the server was still configured for Halyl only, before enabling
+the client recipient. Future automated verification must mock email delivery or
+use a separate test endpoint that sends only to Halyl; submitting the live campaign
+form normally notifies both inboxes.
 
 ## Connection correction — 2026-10-30
 
@@ -49,3 +56,14 @@ the repository source, was active, and its required secrets were configured.
 An empty test POST returned a validation error without writing an inquiry or
 sending email. Local checks confirmed that missing production configuration fails,
 either supported URL enables the build, and local development remains unaffected.
+
+The live browser test showed the success state and created lead
+`bdea9b56-20e1-4ad8-98bc-ac5f174471a7` with status `email_sent` and no email error.
+The test notification and requester confirmation went only to Halyl, before
+client notifications were enabled. This status confirms Resend API acceptance,
+not independent verification of inbox placement. Marketing consent was disabled
+during the test to avoid counting a test conversion.
+
+`node --test scripts/test-lead-routing.mjs` verifies campaign and legacy routing,
+rejects browser recipient overrides, and covers invalid input, storage failure
+and email failure using mocks. It performs no network requests and sends no mail.

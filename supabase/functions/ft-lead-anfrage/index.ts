@@ -26,6 +26,8 @@ const notificationRecipients = [
 const allowedNotifyEmails = new Set([
   "halyl@xn--nll-hoa.com",
 ]);
+const campaignFormName = "Landingpage Videoüberwachung Gewerbe";
+const campaignRecipients = ["halyl@xn--nll-hoa.com", "info@ftst.eu"];
 
 function cleanText(value: unknown, maxLength = 2000) {
   if (typeof value !== "string") return "";
@@ -79,6 +81,10 @@ function parseEmailList(value: string) {
 }
 
 function resolveRecipients(lead: ReturnType<typeof validatePayload>) {
+  // The campaign's approved inboxes are controlled on the server, never by
+  // browser-supplied notifyEmails. Other website forms keep their own routing.
+  if (lead.formName === campaignFormName) return campaignRecipients;
+
   const requestedRecipients = parseEmailList(lead.notifyEmails)
     .filter((email) => allowedNotifyEmails.has(email));
 
@@ -232,6 +238,11 @@ Deno.serve(async (req) => {
 
     const payload = await req.json() as LeadPayload;
     const lead = validatePayload(payload);
+    const to = resolveRecipients(lead);
+
+    if (!to.length) {
+      throw new Error("No lead recipient configured.");
+    }
 
     const supabase = createClient(supabaseUrl, serviceRoleKey, {
       auth: { persistSession: false },
@@ -249,7 +260,7 @@ Deno.serve(async (req) => {
         form_name: lead.formName,
         page_url: lead.pageUrl,
         configurator: lead.configurator,
-        notify_emails: lead.notifyEmails,
+        notify_emails: to.join(","),
       })
       .select("id")
       .single();
@@ -257,11 +268,6 @@ Deno.serve(async (req) => {
     if (error) throw error;
 
     const leadId = data.id as string;
-    const to = resolveRecipients(lead);
-
-    if (!to.length) {
-      throw new Error("No lead recipient configured.");
-    }
 
     const subject = `Neue Anfrage: ${lead.subject} - ${lead.fullName}`;
     const html = renderHtmlEmail(lead);
