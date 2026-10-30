@@ -145,8 +145,8 @@
   .quoteSection{padding-bottom:44px}.quoteVisual{display:block;min-height:0}.quoteVisual>img,.quoteVisual::after{display:none}.quoteCopy{padding:28px;max-width:100%}.quoteCopy h2{font-size:29px;max-width:15ch}.quoteCopy p{font-size:15px;margin:16px 0 24px}
   .faqLayout{grid-template-columns:1fr;gap:24px}.faqLayout h2{margin-bottom:12px}.faqs summary{font-size:15px;padding-block:19px;gap:20px}.faqs details p{font-size:15px;padding-right:12px}.faqProduct{display:none}.faqLayout>div>p{font-size:14px;margin-bottom:4px}.faqLayout .phoneLink{font-size:23px;margin:8px 0}.faqLayout .small{font-size:12px}
   .finalScene{min-height:0;background:var(--landing-raised)}.finalScene>img,.finalScene::after{display:none}.finalContent{padding-block:44px}.finalContent h2{font-size:32px;max-width:15ch}.finalActions{align-items:flex-start;flex-direction:column;gap:8px;margin-top:24px}.finalContent address{margin-top:18px;font-size:15px}
-  /* Appears after the hero CTA; hides beside the form, final CTA or consent UI. */
-  .mobileContact{position:fixed;bottom:0;left:0;right:0;z-index:40;display:grid;grid-template-columns:.8fr 1.2fr;gap:12px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:var(--landing-raised);border-top:1px solid var(--landing-border)}
+  /* Body portal follows the visual viewport, including Safari toolbar changes. */
+  .mobileContact{position:absolute;top:0;left:0;right:0;transform:translate3d(0,calc(var(--contact-bottom, 0px) - 100%),0);z-index:40;display:grid;grid-template-columns:.8fr 1.2fr;gap:12px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:var(--landing-raised);border-top:1px solid var(--landing-border)}
   .mobileContact[hidden]{display:none}.mobileContact>a{display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:13px;font-weight:600;min-height:46px}.mobileContact .primary{padding:10px 14px;gap:10px}
   :global(body:has(.ft-consent-banner)) .mobileContact,:global(body:has(.ft-consent-overlay)) .mobileContact{display:none}
 }

@@ -114,3 +114,10 @@ Prompt: Use case: ads-marketing. Create one photorealistic 4:3 landscape photogr
 - All five mobile scene images reach both viewport edges. Hero, warehouse, shop and night scenes keep their original aspect ratios, preserving the complete compositions. Text and form controls keep their readable side padding.
 - Mannheim messaging and the white theme remain. Product browsing and the existing inquiry submission flow are unchanged.
 - Production build and diff checks passed. Browser checks at 320, 390, 430, 820 and 1440px found no horizontal overflow and confirmed the visible form. All five mobile scene images matched the viewport width, loaded successfully when scrolled into view, and used the original assets. Form input was filled and cleared without submission; no real lead was created.
+
+## Mobile contact-bar positioning — 2026-10-30
+
+- A supplied iPhone screenshot showed the contact bar floating across product cards, substantially above the browser's bottom edge. The previous implementation used `position: fixed; bottom: 0`. This is consistent with reported Safari viewport regressions, but the exact physical-device trigger was not reproduced locally: https://bugs.webkit.org/show_bug.cgi?id=297779.
+- The bar now renders in a body portal and follows the visible viewport's bottom in document coordinates (`visualViewport.pageTop + height`), with a window-size fallback. It no longer depends on native fixed-bottom positioning. Scroll, resize, page restoration and focus changes are coalesced into animation frames; listeners are cleaned up on unmount.
+- It hides beside the form, while editing fields or zooming, at the final contact section/footer, on desktop and behind consent dialogs. The form itself remains visible at the top of the page.
+- Production build and diff checks passed. Browser checks at 320, 390 and 430px widths and 500–932px heights confirmed the bar tracks the bottom after scrolling and viewport shrink/restore, with no horizontal overflow. The form anchor and focus hiding passed; the bar is hidden at the footer and at 1440px desktop width. No form was submitted during these checks.
