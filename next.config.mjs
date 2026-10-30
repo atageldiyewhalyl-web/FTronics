@@ -1,5 +1,15 @@
 import { allRedirects } from './src/lib/redirects.mjs'
 
+// Public form configuration is baked into client bundles during the build.
+// Stop a production release instead of publishing forms with no destination.
+if (
+  process.env.VERCEL_ENV === 'production' &&
+  !process.env.NEXT_PUBLIC_LEAD_CAPTURE_ENDPOINT?.trim() &&
+  !process.env.NEXT_PUBLIC_SUPABASE_URL?.trim()
+) {
+  throw new Error('Production forms require NEXT_PUBLIC_LEAD_CAPTURE_ENDPOINT or NEXT_PUBLIC_SUPABASE_URL in this Vercel project.')
+}
+
 const contentSecurityPolicy = [
   "default-src 'self'",
   "base-uri 'self'",
