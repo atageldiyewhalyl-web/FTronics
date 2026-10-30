@@ -1,4 +1,4 @@
-import Image, { getImageProps } from 'next/image'
+import Image from 'next/image'
 import { ScrollGallery } from '@/components/scroll'
 import { site, jsonLd, breadcrumbJsonLd } from '@/lib/site'
 import { InquiryForm } from './InquiryForm'
@@ -41,19 +41,6 @@ function AdviceLink({ children = 'Beratung anfragen' }) {
   return <a href="#anfrage" className={styles.primary}>{children}<span aria-hidden="true">↗</span></a>
 }
 
-// Art direction keeps the desktop composition and loads one simpler mobile image.
-function CampaignImage({ desktopSrc, mobileSrc, alt, sizes, eager = false, className }) {
-  const common = { alt, loading: eager ? 'eager' : 'lazy', ...(eager ? { fetchPriority: 'high' } : {}) }
-  const { props: desktop } = getImageProps({ ...common, src: desktopSrc, width: 1536, height: 1024, sizes })
-  const { props: mobile } = getImageProps({ ...common, src: mobileSrc, width: 960, height: 720, sizes: 'calc(100vw - 40px)' })
-  return (
-    <picture className={className}>
-      <source media="(max-width: 767px)" srcSet={mobile.srcSet} sizes={mobile.sizes} width={960} height={720} />
-      <img {...desktop} />
-    </picture>
-  )
-}
-
 export default function CommercialVideoPage() {
   return (
     <div className={styles.page}>
@@ -67,10 +54,10 @@ export default function CommercialVideoPage() {
           <p className={styles.lead}>Kameras, Montage und Betreuung. Persönlich vor Ort, aus einer Hand.</p>
           <div id="hero-actions" className={styles.heroActions}><AdviceLink /><a href="#loesung" className={styles.textLink}>Welche Lösung passt zu mir? <span aria-hidden="true">↓</span></a></div>
         </div>
-        <figure className={styles.heroVisual}>
-          <CampaignImage desktopSrc="/campaigns/video-gewerbe/site.webp" mobileSrc="/campaigns/video-gewerbe/mobile-entrance.webp" alt="Videoüberwachung am Gewerbeobjekt" sizes="(max-width: 1100px) 55vw, 720px" eager />
-        </figure>
         <InquiryForm />
+        <figure className={styles.heroVisual}>
+          <Image src="/campaigns/video-gewerbe/site.webp" alt="Gewerbeobjekt mit Kameras an Lagerhalle, Büro und Zufahrt" width={1536} height={1024} sizes="(max-width: 767px) 100vw, (max-width: 1100px) 55vw, 720px" loading="eager" fetchPriority="high" />
+        </figure>
       </section>
 
       <div className={styles.assurances}>
@@ -98,7 +85,7 @@ export default function CommercialVideoPage() {
           <p className={styles.sectionLead}>Erkennen. Nachsehen. Lokal aufzeichnen.</p>
           <div className={styles.benefitGrid}>
             <article className={styles.nightVisual}>
-              <CampaignImage className={styles.nightPicture} desktopSrc="/campaigns/video-gewerbe/after-hours.webp" mobileSrc="/campaigns/video-gewerbe/mobile-after-hours.webp" alt="Überwachter Lagereingang nach Geschäftsschluss" sizes="65vw" />
+              <Image className={styles.nightPicture} src="/campaigns/video-gewerbe/after-hours.webp" alt="Überwachte Lagerzufahrt nach Geschäftsschluss" width={1536} height={1024} sizes="(max-width: 767px) 100vw, 65vw" />
               <div><h3>Feierabend.<br />Ihr Gelände bleibt im Blick.</h3><p>Ereignisse prüfen und bei Bedarf aus der Ferne nachsehen.</p></div>
             </article>
             <article className={styles.benefitCard}>

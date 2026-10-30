@@ -23,10 +23,8 @@
 .textLink{font-size:14px;font-weight:500;text-decoration:none;text-underline-offset:4px;display:inline-flex;align-items:center;gap:10px;min-height:44px}
 .textLink:hover{text-decoration:underline;color:var(--ft-red-brand)}
 .heroVisual{grid-column:1;grid-row:2;margin:20px -18px 0}
-.heroVisual picture{display:block}
 .heroVisual img{display:block;width:100%;height:auto;border-radius:20px}
 .formPanel{grid-column:2;grid-row:1 / span 2;background:var(--landing-surface);padding:28px;border:1px solid var(--landing-border);border-radius:20px;scroll-margin-top:94px}
-.formBack{display:none}
 .formPanel h2{font-size:25px;line-height:1.2;letter-spacing:-.025em;margin-bottom:10px}
 .formIntro{font-size:14px;margin-bottom:20px}
 .fields{border:0;margin:0;padding:0;display:grid;gap:13px;min-width:0}
@@ -65,8 +63,7 @@
 .tinted{background:var(--landing-surface)}
 .benefitGrid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:22px}
 .nightVisual{grid-row:span 2;position:relative;min-height:650px;border-radius:20px;overflow:hidden;isolation:isolate;display:flex;align-items:flex-end;padding:42px}
-.nightPicture{position:absolute;inset:0;z-index:-2}
-.nightPicture img{display:block;width:100%;height:100%;object-fit:cover;object-position:60% center}
+.nightPicture{position:absolute;inset:0;z-index:-2;display:block;width:100%;height:100%;object-fit:cover;object-position:60% center}
 .nightVisual::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,rgba(9,14,20,.94),rgba(9,14,20,.15) 65%,transparent);z-index:-1}
 .page .nightVisual h3{color:#fff;font-size:clamp(28px,3vw,42px);line-height:1.1;letter-spacing:-.035em}
 .nightVisual p{color:#eef0f2;max-width:33ch;font-size:16px;margin:17px 0 0}
@@ -134,18 +131,17 @@
   .hero{display:flex;flex-direction:column;padding-top:28px;padding-bottom:28px;gap:0}.heroCopy{width:100%}.eyebrow{font-size:11px;letter-spacing:0;margin-bottom:14px}
   .hero h1{font-size:clamp(29px,8.6vw,40px);max-width:21ch;margin-bottom:16px;line-height:1.08;scroll-margin-top:90px}.lead{font-size:16px;max-width:40ch;margin-bottom:22px}
   .heroActions{display:block}.heroActions>.textLink{display:none}.primary{font-size:14px;min-height:48px;padding:12px 21px}.heroActions>.primary{width:100%;justify-content:space-between}.textLink{font-size:13px;min-height:44px}
-  .heroVisual{order:2;margin:24px 0 0;width:100%}.heroVisual img{aspect-ratio:4/3;object-fit:cover}
-  /* Native fragment navigation opens the mobile form, including without JS. */
-  .formPanel{display:none;order:3;margin-top:28px;padding:24px;width:100%;scroll-margin-top:84px}.formPanel:target{display:block}.formPanel h2{font-size:24px}.formIntro{font-size:14px}.fields{gap:14px}.fields label{font-size:13px}
-  .formBack{display:flex;align-items:center;justify-content:space-between;min-height:44px;margin:-10px 0 14px;font-size:13px;text-decoration:none;border-bottom:1px solid var(--landing-border)}
+  .heroVisual{order:3;align-self:stretch;margin:28px -20px 0;width:auto}.heroVisual img{border-radius:0}
+  /* Keep the complete inquiry form in the opening section on every screen. */
+  .formPanel{display:block;order:2;margin-top:28px;padding:24px;width:100%;scroll-margin-top:84px}.formPanel h2{font-size:24px}.formIntro{font-size:14px}.fields{gap:14px}.fields label{font-size:13px}
   .formPanel :global(.ft-form-privacy-notice){font-size:12px}.formNote{font-size:12px}.formPanel .primary{min-height:50px}
   .assurances>div{grid-template-columns:1fr 1fr;gap:12px;padding-block:18px}.assurances span{font-size:12px;gap:7px;align-items:flex-start}.assurances span:nth-child(2),.assurances span:nth-child(3){display:none}
   .section{padding-top:44px;padding-bottom:44px}.sectionLead{font-size:15px;margin:16px 0 24px}
-  .propertySection .sectionLead{display:none}.properties{grid-template-columns:1fr;gap:0;margin-top:24px}.property{border-top:1px solid var(--landing-border)}.property>img{display:none}.property>div{padding:18px 0}.property:last-child>div{padding-bottom:0}.property h3{font-size:19px;margin-bottom:7px}.property p{font-size:14px;margin:0}
-  .benefitGrid{display:block}.nightVisual{display:block;min-height:0;padding:0;background:var(--landing-raised);isolation:auto}.nightVisual::after{display:none}.nightPicture{position:static;display:block;aspect-ratio:4/3}.nightPicture img{aspect-ratio:4/3;height:auto;object-position:center}.nightVisual>div{padding:22px}.page .nightVisual h3{font-size:25px;color:var(--landing-text);line-height:1.16}.nightVisual p{font-size:14px;color:var(--landing-muted);margin-top:12px}
+  .propertySection .sectionLead{display:none}.properties{grid-template-columns:1fr;gap:28px;margin:24px -20px 0}.property>img{border-radius:0}.property>div{padding:18px 20px 0}.property h3{font-size:19px;margin-bottom:7px}.property p{font-size:14px;margin:0}
+  .benefitGrid{display:block}.nightVisual{display:block;min-height:0;margin-inline:-20px;padding:0;background:var(--landing-raised);border-radius:0;isolation:auto}.nightVisual::after{display:none}.nightPicture{position:static;height:auto;object-position:center}.nightVisual>div{padding:22px 20px}.page .nightVisual h3{font-size:25px;color:var(--landing-text);line-height:1.16}.nightVisual p{font-size:14px;color:var(--landing-muted);margin-top:12px}
   .benefitCard{padding:22px 0 0;background:none;border-radius:0}.benefitCard>img{display:none}.benefitCard h3{font-size:20px;margin:0 0 7px}.benefitCard p{font-size:14px;max-width:none}
   .productSection{padding-bottom:44px}.productSection .eyebrow{font-size:12px}.productRail :global(.ft-gallery){gap:16px;scroll-padding-left:20px;padding-left:20px;padding-right:20px}.productRail :global(.ft-paddle-row){padding-inline:20px}.productCard{padding:22px}.productImage{height:165px;margin-block:8px}.productInfo h3{font-size:24px}.productPurpose{font-size:12px!important}.productInfo p{margin-bottom:14px}
-  .installSection{grid-template-columns:1fr;gap:24px;padding-top:0;padding-bottom:44px}.installVisual img{height:auto;aspect-ratio:3/2;object-position:center}.installCopy h2{font-size:29px;max-width:19ch}.installSteps{margin-block:24px;gap:20px}.installSteps h3{font-size:19px}.installSteps p{font-size:14px}
+  .installSection{grid-template-columns:1fr;gap:24px;padding-top:0;padding-bottom:44px}.installVisual{margin-inline:-20px}.installVisual img{height:auto;aspect-ratio:3/2;object-position:center;border-radius:0}.installCopy h2{font-size:29px;max-width:19ch}.installSteps{margin-block:24px;gap:20px}.installSteps h3{font-size:19px}.installSteps p{font-size:14px}
   .quoteSection{padding-bottom:44px}.quoteVisual{display:block;min-height:0}.quoteVisual>img,.quoteVisual::after{display:none}.quoteCopy{padding:28px;max-width:100%}.quoteCopy h2{font-size:29px;max-width:15ch}.quoteCopy p{font-size:15px;margin:16px 0 24px}
   .faqLayout{grid-template-columns:1fr;gap:24px}.faqLayout h2{margin-bottom:12px}.faqs summary{font-size:15px;padding-block:19px;gap:20px}.faqs details p{font-size:15px;padding-right:12px}.faqProduct{display:none}.faqLayout>div>p{font-size:14px;margin-bottom:4px}.faqLayout .phoneLink{font-size:23px;margin:8px 0}.faqLayout .small{font-size:12px}
   .finalScene{min-height:0;background:var(--landing-raised)}.finalScene>img,.finalScene::after{display:none}.finalContent{padding-block:44px}.finalContent h2{font-size:32px;max-width:15ch}.finalActions{align-items:flex-start;flex-direction:column;gap:8px;margin-top:24px}.finalContent address{margin-top:18px;font-size:15px}

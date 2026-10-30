@@ -50,7 +50,6 @@ export function InquiryForm() {
 
   return (
     <section id="anfrage" className={styles.formPanel} aria-labelledby="inquiry-heading" tabIndex={-1}>
-      <a href="#page-title" className={styles.formBack}>Zurück zur Übersicht <span aria-hidden="true">↑</span></a>
       {state === 'success' ? (
         <div ref={resultRef} tabIndex={-1} role="status" className={styles.success}>
           <span className={styles.successMark} aria-hidden="true">✓</span>

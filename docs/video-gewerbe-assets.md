@@ -83,7 +83,7 @@ Prompt: Use case: photorealistic-natural. One panoramic architectural photograph
 - Removed automatic dark variants from the campaign page, header and footer; native controls use the light color scheme on this route.
 - Production build passed. The refreshed browser reported a dark device preference with white page, header and input backgrounds, no image-generation labels and no desktop overflow. The mobile preview also displays the light layout.
 
-## Mannheim messaging and mobile revision
+## Mannheim messaging and first mobile revision (superseded below)
 
 - Mannheim is now in the main headline, installation section, inquiry introduction and final address block.
 - Desktop keeps its split hero, visible inquiry form and original image compositions. Mobile uses a simpler sequence, fewer repeated images, smaller product cards and plain cost/contact sections.
@@ -106,3 +106,11 @@ Final asset: `public/campaigns/video-gewerbe/mobile-after-hours.webp`
 Generated with the built-in image-generation tool. Original: `exec-c6c31abd-6a04-42f7-a233-9b544fe60129.png` in the conversation's Codex generated-images directory.
 
 Prompt: Use case: ads-marketing. Create one photorealistic 4:3 landscape photograph composed specifically for a MOBILE German commercial video surveillance landing page, readable at 350 pixels wide. A simple compact warehouse entrance after closing, straight-on architectural view at blue hour: one closed grey loading door in the center, a small pedestrian door on the right with warm practical lighting, one discreet realistic white CCTV camera visible above the doorway. Tight balanced composition of this ONE entrance area only, not an entire industrial estate. Full loading door and security camera within frame, just a little empty pavement foreground, crisp believable materials. Deep slate blue with restrained warm light. Calm and professional, no danger or crime scene. No people, vehicles, text, logos, UI, labels, watermarks or detection boxes. Fictional illustration. This photo is displayed as a standalone 4:3 image with HTML caption BELOW it, so no negative text space or dark overlay is needed.
+
+## Mobile form and original photography correction — 2026-10-30
+
+- The full inquiry form is always visible directly after the opening copy on mobile, before the hero image. It no longer depends on `#anfrage` navigation. The desktop form stays beside the hero.
+- Restored the original `site.webp` and `after-hours.webp` on mobile and restored the warehouse and shop images. The two alternative mobile assets above are retained as unused files; the page no longer references them.
+- All five mobile scene images reach both viewport edges. Hero, warehouse, shop and night scenes keep their original aspect ratios, preserving the complete compositions. Text and form controls keep their readable side padding.
+- Mannheim messaging and the white theme remain. Product browsing and the existing inquiry submission flow are unchanged.
+- Production build and diff checks passed. Browser checks at 320, 390, 430, 820 and 1440px found no horizontal overflow and confirmed the visible form. All five mobile scene images matched the viewport width, loaded successfully when scrolled into view, and used the original assets. Form input was filled and cleared without submission; no real lead was created.
