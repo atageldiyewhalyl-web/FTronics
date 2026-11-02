@@ -21,8 +21,9 @@ secrets. Never put either in a `NEXT_PUBLIC_` variable.
 
 ## Submission flow
 
-1. `InquiryForm.jsx` on `/videoueberwachung-gewerbe` validates the required company,
-   contact name and email fields, then calls the shared `submitLead` helper.
+1. The campaign `InquiryForm.jsx`, used on `/videoueberwachung-gewerbe` and
+   `/alarmanlagen-gewerbe`, validates the required company, contact name and
+   email fields, then calls the shared `submitLead` helper.
 2. The `ft-lead-anfrage` Edge Function validates the payload and stores it in
    `public.ft_lead_anfragen`. Row-level security blocks public table access.
 3. Resend sends an internal notification and a confirmation to the requester.
@@ -31,10 +32,14 @@ secrets. Never put either in a `NEXT_PUBLIC_` variable.
    On failure, entered values remain available for retry. Conversion events fire
    after success and only with marketing consent.
 
-Campaign inquiries have form name `Landingpage Videoüberwachung Gewerbe` and
-subject `Videoüberwachung für Gewerbe`. Company, property type, location and
-the request are included in the message; name, email, phone and page URL are
-stored separately. The page URL preserves campaign query parameters.
+Campaign inquiries use a service-specific form name and subject:
+
+- `Landingpage Videoüberwachung Gewerbe` / `Videoüberwachung für Gewerbe`
+- `Landingpage Alarmanlagen Gewerbe` / `Alarmanlagen für Gewerbe`
+
+Company, property type, location and the request are included in the message;
+name, email, phone and page URL are stored separately. The page URL preserves
+campaign query parameters.
 
 Campaign notifications go to both `info@ftst.eu` and `halyl@xn--nll-hoa.com`
 (`halyl@nüll.com`). Other website forms retain their existing Halyl-only routing.

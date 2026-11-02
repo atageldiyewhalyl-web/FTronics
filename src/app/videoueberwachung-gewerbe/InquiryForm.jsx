@@ -6,7 +6,11 @@ import { submitLead } from '@/lib/lead-submit'
 import { site } from '@/lib/site'
 import styles from './page.module.css'
 
-export function InquiryForm() {
+export function InquiryForm({
+  subject = 'Videoüberwachung für Gewerbe',
+  formName = 'Landingpage Videoüberwachung Gewerbe',
+  defaultMessage = 'Bitte beraten Sie mich zu einer passenden Videoüberwachung.',
+}) {
   const [state, setState] = useState('idle')
   const submitting = useRef(false)
   const resultRef = useRef(null)
@@ -28,15 +32,15 @@ export function InquiryForm() {
         fullName: String(data.get('name')).trim(),
         email: String(data.get('email')).trim(),
         phone: String(data.get('phone') || '').trim(),
-        subject: 'Videoüberwachung für Gewerbe',
+        subject,
         customerType: 'Gewerbekunde',
-        formName: 'Landingpage Videoüberwachung Gewerbe',
+        formName,
         message: [
-          'Beratungsanfrage: Videoüberwachung für Gewerbe',
+          `Beratungsanfrage: ${subject}`,
           `Firma: ${String(data.get('company')).trim()}`,
           `Objekt: ${data.get('property') || 'Noch offen'}`,
           `PLZ / Ort: ${String(data.get('location') || '').trim() || 'Noch offen'}`,
-          `Anliegen: ${String(data.get('message') || '').trim() || 'Bitte beraten Sie mich zu einer passenden Videoüberwachung.'}`,
+          `Anliegen: ${String(data.get('message') || '').trim() || defaultMessage}`,
         ].join('\n'),
       })
       setState('success')

@@ -32,7 +32,7 @@ const loesungen = [
       'Fernzugriff & Benachrichtigungen',
       'Integration mit bestehender Infrastruktur',
     ],
-    link: { label: 'Angebot anfragen →', href: '/kontakt' },
+    link: { label: 'Alarmanlagen für Gewerbe →', href: '/alarmanlagen-gewerbe' },
   },
   {
     title: 'Videoüberwachung',

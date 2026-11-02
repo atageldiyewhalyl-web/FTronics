@@ -83,6 +83,29 @@ test('browser recipient overrides cannot reroute campaign notifications', async 
   assert.deepEqual(f.emails.map(email => email.to), [halyl, client, payload.email])
 })
 
+test('alarm campaign keeps its service identity and notifies both approved inboxes', async () => {
+  const f = fixture()
+  const alarm = {
+    ...payload,
+    formName: 'Landingpage Alarmanlagen Gewerbe',
+    subject: 'Alarmanlagen für Gewerbe',
+    pageUrl: 'https://www.ftsicherheitstechnik.com/alarmanlagen-gewerbe?utm_campaign=alarm',
+    message: 'Beratungsanfrage: Alarmanlagen für Gewerbe\nFirma: Local test company',
+    notifyEmails: 'unapproved@example.test',
+  }
+  const response = await f.submit(alarm)
+  assert.equal(response.status, 200)
+  assert.deepEqual(f.emails.map(email => email.to), [halyl, client, payload.email])
+  assert.equal(f.records[0].form_name, alarm.formName)
+  assert.equal(f.records[0].subject, alarm.subject)
+  assert.equal(f.records[0].page_url, alarm.pageUrl)
+  assert.equal(f.records[0].message, alarm.message)
+  assert.equal(f.records[0].notify_emails, `${halyl},${client}`)
+  assert.equal(f.emails[0].reply_to, payload.email)
+  assert.match(f.emails[1].subject, /Alarmanlagen/)
+  assert.equal(f.updates.at(-1).status, 'email_sent')
+})
+
 test('other website forms retain their existing Halyl-only notifications', async () => {
   const f = fixture()
   await f.submit({ ...payload, formName: 'Kontaktformular', notifyEmails: `${client},unapproved@example.test` })

@@ -6,6 +6,7 @@ const routes = [
   ['/loesungen-privat', 0.9, 'weekly'],
   ['/loesungen-gewerbe', 0.9, 'weekly'],
   ['/videoueberwachung-gewerbe', 0.85, 'monthly'],
+  ['/alarmanlagen-gewerbe', 0.85, 'monthly'],
   ['/produkte', 0.85, 'weekly'],
   ['/produkte/fc-8d-pro', 0.8, 'weekly'],
   ['/produkte/fc-8d', 0.8, 'weekly'],

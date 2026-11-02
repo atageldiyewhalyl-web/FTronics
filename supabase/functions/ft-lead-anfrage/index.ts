@@ -26,7 +26,10 @@ const notificationRecipients = [
 const allowedNotifyEmails = new Set([
   "halyl@xn--nll-hoa.com",
 ]);
-const campaignFormName = "Landingpage Videoüberwachung Gewerbe";
+const campaignFormNames = new Set([
+  "Landingpage Videoüberwachung Gewerbe",
+  "Landingpage Alarmanlagen Gewerbe",
+]);
 const campaignRecipients = ["halyl@xn--nll-hoa.com", "info@ftst.eu"];
 
 function cleanText(value: unknown, maxLength = 2000) {
@@ -83,7 +86,7 @@ function parseEmailList(value: string) {
 function resolveRecipients(lead: ReturnType<typeof validatePayload>) {
   // The campaign's approved inboxes are controlled on the server, never by
   // browser-supplied notifyEmails. Other website forms keep their own routing.
-  if (lead.formName === campaignFormName) return campaignRecipients;
+  if (campaignFormNames.has(lead.formName)) return campaignRecipients;
 
   const requestedRecipients = parseEmailList(lead.notifyEmails)
     .filter((email) => allowedNotifyEmails.has(email));

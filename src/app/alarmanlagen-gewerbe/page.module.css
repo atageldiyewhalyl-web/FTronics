@@ -1,0 +1,42 @@
+/* Extend the established white FT campaign design.
+   Design variance 5 / motion 2 / visual density 2: quiet, image-led B2B.
+   The complete hero form takes priority over a viewport-height hero. */
+.page{background:#fff}
+.eveningVisual{margin:0;overflow:hidden;border-radius:20px}
+.eveningVisual img{display:block;width:100%;height:auto;aspect-ratio:2.3;object-fit:cover;object-position:center 48%}
+.alarmSteps{list-style:none;margin:34px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px;counter-reset:alarm}
+.alarmSteps li{counter-increment:alarm}
+.alarmSteps li::before{content:counter(alarm,decimal-leading-zero);display:block;margin-bottom:15px;color:var(--ft-red-brand);font-size:14px;font-weight:600}
+.alarmSteps h3{font-size:21px;margin:0 0 10px}
+.alarmSteps p{font-size:15px;margin:0;max-width:37ch}
+.technology{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:56px;align-items:center}
+.detailVisual{margin:0}
+.detailVisual img{display:block;width:100%;height:auto;border-radius:20px}
+.components{margin:0;display:grid;gap:24px}
+.components dt{font-size:21px;font-weight:600;letter-spacing:-.02em;line-height:1.3}
+.components dd{margin:6px 0 0;font-size:15px;color:var(--landing-muted);line-height:1.65;max-width:42ch}
+.costSection{padding-bottom:76px}
+.costPanel{background:var(--landing-surface);border-radius:20px;padding:42px;display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:52px;align-items:center}
+.costPanel h2{grid-column:1;margin:0;max-width:22ch}
+.costPanel p{grid-column:1;font-size:16px;max-width:58ch;margin:20px 0 0}
+.costPanel>a{grid-column:2;grid-row:1 / span 2}
+.installation{padding-top:0}
+.finalSection>div{padding-inline:0}
+.finalSection h2{max-width:22ch}
+.finalSection p{font-size:17px;margin:22px 0 0}
+@media(min-width:768px) and (max-width:1100px){
+  .technology{gap:30px}.components{gap:19px}.components dt{font-size:19px}
+  .alarmSteps{gap:24px}.alarmSteps h3{font-size:20px}.costPanel{padding:32px;column-gap:30px}
+}
+@media(max-width:767px){
+  .eveningVisual{margin-inline:-20px;border-radius:0}.eveningVisual img{aspect-ratio:3/2;object-fit:contain}
+  .alarmSteps{grid-template-columns:1fr;gap:23px;margin-top:26px}
+  .alarmSteps li{display:grid;grid-template-columns:24px 1fr;column-gap:14px}
+  .alarmSteps li::before{grid-row:span 2;line-height:25px;margin:0;font-size:12px}
+  .alarmSteps h3{font-size:19px;margin:0 0 6px}.alarmSteps p{grid-column:2;font-size:14px;max-width:none}
+  .technology{grid-template-columns:1fr;gap:24px}.detailVisual{margin-inline:-20px}.detailVisual img{border-radius:0}
+  .components{gap:20px}.components dt{font-size:19px}.components dd{font-size:14px;max-width:none}
+  .costSection{padding-bottom:44px}.costPanel{display:block;padding:28px}.costPanel h2{font-size:28px;max-width:17ch}
+  .costPanel p{font-size:15px;margin:16px 0 23px}
+  .finalSection h2{font-size:32px;max-width:20ch}.finalSection p{font-size:15px;margin-top:18px}
+}

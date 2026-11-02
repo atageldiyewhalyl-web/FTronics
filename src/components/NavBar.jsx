@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { navItems } from '@/lib/site'
+import { campaignRoutes } from '@/lib/campaigns'
 import { Button } from './ui'
 import { CampaignHeader } from './CampaignHeader'
 
@@ -234,7 +235,7 @@ export function NavBar() {
     links[(next + links.length) % links.length].focus()
   }
 
-  if (pathname === '/videoueberwachung-gewerbe') return <CampaignHeader />
+  if (campaignRoutes.includes(pathname)) return <CampaignHeader />
 
   return (
     <nav

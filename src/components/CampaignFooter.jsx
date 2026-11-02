@@ -3,12 +3,13 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { site, legalLinks } from '@/lib/site'
+import { campaignRoutes } from '@/lib/campaigns'
 import { PrivacySettingsButton } from './PrivacySettingsButton'
 import styles from './campaign-footer.module.css'
 
 export function CampaignFooter({ children }) {
   const pathname = usePathname()
-  if (pathname !== '/videoueberwachung-gewerbe') return children
+  if (!campaignRoutes.includes(pathname)) return children
   return (
     <footer className={styles.footer}>
       <div className={styles.inner}>
