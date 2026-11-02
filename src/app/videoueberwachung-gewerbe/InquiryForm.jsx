@@ -10,6 +10,8 @@ export function InquiryForm({
   subject = 'Videoüberwachung für Gewerbe',
   formName = 'Landingpage Videoüberwachung Gewerbe',
   defaultMessage = 'Bitte beraten Sie mich zu einer passenden Videoüberwachung.',
+  heading = 'Was möchten Sie absichern?',
+  intro = 'Unser Team in Mannheim berät Sie persönlich.',
 }) {
   const [state, setState] = useState('idle')
   const submitting = useRef(false)
@@ -64,8 +66,8 @@ export function InquiryForm({
         </div>
       ) : (
         <>
-          <h2 id="inquiry-heading">Was möchten Sie absichern?</h2>
-          <p className={styles.formIntro}>Unser Team in Mannheim berät Sie persönlich.</p>
+          <h2 id="inquiry-heading">{heading}</h2>
+          <p className={styles.formIntro}>{intro}</p>
           <form onSubmit={handleSubmit} aria-busy={state === 'sending'}>
             <fieldset disabled={state === 'sending'} className={styles.fields}>
               <label>Firmenname <span>*</span><input name="company" autoComplete="organization" maxLength={160} required onInput={e => e.target.setCustomValidity('')} /></label>

@@ -29,6 +29,7 @@ const allowedNotifyEmails = new Set([
 const campaignFormNames = new Set([
   "Landingpage Videoüberwachung Gewerbe",
   "Landingpage Alarmanlagen Gewerbe",
+  "Landingpage Zutrittskontrolle Gewerbe",
 ]);
 const campaignRecipients = ["halyl@xn--nll-hoa.com", "info@ftst.eu"];
 

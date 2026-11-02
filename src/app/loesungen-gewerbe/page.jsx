@@ -54,7 +54,7 @@ const loesungen = [
       'Besucher-Management',
       'Integration mit Zeiterfassung',
     ],
-    link: { label: 'Angebot anfragen →', href: '/kontakt' },
+    link: { label: 'Zutrittskontrolle für Gewerbe →', href: '/zutrittskontrolle-gewerbe' },
   },
   {
     title: 'Zeiterfassung',

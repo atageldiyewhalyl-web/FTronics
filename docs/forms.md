@@ -21,8 +21,8 @@ secrets. Never put either in a `NEXT_PUBLIC_` variable.
 
 ## Submission flow
 
-1. The campaign `InquiryForm.jsx`, used on `/videoueberwachung-gewerbe` and
-   `/alarmanlagen-gewerbe`, validates the required company, contact name and
+1. The campaign `InquiryForm.jsx`, used on `/videoueberwachung-gewerbe`,
+   `/alarmanlagen-gewerbe` and `/zutrittskontrolle-gewerbe`, validates the required company, contact name and
    email fields, then calls the shared `submitLead` helper.
 2. The `ft-lead-anfrage` Edge Function validates the payload and stores it in
    `public.ft_lead_anfragen`. Row-level security blocks public table access.
@@ -36,6 +36,7 @@ Campaign inquiries use a service-specific form name and subject:
 
 - `Landingpage Videoüberwachung Gewerbe` / `Videoüberwachung für Gewerbe`
 - `Landingpage Alarmanlagen Gewerbe` / `Alarmanlagen für Gewerbe`
+- `Landingpage Zutrittskontrolle Gewerbe` / `Zutrittskontrolle für Gewerbe`
 
 Company, property type, location and the request are included in the message;
 name, email, phone and page URL are stored separately. The page URL preserves
