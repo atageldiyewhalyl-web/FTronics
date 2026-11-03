@@ -11,11 +11,11 @@ import {
   writeConsent,
 } from '@/lib/privacy-consent'
 
-const GOOGLE_ADS_ID = 'AW-960863776'
+const GOOGLE_TAG_MANAGER_ID = 'GTM-KJCW2GKZ'
 const emptyPreferences = { marketing: false, externalMedia: false }
 
-function loadGoogleAds() {
-  if (document.getElementById('ft-google-ads')) return
+function loadGoogleMarketing() {
+  if (document.getElementById('ft-google-tag-manager')) return
 
   window.dataLayer = window.dataLayer || []
   window.gtag = window.gtag || function gtag() {
@@ -27,13 +27,16 @@ function loadGoogleAds() {
     ad_user_data: 'granted',
     ad_personalization: 'granted',
   })
-  window.gtag('js', new Date())
-  window.gtag('config', GOOGLE_ADS_ID)
+
+  window.dataLayer.push({
+    'gtm.start': new Date().getTime(),
+    event: 'gtm.js',
+  })
 
   const script = document.createElement('script')
-  script.id = 'ft-google-ads'
+  script.id = 'ft-google-tag-manager'
   script.async = true
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}`
+  script.src = `https://www.googletagmanager.com/gtm.js?id=${GOOGLE_TAG_MANAGER_ID}`
   document.head.appendChild(script)
 }
 
@@ -85,7 +88,7 @@ export function PrivacyConsentManager() {
   }, [])
 
   useEffect(() => {
-    if (consent?.marketing) loadGoogleAds()
+    if (consent?.marketing) loadGoogleMarketing()
   }, [consent?.marketing])
 
   useEffect(() => {
@@ -156,8 +159,9 @@ export function PrivacyConsentManager() {
             <p className="ft-consent-kicker">Ihre Privatsphäre</p>
             <h2>Sie entscheiden, was geladen wird</h2>
             <p>
-              Notwendige Funktionen laufen immer. Google Ads und Google Maps laden wir erst nach
-              Ihrer ausdrücklichen Einwilligung. Ihre Auswahl können Sie jederzeit ändern.
+              Notwendige Funktionen laufen immer. Google Tag Manager, Google Ads und Google Maps
+              laden wir erst nach Ihrer ausdrücklichen Einwilligung. Ihre Auswahl können Sie
+              jederzeit ändern.
             </p>
             {gpc && (
               <p className="ft-consent-notice" role="status">
@@ -232,8 +236,8 @@ export function PrivacyConsentManager() {
 
               <label className="ft-consent-service">
                 <span>
-                  <strong>Marketing – Google Ads</strong>
-                  <small>Misst Anzeigen-Conversions nach erfolgreichen Anfragen. Anbieter: Google Ireland Limited.</small>
+                  <strong>Marketing – Google Tag Manager und Google Ads</strong>
+                  <small>Lädt unseren Tag-Container und misst Anzeigen-Conversions nach erfolgreichen Anfragen. Anbieter: Google Ireland Limited.</small>
                   {gpc && <small className="ft-consent-gpc">Durch Global Privacy Control deaktiviert.</small>}
                 </span>
                 <input

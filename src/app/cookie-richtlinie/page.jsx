@@ -17,10 +17,10 @@ const rows = [
     duration: '180 Tage',
   },
   {
-    name: '_gcl_au, _gcl_aw und mögliche Google-Werbe-Kennungen',
+    name: 'Google Tag Manager, _gcl_au, _gcl_aw und mögliche Google-Werbe-Kennungen',
     provider: 'Google Ireland Limited',
     category: 'Marketing',
-    purpose: 'Zuordnung von Anzeigeninteraktionen und Messung erfolgreicher Anfragen.',
+    purpose: 'Auslieferung des Marketing-Tag-Containers, Zuordnung von Anzeigeninteraktionen und Messung erfolgreicher Anfragen.',
     duration: 'Nur nach Einwilligung; abhängig von Google, typischerweise bis zu 90 Tage',
   },
   {
@@ -43,13 +43,13 @@ export default function CookieRichtlinie() {
             Welche Speichertechnologien wir verwenden, warum wir sie einsetzen und wie Sie Ihre
             Auswahl kontrollieren.
           </p>
-          <p><strong>Stand:</strong> 16. Oktober 2026</p>
+          <p><strong>Stand:</strong> 3. November 2026</p>
 
           <h2>Grundsatz</h2>
           <p>
             Ohne Ihre Einwilligung setzen wir ausschließlich die technisch notwendige
-            Einwilligungseinstellung. Google Ads und Google Maps bleiben blockiert. Google Tag
-            Manager, Google Analytics, Social-Media-Pixel und versteckte Tracking-Embeds werden
+            Einwilligungseinstellung. Google Tag Manager, Google Ads und Google Maps bleiben
+            blockiert. Google Analytics, Social-Media-Pixel und versteckte Tracking-Embeds werden
             nicht eingesetzt.
           </p>
 
@@ -93,9 +93,10 @@ export default function CookieRichtlinie() {
           </p>
           <h3>Marketing</h3>
           <p>
-            Google Ads wird ausschließlich nach Zustimmung geladen. Wir messen erfolgreiche
-            Anfragen, übermitteln dabei aber keine Namen, E-Mail-Adressen, Telefonnummern oder
-            Nachrichtentexte an Google.
+            Google Tag Manager und Google Ads werden ausschließlich nach Zustimmung geladen. Der
+            Tag Manager liefert unseren Marketing-Tag-Container aus; darüber messen wir
+            erfolgreiche Anfragen. Wir übermitteln dabei aber keine Namen, E-Mail-Adressen,
+            Telefonnummern oder Nachrichtentexte an Google.
           </p>
           <h3>Externe Medien</h3>
           <p>

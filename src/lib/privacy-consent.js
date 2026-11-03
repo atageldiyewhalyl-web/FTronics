@@ -1,5 +1,5 @@
 export const CONSENT_COOKIE_NAME = 'ft_privacy_consent'
-export const CONSENT_VERSION = '2026-10-16'
+export const CONSENT_VERSION = '2026-11-03'
 export const CONSENT_MAX_AGE_SECONDS = 60 * 60 * 24 * 180
 export const CONSENT_CHANGE_EVENT = 'ft:consent-change'
 export const OPEN_PRIVACY_SETTINGS_EVENT = 'ft:open-privacy-settings'

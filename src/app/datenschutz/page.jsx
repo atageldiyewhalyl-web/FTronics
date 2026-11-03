@@ -5,7 +5,7 @@ import { site } from '@/lib/site'
 export const metadata = {
   title: 'Datenschutzerklärung',
   description:
-    'Datenschutzerklärung der FT Sicherheitstechnik Mannheim mit Informationen zu Hosting, Kontaktanfragen, Google Ads und Google Maps.',
+    'Datenschutzerklärung der FT Sicherheitstechnik Mannheim mit Informationen zu Hosting, Kontaktanfragen, Google Tag Manager, Google Ads und Google Maps.',
   alternates: { canonical: '/datenschutz' },
   robots: { index: false, follow: true },
 }
@@ -22,7 +22,7 @@ export default function Datenschutz() {
           <p className="ft-lead">
             Informationen über die Verarbeitung personenbezogener Daten bei Nutzung dieser Website.
           </p>
-          <p><strong>Stand:</strong> 16. Oktober 2026</p>
+          <p><strong>Stand:</strong> 3. November 2026</p>
 
           <h2 style={headingStyle}>1. Verantwortlicher</h2>
           <p>
@@ -113,14 +113,17 @@ export default function Datenschutz() {
             den anwendbaren Fristen länger aufbewahrt werden.
           </p>
 
-          <h2 style={headingStyle}>6. Google Ads und Conversion-Messung</h2>
+          <h2 style={headingStyle}>6. Google Tag Manager, Google Ads und Conversion-Messung</h2>
           <p>
-            Nur wenn Sie der Kategorie „Marketing“ zustimmen, laden wir Google Ads von Google
-            Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland. Die Conversion-Messung
-            hilft uns zu erkennen, ob eine Anzeige zu einer erfolgreichen Anfrage geführt hat.
-            Dabei können IP-Adresse, Browser- und Geräteinformationen, aufgerufene Seiten,
-            Zeitpunkte, Anzeigen- und Cookie-Kennungen sowie das Conversion-Ereignis verarbeitet
-            werden. Inhalte Ihrer Formulare werden nicht an Google übermittelt.
+            Nur wenn Sie der Kategorie „Marketing“ zustimmen, laden wir Google Tag Manager und
+            Google Ads von Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland.
+            Google Tag Manager dient dabei ausschließlich zur Auslieferung und Steuerung der von
+            uns konfigurierten Marketing-Tags; der Dienst setzt nach Angaben von Google selbst
+            keine Cookies. Die Conversion-Messung hilft uns zu erkennen, ob eine Anzeige zu einer
+            erfolgreichen Anfrage geführt hat. Dabei können IP-Adresse, Browser- und
+            Geräteinformationen, aufgerufene Seiten, Zeitpunkte, Anzeigen- und Cookie-Kennungen
+            sowie das Conversion-Ereignis verarbeitet werden. Inhalte Ihrer Formulare werden nicht
+            an Google übermittelt.
           </p>
           <p>
             Rechtsgrundlagen sind Ihre Einwilligung gemäß Art. 6 Abs. 1 lit. a DSGVO und § 25 Abs. 1
