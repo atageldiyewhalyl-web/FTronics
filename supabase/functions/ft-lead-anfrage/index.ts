@@ -22,6 +22,7 @@ const corsHeaders = {
 const fromEmail = "FT Sicherheitstechnik <anfrage@forms.xn--nll-hoa.com>";
 const notificationRecipients = [
   "halyl@xn--nll-hoa.com",
+  "info@ftst.eu",
 ];
 const allowedNotifyEmails = new Set([
   "halyl@xn--nll-hoa.com",
@@ -86,7 +87,7 @@ function parseEmailList(value: string) {
 
 function resolveRecipients(lead: ReturnType<typeof validatePayload>) {
   // The campaign's approved inboxes are controlled on the server, never by
-  // browser-supplied notifyEmails. Other website forms keep their own routing.
+  // browser-supplied notifyEmails. All website forms notify both approved inboxes.
   if (campaignFormNames.has(lead.formName)) return campaignRecipients;
 
   const requestedRecipients = parseEmailList(lead.notifyEmails)

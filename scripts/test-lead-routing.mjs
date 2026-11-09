@@ -129,12 +129,14 @@ test('access-control campaign keeps its service identity and notifies both appro
   assert.equal(f.updates.at(-1).status, 'email_sent')
 })
 
-test('other website forms retain their existing Halyl-only notifications', async () => {
-  const f = fixture()
-  await f.submit({ ...payload, formName: 'Kontaktformular', notifyEmails: `${client},unapproved@example.test` })
-  assert.deepEqual(f.emails.map(email => email.to), [halyl, payload.email])
-  assert.equal(f.records[0].notify_emails, halyl)
-})
+for (const formName of ['Startseite CTA', 'Kontaktseite', 'System-Konfigurator']) {
+  test(`${formName} notifies both approved inboxes`, async () => {
+    const f = fixture()
+    await f.submit({ ...payload, formName, notifyEmails: `${client},unapproved@example.test` })
+    assert.deepEqual(f.emails.map(email => email.to), [halyl, client, payload.email])
+    assert.equal(f.records[0].notify_emails, `${halyl},${client}`)
+  })
+}
 
 test('invalid submissions cannot save a lead or trigger email', async () => {
   const f = fixture()
