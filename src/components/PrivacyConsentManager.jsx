@@ -176,18 +176,18 @@ export function PrivacyConsentManager() {
           </div>
           <div className="ft-consent-banner__actions">
             <button
+              className="ft-consent-action ft-consent-action--primary"
+              type="button"
+              onClick={() => persist({ marketing: !gpc, externalMedia: true }, 'accept-all')}
+            >
+              {gpc ? 'Externe Medien akzeptieren' : 'Alle akzeptieren'}
+            </button>
+            <button
               className="ft-consent-action ft-consent-action--equal"
               type="button"
               onClick={() => persist({ marketing: false, externalMedia: false }, 'reject-all')}
             >
               Nur notwendige
-            </button>
-            <button
-              className="ft-consent-action ft-consent-action--equal"
-              type="button"
-              onClick={() => persist({ marketing: !gpc, externalMedia: true }, 'accept-all')}
-            >
-              {gpc ? 'Externe Medien akzeptieren' : 'Alle akzeptieren'}
             </button>
             <button
               className="ft-consent-action ft-consent-action--settings"
