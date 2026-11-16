@@ -37,7 +37,7 @@ export function SiteFooter() {
           <span>
             © {new Date().getFullYear()} {site.name}. Alle Rechte vorbehalten. USt-IdNr: {site.vatId}
           </span>
-          <a className="ft-footer-madeby" href="https://nüll.com" target="_blank" rel="noopener noreferrer">
+          <a className="ft-footer-madeby" href="https://nuell-agentur.com/" target="_blank" rel="noopener noreferrer">
             Site made by <strong>nüll.</strong>
           </a>
           <nav aria-label="Rechtliches">
