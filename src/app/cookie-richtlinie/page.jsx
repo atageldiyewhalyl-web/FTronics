@@ -24,6 +24,13 @@ const rows = [
     duration: 'Nur nach Einwilligung; abhängig von Google, typischerweise bis zu 90 Tage',
   },
   {
+    name: 'Google Analytics 4: _ga, _ga_*',
+    provider: 'Google Ireland Limited',
+    category: 'Marketing',
+    purpose: 'Unterscheidung von Besuchern und Sitzungen, Auswertung von Seitenaufrufen, Anfragen und Kontaktklicks.',
+    duration: 'Nur nach Einwilligung; bis zu 2 Jahre',
+  },
+  {
     name: 'Google-Maps-Speicher und -Cookies',
     provider: 'Google Ireland Limited',
     category: 'Externe Medien',
@@ -43,12 +50,12 @@ export default function CookieRichtlinie() {
             Welche Speichertechnologien wir verwenden, warum wir sie einsetzen und wie Sie Ihre
             Auswahl kontrollieren.
           </p>
-          <p><strong>Stand:</strong> 3. November 2026</p>
+          <p><strong>Stand:</strong> 18. November 2026</p>
 
           <h2>Grundsatz</h2>
           <p>
             Ohne Ihre Einwilligung setzen wir ausschließlich die technisch notwendige
-            Einwilligungseinstellung. Google Tag Manager, Google Ads und Google Maps bleiben
+            Einwilligungseinstellung. Google Tag Manager, Google Analytics, Google Ads und Google Maps bleiben
             blockiert. Google Analytics, Social-Media-Pixel und versteckte Tracking-Embeds werden
             nicht eingesetzt.
           </p>
@@ -93,7 +100,7 @@ export default function CookieRichtlinie() {
           </p>
           <h3>Marketing</h3>
           <p>
-            Google Tag Manager und Google Ads werden ausschließlich nach Zustimmung geladen. Der
+            Google Tag Manager, Google Analytics und Google Ads werden ausschließlich nach Zustimmung geladen. Der
             Tag Manager liefert unseren Marketing-Tag-Container aus; darüber messen wir
             erfolgreiche Anfragen. Wir übermitteln dabei aber keine Namen, E-Mail-Adressen,
             Telefonnummern oder Nachrichtentexte an Google.

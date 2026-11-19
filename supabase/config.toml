@@ -1,2 +1,5 @@
 [functions.ft-lead-anfrage]
 verify_jwt = false
+
+[functions.ft-lead-interaktion]
+verify_jwt = false

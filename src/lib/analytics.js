@@ -5,6 +5,54 @@ function currentPagePath() {
   return `${window.location.pathname}${window.location.search}`
 }
 
+const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || '').replace(/\/$/, '')
+const leadEndpoint = process.env.NEXT_PUBLIC_LEAD_CAPTURE_ENDPOINT || ''
+const interactionEndpoint = supabaseUrl
+  ? `${supabaseUrl}/functions/v1/ft-lead-interaktion`
+  : leadEndpoint.replace(/ft-lead-anfrage\/?$/, 'ft-lead-interaktion')
+
+function deviceClass() {
+  const width = window.innerWidth || 0
+  if (width < 768) return 'mobile'
+  if (width < 1100) return 'tablet'
+  return 'desktop'
+}
+
+// Anonymous first-party log in Supabase (ft_lead_interaktionen). It stores no
+// IP, cookie or visitor ID, so it runs regardless of marketing consent and
+// gives the client report counts that GA4 misses when cookies are declined.
+function logInteraction(eventType, details = {}) {
+  if (typeof window === 'undefined' || !interactionEndpoint.includes('ft-lead-interaktion')) return
+
+  const params = new URLSearchParams(window.location.search)
+  const body = JSON.stringify({
+    eventType,
+    pagePath: window.location.pathname,
+    utmSource: params.get('utm_source'),
+    utmMedium: params.get('utm_medium'),
+    utmCampaign: params.get('utm_campaign'),
+    fromGoogleAds: params.has('gclid') || params.has('gbraid') || params.has('wbraid'),
+    device: deviceClass(),
+    details,
+  })
+
+  try {
+    // text/plain keeps sendBeacon a simple request (no CORS preflight) and the
+    // beacon survives the page handing off to the phone or mail app.
+    const sent = navigator.sendBeacon?.(interactionEndpoint, new Blob([body], { type: 'text/plain' }))
+    if (!sent) {
+      fetch(interactionEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body,
+        keepalive: true,
+      }).catch(() => {})
+    }
+  } catch {
+    // Logging must never break the click.
+  }
+}
+
 const GOOGLE_ADS_ID = 'AW-960863776'
 const GOOGLE_ADS_CONVERSION_LABELS = {
   contact_form: '9ERXCKa2g4AdEKC8lsoD',
@@ -70,12 +118,16 @@ export function trackLeadGenerated({
 }
 
 export function trackContactClick(contactMethod) {
+  logInteraction(`${contactMethod}_click`)
   pushDataLayer('contact_click', {
     contact_method: contactMethod,
   })
 }
 
 export function trackConfiguratorProgress(stage, stepNumber, parameters = {}) {
+  if (stage === 'start' || stage === 'final_step') {
+    logInteraction(`configurator_${stage}`, { object_type: parameters.object_type || '' })
+  }
   pushDataLayer('configurator_progress', {
     configurator_stage: stage,
     step_number: stepNumber,

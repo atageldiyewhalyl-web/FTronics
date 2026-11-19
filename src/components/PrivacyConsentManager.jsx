@@ -12,6 +12,9 @@ import {
 } from '@/lib/privacy-consent'
 
 const GOOGLE_TAG_MANAGER_ID = 'GTM-KJCW2GKZ'
+// GA4 property "FT Sicherheitstechnik Website" (properties/564943700) in the
+// nüll tracking account. Loaded next to GTM so the setup lives in this repo.
+const GA4_MEASUREMENT_ID = 'G-WP3LJBNJSM'
 const emptyPreferences = { marketing: false, externalMedia: false }
 
 function loadGoogleMarketing() {
@@ -38,6 +41,14 @@ function loadGoogleMarketing() {
   script.async = true
   script.src = `https://www.googletagmanager.com/gtm.js?id=${GOOGLE_TAG_MANAGER_ID}`
   document.head.appendChild(script)
+
+  window.gtag('js', new Date())
+  window.gtag('config', GA4_MEASUREMENT_ID)
+  const analyticsScript = document.createElement('script')
+  analyticsScript.id = 'ft-google-analytics'
+  analyticsScript.async = true
+  analyticsScript.src = `https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`
+  document.head.appendChild(analyticsScript)
 }
 
 function updateGoogleConsent(granted) {
@@ -159,7 +170,7 @@ export function PrivacyConsentManager() {
             <p className="ft-consent-kicker">Ihre Privatsphäre</p>
             <h2>Sie entscheiden, was geladen wird</h2>
             <p>
-              Notwendige Funktionen laufen immer. Google Tag Manager, Google Ads und Google Maps
+              Notwendige Funktionen laufen immer. Google Tag Manager, Google Analytics, Google Ads und Google Maps
               laden wir erst nach Ihrer ausdrücklichen Einwilligung. Ihre Auswahl können Sie
               jederzeit ändern.
             </p>
@@ -236,8 +247,8 @@ export function PrivacyConsentManager() {
 
               <label className="ft-consent-service">
                 <span>
-                  <strong>Marketing – Google Tag Manager und Google Ads</strong>
-                  <small>Lädt unseren Tag-Container und misst Anzeigen-Conversions nach erfolgreichen Anfragen. Anbieter: Google Ireland Limited.</small>
+                  <strong>Marketing – Google Tag Manager, Google Analytics und Google Ads</strong>
+                  <small>Lädt unseren Tag-Container, misst Seitenaufrufe und Anfragen mit Google Analytics und misst Anzeigen-Conversions. Anbieter: Google Ireland Limited.</small>
                   {gpc && <small className="ft-consent-gpc">Durch Global Privacy Control deaktiviert.</small>}
                 </span>
                 <input

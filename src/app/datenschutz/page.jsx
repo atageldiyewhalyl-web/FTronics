@@ -5,7 +5,7 @@ import { site } from '@/lib/site'
 export const metadata = {
   title: 'Datenschutzerklärung',
   description:
-    'Datenschutzerklärung der FT Sicherheitstechnik Mannheim mit Informationen zu Hosting, Kontaktanfragen, Google Tag Manager, Google Ads und Google Maps.',
+    'Datenschutzerklärung der FT Sicherheitstechnik Mannheim mit Informationen zu Hosting, Kontaktanfragen, Google Tag Manager, Google Analytics, Google Ads und Google Maps.',
   alternates: { canonical: '/datenschutz' },
   robots: { index: false, follow: true },
 }
@@ -22,7 +22,7 @@ export default function Datenschutz() {
           <p className="ft-lead">
             Informationen über die Verarbeitung personenbezogener Daten bei Nutzung dieser Website.
           </p>
-          <p><strong>Stand:</strong> 3. November 2026</p>
+          <p><strong>Stand:</strong> 18. November 2026</p>
 
           <h2 style={headingStyle}>1. Verantwortlicher</h2>
           <p>
@@ -106,6 +106,16 @@ export default function Datenschutz() {
             <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">Resend</a>.
           </p>
           <p>
+            Zusätzlich zählen wir Klicks auf unsere Telefonnummer, E-Mail-Adresse und WhatsApp-Links
+            sowie den Start und den letzten Schritt des Konfigurators. Gespeichert werden nur die
+            Art der Aktion, Zeitpunkt, aufgerufene Seite, Gerätekategorie (Smartphone, Tablet,
+            Desktop) und gegebenenfalls die Kampagnenparameter der Seitenadresse. Wir speichern
+            dabei weder IP-Adresse noch Cookies oder andere Kennungen und können die Einträge keiner
+            Person zuordnen. Die Speicherung erfolgt bei Supabase. Rechtsgrundlage ist Art. 6 Abs. 1
+            lit. f DSGVO; unser berechtigtes Interesse ist zu erkennen, wie Interessenten uns
+            kontaktieren. Diese Einträge löschen wir spätestens nach 26 Monaten.
+          </p>
+          <p>
             Anfragen löschen wir, sobald sie für den Zweck nicht mehr erforderlich sind, sofern
             keine gesetzlichen Aufbewahrungspflichten oder die Geltendmachung, Ausübung oder
             Verteidigung von Rechtsansprüchen entgegenstehen. Geschäftliche Korrespondenz kann im
@@ -113,10 +123,10 @@ export default function Datenschutz() {
             den anwendbaren Fristen länger aufbewahrt werden.
           </p>
 
-          <h2 style={headingStyle}>6. Google Tag Manager, Google Ads und Conversion-Messung</h2>
+          <h2 style={headingStyle}>6. Google Tag Manager, Google Analytics, Google Ads und Conversion-Messung</h2>
           <p>
-            Nur wenn Sie der Kategorie „Marketing“ zustimmen, laden wir Google Tag Manager und
-            Google Ads von Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland.
+            Nur wenn Sie der Kategorie „Marketing“ zustimmen, laden wir Google Tag Manager,
+            Google Analytics 4 und Google Ads von Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland.
             Google Tag Manager dient dabei ausschließlich zur Auslieferung und Steuerung der von
             uns konfigurierten Marketing-Tags; der Dienst setzt nach Angaben von Google selbst
             keine Cookies. Die Conversion-Messung hilft uns zu erkennen, ob eine Anzeige zu einer
@@ -126,8 +136,14 @@ export default function Datenschutz() {
             an Google übermittelt.
           </p>
           <p>
+            Mit Google Analytics 4 werten wir aus, wie unsere Website genutzt wird, etwa welche
+            Seiten aufgerufen werden, über welche Kanäle Besucher kommen und wie viele Anfragen und
+            Kontaktklicks entstehen. Google Analytics 4 speichert keine vollständigen IP-Adressen.
+            Die Ereignisdaten werden nach 14 Monaten gelöscht.
+          </p>
+          <p>
             Rechtsgrundlagen sind Ihre Einwilligung gemäß Art. 6 Abs. 1 lit. a DSGVO und § 25 Abs. 1
-            TDDDG. Je nach Nutzung können Google-Cookies wie <code>_gcl_au</code> oder
+            TDDDG. Je nach Nutzung können Google-Cookies wie <code>_ga</code>, <code>_ga_*</code>, <code>_gcl_au</code> oder
             <code>_gcl_aw</code> gesetzt werden. Google kann Daten auch in den USA verarbeiten und
             setzt hierfür die jeweils anwendbaren Übermittlungsmechanismen ein. Weitere
             Informationen:{' '}
