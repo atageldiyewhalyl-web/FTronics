@@ -1,10 +1,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { CtaFlatlay } from '@/components/ui'
-import { jsonLd, breadcrumbJsonLd } from '@/lib/site'
-import { ReadingProgress } from './ReadingProgress'
+import { Button, CtaFlatlay } from '@/components/ui'
+import { jsonLd, breadcrumbJsonLd, site } from '@/lib/site'
 import { CtaAnfrageForm } from '../CtaAnfrageForm'
 import { WhatsAppButton } from '@/components/WhatsAppButton'
+import { GoogleLogo } from '@/components/GoogleLogo'
 import { getAllPosts, headingId } from '@/lib/ratgeber-posts'
 
 export const metadata = {
@@ -13,24 +13,6 @@ export const metadata = {
     'Fachartikel zu Alarmanlagen, Videoüberwachung, Zutrittskontrolle, Brandschutz und Sicherheitstechnik im Rhein-Neckar-Raum.',
   alternates: { canonical: '/ratgeber' },
 }
-
-/* .ft-card gives background, border, radius and the hover lift; the teaser card
-   only overrides the padding so the 16:9 image can sit flush. */
-const teaserCard = {
-  padding: 0,
-  overflow: 'hidden',
-  height: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-}
-
-const readMore = {
-  color: 'var(--fg)',
-  font: '500 var(--t-body-sm) var(--font-ui)',
-  textDecoration: 'none',
-}
-
-/* ---------------- page ---------------- */
 
 const categoryOrder = [
   'Alarmanlagen & Einbruchschutz',
@@ -41,34 +23,43 @@ const categoryOrder = [
   'Sicherheitstechnik',
 ]
 
+const categoryIntro = {
+  'Alarmanlagen & Einbruchschutz': 'Planung, Kosten, Normklassen, Aufschaltung und Wartung von Einbruchmeldeanlagen.',
+  'Videoüberwachung': 'Kameratypen, KI-Erkennung, Kosten und Datenschutz für Gelände, Lager und Baustelle.',
+  'Zutrittskontrolle': 'Chip statt Schlüssel, Zeiterfassung, Sprechanlagen und Zufahrten sauber gelöst.',
+  'Brandschutz': 'Pflichten, Fristen und die richtige Technik für Büro, Halle und Betrieb.',
+  'Recht & Datenschutz': 'DSGVO, Speicherfristen und Betriebsrat: was bei Sicherheitstechnik gilt.',
+  'Sicherheitstechnik': 'Region, Statistik, Sicherheitskonzept und die Wahl des richtigen Partners.',
+}
+
+function shorten(text, max = 150) {
+  return text.length > max ? `${text.slice(0, max - 3).replace(/\s+\S*$/, '')} …` : text
+}
+
 function TeaserCard({ a, priority }) {
   return (
-    <article className="ft-card" style={teaserCard}>
-      <Link href={a.path} className="ft-ratgeber-card-img">
+    <Link href={a.path} className="ft-rg-card">
+      <span className="ft-rg-card-img">
         <Image
           src={a.image.src}
           alt={a.image.alt}
           width={a.image.width}
           height={a.image.height}
-          sizes="(max-width: 900px) 100vw, 380px"
+          sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 360px"
           priority={priority}
         />
-      </Link>
-      <div style={{ padding: '1.6rem', display: 'flex', flexDirection: 'column', gap: 10, flex: 1 }}>
-        <span style={{ color: 'var(--fg-tertiary)', font: '500 .8rem/1.3 var(--font-ui)', letterSpacing: '.04em', textTransform: 'uppercase' }}>
-          {a.readingMinutes} Min. Lesezeit
-        </span>
-        <h4 style={{ margin: 0 }}>
-          <Link href={a.path} style={{ color: 'inherit', textDecoration: 'none' }}>
-            {a.title}
-          </Link>
-        </h4>
-        <p style={{ flex: 1 }}>{a.excerpt.length > 190 ? `${a.excerpt.slice(0, 187).replace(/\s+\S*$/, '')} …` : a.excerpt}</p>
-        <Link href={a.path} style={readMore}>Weiterlesen →</Link>
-      </div>
-    </article>
+      </span>
+      <span className="ft-rg-card-body">
+        <span className="ft-rg-meta">{a.readingMinutes} Min. Lesezeit</span>
+        <span className="ft-rg-card-title">{a.title}</span>
+        <span className="ft-rg-card-text">{shorten(a.excerpt)}</span>
+        <span className="ft-rg-card-more">Weiterlesen →</span>
+      </span>
+    </Link>
   )
 }
+
+/* ---------------- page ---------------- */
 
 export default function Ratgeber() {
   const articles = getAllPosts()
@@ -77,6 +68,7 @@ export default function Ratgeber() {
     .filter((g) => g.posts.length)
   const other = articles.filter((a) => !categoryOrder.includes(a.category))
   if (other.length) groups.push({ name: 'Weitere Themen', id: 'weitere-themen', posts: other })
+  const featured = articles.find((a) => a.slug === 'sicherheitskonzept-unternehmen-checkliste') || articles[0]
 
   return (
     <>
@@ -90,56 +82,67 @@ export default function Ratgeber() {
         )}
       />
 
-      <ReadingProgress />
-
-      {/* 15.1 Hero */}
-      <section style={{ padding: 'clamp(4rem,6vw,6.5rem) 0 0' }}>
-        <div className="ft-shell">
-          <div data-rev-group style={{ maxWidth: 680 }}>
-            <p className="ft-eyebrow" data-rev>Wissen &amp; Ratgeber</p>
-            <h1 data-rev>Sicherheit beginnt mit Wissen</h1>
-            <p
-              data-rev
-              style={{
-                fontSize: 'var(--t-lead)', lineHeight: 'var(--t-lead-lh)',
-                color: 'var(--fg-secondary)', margin: '1rem 0 0',
-              }}
-            >
-              Fachartikel für Betriebe: von Einbruchschutz und Videoüberwachung bis
-              Zutrittskontrolle, Brandschutz und regionaler Planung rund um Mannheim.
-              Geschrieben von dem Team, das diese Anlagen seit 2013 plant, installiert und wartet.
+      <section className="ft-rg-hero">
+        <div className="ft-shell ft-rg-hero-grid">
+          <div className="ft-rg-hero-copy">
+            <p className="ft-eyebrow">Wissen &amp; Ratgeber</p>
+            <h1>Sicherheit beginnt mit Wissen</h1>
+            <p className="ft-rg-lead">
+              Fachartikel für Betriebe rund um Mannheim: Einbruchschutz, Videoüberwachung,
+              Zutrittskontrolle und Brandschutz. Geschrieben von dem Team, das diese Anlagen seit
+              2013 plant, installiert und wartet.
             </p>
+            <ul className="ft-rg-stats">
+              <li><strong>{articles.length}</strong> Fachartikel</li>
+              <li><strong>{groups.length}</strong> Themen</li>
+              <li className="ft-rg-stat-google"><GoogleLogo size={17} /><span><strong>5,0&nbsp;★</strong> bei Google</span></li>
+            </ul>
           </div>
+          <Link href={featured.path} className="ft-rg-featured">
+            <span className="ft-rg-featured-img">
+              <Image
+                src={featured.image.src}
+                alt={featured.image.alt}
+                width={featured.image.width}
+                height={featured.image.height}
+                sizes="(max-width: 900px) 100vw, 560px"
+                priority
+              />
+            </span>
+            <span className="ft-rg-featured-body">
+              <span className="ft-rg-meta">Empfohlen · {featured.readingMinutes} Min.</span>
+              <span className="ft-rg-featured-title">{featured.title}</span>
+              <span className="ft-rg-card-text">{shorten(featured.excerpt, 170)}</span>
+            </span>
+          </Link>
         </div>
       </section>
 
-      {/* 15.2 Fachartikel, grouped by topic */}
-      <section style={{ padding: 'clamp(3rem,5vw,4.5rem) 0 clamp(5rem,7vw,8rem)' }}>
-        <div className="ft-shell">
-          <nav aria-label="Themen" style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-            {groups.map((g) => (
-              <a key={g.id} href={`#${g.id}`} className="ft-chip" style={{ textDecoration: 'none' }}>
-                {g.name} · {g.posts.length}
-              </a>
-            ))}
-          </nav>
-          {groups.map((g, gi) => (
-            <div key={g.id} id={g.id} style={{ scrollMarginTop: 'calc(var(--ft-nav-h) + 1.5rem)', marginTop: 'clamp(3rem,5vw,4.5rem)' }}>
-              <h2 style={{ margin: 0 }}>{g.name}</h2>
-              <div
-                style={{
-                  display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(min(340px,100%),1fr))',
-                  gap: '1.25rem', marginTop: '1.6rem',
-                }}
-              >
-                {g.posts.map((a, index) => (
-                  <TeaserCard key={a.slug} a={a} priority={gi === 0 && index === 0} />
-                ))}
-              </div>
-            </div>
+      <nav className="ft-rg-topics" aria-label="Themen">
+        <div className="ft-shell ft-rg-topics-row">
+          {groups.map((g) => (
+            <a key={g.id} href={`#${g.id}`}>
+              {g.name}<span>{g.posts.length}</span>
+            </a>
           ))}
         </div>
-      </section>
+      </nav>
+
+      <div className="ft-shell ft-rg-sections">
+        {groups.map((g, gi) => (
+          <section key={g.id} id={g.id} className="ft-rg-section" aria-labelledby={`${g.id}-title`}>
+            <header className="ft-rg-section-head">
+              <h2 id={`${g.id}-title`}>{g.name}</h2>
+              <p>{categoryIntro[g.name] || ''}</p>
+            </header>
+            <div className="ft-rg-grid">
+              {g.posts.map((a, index) => (
+                <TeaserCard key={a.slug} a={a} priority={gi === 0 && index < 3} />
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
 
       {/* 15.3 Closing CTA */}
       <section style={{ padding: '0 0 clamp(5rem,7vw,8rem)' }}>
@@ -160,6 +163,7 @@ export default function Ratgeber() {
                 Unser Expertenteam steht Ihnen jederzeit zur Verfügung.
               </p>
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: '1.5rem' }}>
+                <Button href={site.phoneHref}>{site.phone}</Button>
                 <WhatsAppButton />
               </div>
             </div>

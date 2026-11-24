@@ -1,9 +1,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { Button, Chip, CtaFlatlay } from '@/components/ui'
+import { Button, CtaFlatlay } from '@/components/ui'
 import { CtaAnfrageForm } from '@/app/CtaAnfrageForm'
 import { WhatsAppButton } from '@/components/WhatsAppButton'
+import { GoogleLogo } from '@/components/GoogleLogo'
 import { site, jsonLd, cta } from '@/lib/site'
 import { blogJsonLd, getPostBySlug, getPostSlugs, getRelatedPosts, headingId } from '@/lib/ratgeber-posts'
 import { ReadingProgress } from '../ReadingProgress'
@@ -248,7 +249,7 @@ function InlineCta({ category }) {
 function TrustStrip() {
   return (
     <ul className="ft-article-trust" aria-label="Warum FT Sicherheitstechnik">
-      <li><strong>{site.rating.value} ★</strong> {site.rating.count} Google-Bewertungen</li>
+      <li className="ft-article-trust-google"><GoogleLogo size={15} /><span><strong>{site.rating.value}&nbsp;★</strong> {site.rating.count} Google-Bewertungen</span></li>
       <li><strong>Seit 2013</strong> in Mannheim</li>
       <li><strong>FTronics</strong> eigene Kameramarke</li>
       <li><strong>DIPMB 2024</strong> Hohe Kundenzufriedenheit</li>
@@ -283,30 +284,22 @@ export default async function RatgeberPost({ params }) {
 
       <article className="ft-article">
         <header className="ft-article-hero">
-          <div className="ft-shell ft-article-hero-inner">
-            <nav className="ft-article-crumbs" aria-label="Brotkrumen">
-              <Link href="/">Startseite</Link>
-              <span aria-hidden="true">/</span>
-              <Link href="/ratgeber">Ratgeber</Link>
-            </nav>
-            <div className="ft-article-kicker">
-              <Chip>{post.category}</Chip>
-              <span>{post.readingMinutes} Min. Lesezeit</span>
-              <span>
+          <div className="ft-shell ft-article-hero-grid">
+            <div className="ft-article-hero-copy">
+              <nav className="ft-article-crumbs" aria-label="Brotkrumen">
+                <Link href="/">Startseite</Link>
+                <span aria-hidden="true">/</span>
+                <Link href="/ratgeber">Ratgeber</Link>
+                <span aria-hidden="true">/</span>
+                <span>{post.category}</span>
+              </nav>
+              <h1>{post.title}</h1>
+              <p className="ft-article-byline">
+                {post.author} · {post.readingMinutes} Min. Lesezeit ·{' '}
                 {post.updated !== post.date ? `Aktualisiert am ${formatDate(post.updated)}` : formatDate(post.date)}
-              </span>
+              </p>
+              <TrustStrip />
             </div>
-            <h1>{post.title}</h1>
-            <p className="ft-article-byline">{post.author} · Mannheim</p>
-            {post.summary && (
-              <div className="ft-article-summary">
-                <p className="ft-article-summary-label">Kurz gesagt</p>
-                <p>{inline(post.summary)}</p>
-              </div>
-            )}
-            <TrustStrip />
-          </div>
-          <div className="ft-shell">
             {/* The LCP element on every article: preloaded, with intrinsic
                 width/height so the box is reserved before the file lands. */}
             <Image
@@ -315,7 +308,7 @@ export default async function RatgeberPost({ params }) {
               alt={post.image.alt}
               width={post.image.width}
               height={post.image.height}
-              sizes="(max-width: 1100px) 100vw, 1100px"
+              sizes="(max-width: 900px) 100vw, 640px"
               priority
             />
           </div>
@@ -336,14 +329,23 @@ export default async function RatgeberPost({ params }) {
             )}
             <div className="ft-article-contact">
               <p className="ft-article-aside-label">Persönliche Beratung</p>
-              <p className="ft-article-contact-note">Mo–Fr 08:00–17:00 · Mannheim + 50 km</p>
-              <a className="ft-article-contact-phone" href={site.phoneHref}>{site.phone}</a>
-              <Button href="/kontakt" size="sm">{cta.freeAdvice}</Button>
-              <WhatsAppButton size="sm" />
+              <p className="ft-article-contact-note">Kostenlose Begehung im Umkreis von 50 km um Mannheim.</p>
+              <a className="ft-article-contact-phone" href={site.phoneHref}>
+                <span>Anrufen · Mo–Fr 8–17 Uhr</span>
+                {site.phone}
+              </a>
+              <Button href="/kontakt" size="sm" className="ft-article-contact-btn">Beratung anfragen</Button>
+              <WhatsAppButton size="sm" className="ft-article-contact-btn" />
             </div>
           </aside>
 
           <div className="ft-article-main">
+            {post.summary && (
+              <div className="ft-article-summary">
+                <p className="ft-article-summary-label">Kurz gesagt</p>
+                <p>{inline(post.summary)}</p>
+              </div>
+            )}
             <div className="ft-article-body">{renderBlocks(bodyMarkdown, post.category)}</div>
 
             {post.faqs.length > 0 && (
@@ -399,7 +401,7 @@ export default async function RatgeberPost({ params }) {
             <h2>{service.title}</h2>
             <p>{service.text} Die Beratung ist kostenlos und unverbindlich.</p>
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: '1.5rem' }}>
-              <Button href={site.phoneHref} variant="secondary">{site.phone}</Button>
+              <Button href={site.phoneHref}>{site.phone}</Button>
               <WhatsAppButton />
             </div>
           </div>

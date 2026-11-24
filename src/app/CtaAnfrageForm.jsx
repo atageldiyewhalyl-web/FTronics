@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Button, Field } from '@/components/ui'
 import { FormPrivacyNotice } from '@/components/FormPrivacyNotice'
 import { submitLead } from '@/lib/lead-submit'
+import { site } from '@/lib/site'
 
 /* ============================================================
    CTA-Anfrageformular — the closing call to action's own form.
@@ -198,6 +199,8 @@ export function CtaAnfrageForm() {
           </Button>
         )}
         <Button type="submit" disabled={sending}>{sending ? 'Wird gesendet...' : step === 1 ? 'Weiter' : 'Anfrage senden'}</Button>
+        {/* For people who would rather talk than type. */}
+        <Button variant="secondary" href={site.phoneHref}>{site.phone}</Button>
       </div>
       {error && (
         <p role="alert" style={{ color: 'var(--ft-red-brand)', fontSize: 'var(--t-body-sm)', margin: '1rem 0 0' }}>
