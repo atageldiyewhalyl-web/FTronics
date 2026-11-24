@@ -446,18 +446,6 @@ export default function ProduktFC8D() {
             ))}
           </div>
 
-          <div data-rev style={{ ...panel, marginTop: '1.25rem', display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ maxWidth: 560 }}>
-              <h4 style={{ marginBottom: '.3em' }}>Datenblatt für Ihre Unterlagen.</h4>
-              <p style={{ margin: 0, color: 'var(--fg-secondary)', fontSize: 'var(--t-body-sm)' }}>
-                Offizielle Produktdokumentation mit den vollständigen technischen Parametern.
-              </p>
-            </div>
-            <Button variant="secondary" href="https://www.ftsicherheitstechnik.com/assets/ftronics-fc8d-datenblatt.pdf">
-              FC-8D Datenblatt (PDF)
-            </Button>
-          </div>
-
           <ul className="ft-notes" data-rev>{footnotes.map((note) => <li key={note}>{note}</li>)}</ul>
         </div>
       </section>

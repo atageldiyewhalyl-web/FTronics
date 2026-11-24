@@ -855,7 +855,7 @@ export const de2en = {
   "* Analyse-, Licht- und IR-Reichweiten sind Richtwerte und hängen von Montagehöhe, Motivgröße, Blickwinkel, Reflexion und Umgebungslicht ab.": "* Analysis, light and IR ranges are guide values and depend on mounting height, subject size, viewing angle, reflectance and ambient light.",
   "* Die 4K-Hauptstreamrate beträgt laut technischem Datenblatt 20 fps; bei Auflösungen bis 6 MP sind bis zu 30 fps möglich.": "* According to the technical datasheet the 4K main stream runs at 20 fps; at resolutions up to 6 MP as much as 30 fps is possible.",
   "* Festplatten sind projektabhängig zu dimensionieren und nicht automatisch im Lieferumfang enthalten.": "* Hard disks are sized per project and are not automatically included in the delivery.",
-  "* Maßgeblich für Projektierung und Inbetriebnahme ist das verlinkte offizielle Datenblatt.": "* The linked official datasheet is what governs planning and commissioning.",
+  "* Maßgeblich für Projektierung und Inbetriebnahme ist das offizielle Datenblatt.": "* The official datasheet is what governs planning and commissioning.",
   "* Speicherdauer hängt von Kameraanzahl, Auflösung, Bildrate, Kompression, Ereignisprofil und Festplattenbestückung ab.": "* Retention time depends on the number of cameras, resolution, frame rate, compression, event profile and how the drive bays are populated.",
   "−10 °C bis +50 °C": "−10 °C to +50 °C",
   "−10 °C bis +55 °C": "−10 °C to +55 °C",

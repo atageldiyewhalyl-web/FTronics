@@ -255,13 +255,15 @@ export function StandardProductPage({ product }) {
         <div className="ft-shell">
           <SectionHead eyebrow="Spezifikationen" title="Technische Daten" />
           <SpecCard groups={product.specGroups} />
-          <div data-rev style={{ ...panel, marginTop: '1.25rem', display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ maxWidth: 560 }}>
-              <h4 style={{ marginBottom: '.3em' }}>Datenblatt für Ihre Unterlagen.</h4>
-              <p style={{ margin: 0, color: 'var(--fg-secondary)', fontSize: 'var(--t-body-sm)' }}>Offizielle Produktdokumentation mit den vollständigen technischen Parametern.</p>
+          {product.datasheet && (
+            <div data-rev style={{ ...panel, marginTop: '1.25rem', display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ maxWidth: 560 }}>
+                <h4 style={{ marginBottom: '.3em' }}>Datenblatt für Ihre Unterlagen.</h4>
+                <p style={{ margin: 0, color: 'var(--fg-secondary)', fontSize: 'var(--t-body-sm)' }}>Offizielle Produktdokumentation mit den vollständigen technischen Parametern.</p>
+              </div>
+              <Button variant="secondary" href={product.datasheet} external target="_blank" rel="noopener">{product.name} Datenblatt (PDF)</Button>
             </div>
-            <Button variant="secondary" href={product.datasheet}>{product.name} Datenblatt (PDF)</Button>
-          </div>
+          )}
           <ul className="ft-notes" data-rev>{product.footnotes.map((note) => <li key={note}>{note}</li>)}</ul>
         </div>
       </section>

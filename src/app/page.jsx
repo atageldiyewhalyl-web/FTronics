@@ -632,7 +632,7 @@ export default function Startseite() {
                   kind: '180° Panorama Turret', name: 'FT-8P Dual', href: '/produkte/ft-8p-dual',
                   img: '/ft-8p-dual-main.webp',
                   desc: 'Dual-Objektiv Panoramakamera mit 180° Weitwinkel, aktiver Abschreckung und Zweiwege-Audio.',
-                  specs: ['8MP 180°', 'IP67', 'Dual-Light', '2-Wege Audio'],
+                  specs: ['16MP 180°', 'IP67', 'Dual-Light', '2-Wege Audio'],
                 },
                 {
                   kind: 'PTZ Speed Dome', name: 'FP-8T 20X', href: '/produkte/fp-8t-20x',
@@ -643,8 +643,8 @@ export default function Startseite() {
                 {
                   kind: '16-Kanal 4K NVR', name: 'FN-16', href: '/produkte/fn-16',
                   img: '/fn-16-main.webp',
-                  desc: 'Leistungsstarker 16-Kanal NVR mit 2x SATA für bis zu 16TB und ANR Technologie.',
-                  specs: ['4K', '16 Kanäle', '2x SATA 16TB', 'ANR'],
+                  desc: 'Leistungsstarker 16-Kanal NVR mit 2x SATA für bis zu 20TB und ANR Technologie.',
+                  specs: ['4K', '16 Kanäle', '2x SATA 20TB', 'ANR'],
                 },
                 {
                   kind: 'IP-Lautsprecher', name: 'FS-30', href: '/produkte/fs-30',

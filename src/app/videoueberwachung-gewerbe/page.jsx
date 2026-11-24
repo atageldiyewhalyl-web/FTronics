@@ -32,7 +32,7 @@ const faqs = [
 const products = [
   { name: 'FC-8D Pro', slug: 'fc-8d-pro', purpose: 'Für Eingänge & Innenbereiche', kind: 'Dome-Kamera', features: '4K-Auflösung · PoE', width: 600, height: 600 },
   { name: 'FB-8A Pro', slug: 'fb-8a-pro', purpose: 'Für Fassade & Zufahrt', kind: 'Bullet-Kamera', features: '4K-Auflösung · IP67', width: 600, height: 600 },
-  { name: 'FT-8P Dual', slug: 'ft-8p-dual', purpose: 'Für breite Sichtbereiche', kind: 'Panorama-Kamera', features: '180°-Panorama · 8 MP', width: 600, height: 600 },
+  { name: 'FT-8P Dual', slug: 'ft-8p-dual', purpose: 'Für breite Sichtbereiche', kind: 'Panorama-Kamera', features: '180°-Panorama · 16 MP', width: 600, height: 600 },
   { name: 'FP-8T 20X', slug: 'fp-8t-20x', purpose: 'Für große Außenflächen', kind: 'Schwenkbare PTZ-Kamera', features: '20-fach-Zoom · Auto-Tracking', width: 500, height: 500 },
   { name: 'FN-16', slug: 'fn-16', purpose: 'Für Ihre lokale Aufzeichnung', kind: 'Netzwerk-Videorekorder', features: '16 Kanäle · 4K', width: 2283, height: 1714 },
 ]
