@@ -4,8 +4,9 @@ import { notFound } from 'next/navigation'
 import { Button, Chip, CtaFlatlay } from '@/components/ui'
 import { CtaAnfrageForm } from '@/app/CtaAnfrageForm'
 import { WhatsAppButton } from '@/components/WhatsAppButton'
-import { site, jsonLd } from '@/lib/site'
-import { blogJsonLd, getPostBySlug, getPostSlugs } from '@/lib/ratgeber-posts'
+import { site, jsonLd, cta } from '@/lib/site'
+import { blogJsonLd, getPostBySlug, getPostSlugs, getRelatedPosts, headingId } from '@/lib/ratgeber-posts'
+import { ReadingProgress } from '../ReadingProgress'
 
 export function generateStaticParams() {
   return getPostSlugs().map((slug) => ({ slug }))
@@ -94,7 +95,7 @@ function Table({ lines }) {
   )
 }
 
-function renderBlocks(markdown) {
+function renderBlocks(markdown, category) {
   const lines = markdown.split('\n')
   const blocks = []
   let i = 0
@@ -106,8 +107,14 @@ function renderBlocks(markdown) {
       continue
     }
 
+    if (line.trim() === '[[cta]]') {
+      blocks.push(<InlineCta key={blocks.length} category={category} />)
+      i += 1
+      continue
+    }
+
     if (line.startsWith('## ')) {
-      blocks.push(<h2 key={blocks.length}>{inline(line.slice(3))}</h2>)
+      blocks.push(<h2 key={blocks.length} id={headingId(line.slice(3))}>{inline(line.slice(3))}</h2>)
       i += 1
       continue
     }
@@ -175,6 +182,7 @@ function renderBlocks(markdown) {
       !lines[i].startsWith('### ') &&
       !lines[i].startsWith('> ') &&
       !lines[i].startsWith('|') &&
+      lines[i].trim() !== '[[cta]]' &&
       !/^- /.test(lines[i]) &&
       !/^\d+\. /.test(lines[i])
     ) {
@@ -187,32 +195,120 @@ function renderBlocks(markdown) {
   return blocks
 }
 
+/* Where each topic's reader should go next: the matching service page. */
+const ctaByCategory = {
+  'Alarmanlagen & Einbruchschutz': {
+    title: 'Alarmanlage für Ihren Betrieb planen lassen',
+    text: 'Wir sehen uns Ihr Objekt an, legen Meldergruppen und Alarmweg fest und nennen Ihnen danach einen verbindlichen Preis.',
+    href: '/alarmanlagen-gewerbe',
+    label: 'Alarmanlagen für Gewerbe',
+  },
+  'Videoüberwachung': {
+    title: 'Kamerapunkte für Ihr Gelände planen lassen',
+    text: 'Wir prüfen Blickwinkel, Licht und Speicherung vor Ort und planen nur die Kameras, die Ihr Objekt wirklich braucht.',
+    href: '/videoueberwachung-gewerbe',
+    label: 'Videoüberwachung für Gewerbe',
+  },
+  'Zutrittskontrolle': {
+    title: 'Zutritt und Zeiterfassung sauber lösen',
+    text: 'Wir planen Türen, Berechtigungen und Terminals so, dass sie zu Ihren Abläufen und zum Datenschutz passen.',
+    href: '/zutrittskontrolle-gewerbe',
+    label: 'Zutrittskontrolle für Gewerbe',
+  },
+  'Brandschutz': {
+    title: 'Brandschutz im Betrieb prüfen lassen',
+    text: 'Wir klären, welche Technik Ihr Objekt braucht, und stimmen Planung und Wartung mit Ihnen ab.',
+    href: '/loesungen-gewerbe',
+    label: 'Lösungen für Gewerbe',
+  },
+}
+const defaultCta = {
+  title: 'Sicherheitskonzept für Ihren Betrieb',
+  text: 'Eine Begehung zeigt, wo Ihr Objekt wirklich verwundbar ist und welche Technik sich lohnt.',
+  href: '/loesungen-gewerbe',
+  label: 'Lösungen für Gewerbe',
+}
+
+function InlineCta({ category }) {
+  const c = ctaByCategory[category] || defaultCta
+  return (
+    <aside className="ft-article-cta" aria-label="Beratung">
+      <div>
+        <p className="ft-article-cta-title">{c.title}</p>
+        <p>{c.text}</p>
+      </div>
+      <div className="ft-article-cta-actions">
+        <Button href="/kontakt" size="sm">{cta.freeAdvice}</Button>
+        <a href={site.phoneHref} className="ft-article-cta-phone">{site.phone}</a>
+      </div>
+    </aside>
+  )
+}
+
+function TrustStrip() {
+  return (
+    <ul className="ft-article-trust" aria-label="Warum FT Sicherheitstechnik">
+      <li><strong>{site.rating.value} ★</strong> {site.rating.count} Google-Bewertungen</li>
+      <li><strong>Seit 2013</strong> in Mannheim</li>
+      <li><strong>FTronics</strong> eigene Kameramarke</li>
+      <li><strong>DIPMB 2024</strong> Hohe Kundenzufriedenheit</li>
+    </ul>
+  )
+}
+
+function formatDate(value) {
+  if (!value) return ''
+  const [y, m, d] = value.split('-')
+  return `${d}.${m}.${y}`
+}
+
+/* The FAQ renders as an accordion after the body, so its markdown section
+   (from "## Häufige Fragen" to the next H2 or the end) is cut out here. */
+function withoutFaq(markdown) {
+  return markdown.replace(/\n## Häufige Fragen[^\n]*\n[\s\S]*?(?=\n## |$)/, '\n')
+}
+
 export default async function RatgeberPost({ params }) {
   const { slug } = await params
   const post = getPostBySlug(slug)
   if (!post) notFound()
+  const related = getRelatedPosts(post)
+  const bodyMarkdown = withoutFaq(post.markdown)
+  const service = ctaByCategory[post.category] || defaultCta
 
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(blogJsonLd(post))} />
+      <ReadingProgress />
 
       <article className="ft-article">
         <header className="ft-article-hero">
           <div className="ft-shell ft-article-hero-inner">
+            <nav className="ft-article-crumbs" aria-label="Brotkrumen">
+              <Link href="/">Startseite</Link>
+              <span aria-hidden="true">/</span>
+              <Link href="/ratgeber">Ratgeber</Link>
+            </nav>
             <div className="ft-article-kicker">
               <Chip>{post.category}</Chip>
-              <span>{post.date}</span>
+              <span>{post.readingMinutes} Min. Lesezeit</span>
+              <span>
+                {post.updated !== post.date ? `Aktualisiert am ${formatDate(post.updated)}` : formatDate(post.date)}
+              </span>
             </div>
             <h1>{post.title}</h1>
-            <p className="ft-lead">{post.description}</p>
-            <p className="ft-article-byline">{post.author}</p>
+            <p className="ft-article-byline">{post.author} · Mannheim</p>
+            {post.summary && (
+              <div className="ft-article-summary">
+                <p className="ft-article-summary-label">Kurz gesagt</p>
+                <p>{inline(post.summary)}</p>
+              </div>
+            )}
+            <TrustStrip />
           </div>
           <div className="ft-shell">
-            {/* The LCP element on every article. `priority` preloads it and
-                opts it out of lazy loading; the intrinsic width/height come
-                from the post's image record so the browser can reserve the
-                box before the file lands. `sizes` matches the article shell,
-                which never exceeds ~1100px. */}
+            {/* The LCP element on every article: preloaded, with intrinsic
+                width/height so the box is reserved before the file lands. */}
             <Image
               className="ft-article-hero-img"
               src={post.image.src}
@@ -227,25 +323,83 @@ export default async function RatgeberPost({ params }) {
 
         <div className="ft-shell ft-article-layout">
           <aside className="ft-article-aside">
-            <Link href="/ratgeber">Alle Ratgeber</Link>
-            <a href={site.phoneHref}>{site.phone}</a>
-            <Button href="/kontakt" size="sm">Beratung anfragen</Button>
-            <WhatsAppButton size="sm" />
-            <Button variant="secondary" href="/produkte" size="sm">Produkte ansehen</Button>
+            {post.toc.length > 2 && (
+              <nav className="ft-article-toc" aria-label="Inhalt">
+                <p className="ft-article-aside-label">Inhalt</p>
+                <ol>
+                  {post.toc.map((item) => (
+                    <li key={item.id}><a href={`#${item.id}`}>{item.label}</a></li>
+                  ))}
+                  {post.faqs.length > 0 && <li><a href="#faq">Häufige Fragen</a></li>}
+                </ol>
+              </nav>
+            )}
+            <div className="ft-article-contact">
+              <p className="ft-article-aside-label">Persönliche Beratung</p>
+              <p className="ft-article-contact-note">Mo–Fr 08:00–17:00 · Mannheim + 50 km</p>
+              <a className="ft-article-contact-phone" href={site.phoneHref}>{site.phone}</a>
+              <Button href="/kontakt" size="sm">{cta.freeAdvice}</Button>
+              <WhatsAppButton size="sm" />
+            </div>
           </aside>
-          <div className="ft-article-body">{renderBlocks(post.markdown)}</div>
+
+          <div className="ft-article-main">
+            <div className="ft-article-body">{renderBlocks(bodyMarkdown, post.category)}</div>
+
+            {post.faqs.length > 0 && (
+              <section className="ft-article-faq" id="faq" aria-labelledby="faq-title">
+                <h2 id="faq-title">Häufige Fragen</h2>
+                {post.faqs.map((faq) => (
+                  <details key={faq.q}>
+                    <summary>{faq.q}</summary>
+                    <p>{faq.a}</p>
+                  </details>
+                ))}
+              </section>
+            )}
+
+            <section className="ft-article-about" aria-label="Über FT Sicherheitstechnik">
+              <p className="ft-article-aside-label">Über den Autor</p>
+              <h2>FT Sicherheitstechnik, Mannheim</h2>
+              <p>
+                Gegründet 2013 von {site.founder}, der seine erste Kamerainstallation schon 2008
+                umgesetzt hat. Wir planen, installieren und warten Alarmanlagen, Videoüberwachung,
+                Zutrittskontrolle und Brandwarntechnik für Betriebe im Umkreis von 50 km um Mannheim.
+                Unsere Kameras und Rekorder entwickeln wir seit 2015 unter der eigenen Marke FTronics.
+              </p>
+              <div className="ft-article-about-actions">
+                <Button href={service.href} variant="secondary" size="sm">{service.label}</Button>
+                <Button href="/ueber-uns" variant="secondary" size="sm">Über uns</Button>
+              </div>
+            </section>
+          </div>
         </div>
+
+        {related.length > 0 && (
+          <section className="ft-article-related" aria-labelledby="related-title">
+            <div className="ft-shell">
+              <h2 id="related-title">Weiterlesen</h2>
+              <div className="ft-article-related-grid">
+                {related.map((r) => (
+                  <Link key={r.slug} href={r.path} className="ft-article-related-card">
+                    <Image src={r.image.src} alt={r.image.alt} width={r.image.width} height={r.image.height} sizes="(max-width: 900px) 100vw, 360px" />
+                    <span className="ft-article-related-meta">{r.category} · {r.readingMinutes} Min.</span>
+                    <span className="ft-article-related-title">{r.title}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
       </article>
 
       <section className="ft-section ft-cta-close">
         <div className="ft-shell ft-cta-split">
           <div className="ft-cta-copy">
-            <h2>Fragen zu Ihrem Objekt?</h2>
-            <p>
-              Wir prüfen Anforderungen, Technik und Aufwand vor Ort und erstellen ein passendes
-              Sicherheitskonzept für Ihr Unternehmen.
-            </p>
+            <h2>{service.title}</h2>
+            <p>{service.text} Die Beratung ist kostenlos und unverbindlich.</p>
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: '1.5rem' }}>
+              <Button href={site.phoneHref} variant="secondary">{site.phone}</Button>
               <WhatsAppButton />
             </div>
           </div>
@@ -253,6 +407,12 @@ export default async function RatgeberPost({ params }) {
         </div>
         <CtaFlatlay />
       </section>
+
+      <div className="ft-article-mobilebar" aria-label="Schnellkontakt">
+        <a href={site.phoneHref}>Anrufen</a>
+        <a href={site.whatsappHref} target="_blank" rel="noopener noreferrer">WhatsApp</a>
+        <Link href="/kontakt">Anfrage</Link>
+      </div>
     </>
   )
 }

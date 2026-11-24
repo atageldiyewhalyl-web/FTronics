@@ -1,11 +1,11 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Chip, CtaFlatlay, SectionHead } from '@/components/ui'
-import { cta, jsonLd, breadcrumbJsonLd } from '@/lib/site'
+import { CtaFlatlay } from '@/components/ui'
+import { jsonLd, breadcrumbJsonLd } from '@/lib/site'
 import { ReadingProgress } from './ReadingProgress'
 import { CtaAnfrageForm } from '../CtaAnfrageForm'
 import { WhatsAppButton } from '@/components/WhatsAppButton'
-import { getAllPosts } from '@/lib/ratgeber-posts'
+import { getAllPosts, headingId } from '@/lib/ratgeber-posts'
 
 export const metadata = {
   title: 'Ratgeber Sicherheitstechnik',
@@ -32,8 +32,51 @@ const readMore = {
 
 /* ---------------- page ---------------- */
 
+const categoryOrder = [
+  'Alarmanlagen & Einbruchschutz',
+  'Videoüberwachung',
+  'Zutrittskontrolle',
+  'Brandschutz',
+  'Recht & Datenschutz',
+  'Sicherheitstechnik',
+]
+
+function TeaserCard({ a, priority }) {
+  return (
+    <article className="ft-card" style={teaserCard}>
+      <Link href={a.path} className="ft-ratgeber-card-img">
+        <Image
+          src={a.image.src}
+          alt={a.image.alt}
+          width={a.image.width}
+          height={a.image.height}
+          sizes="(max-width: 900px) 100vw, 380px"
+          priority={priority}
+        />
+      </Link>
+      <div style={{ padding: '1.6rem', display: 'flex', flexDirection: 'column', gap: 10, flex: 1 }}>
+        <span style={{ color: 'var(--fg-tertiary)', font: '500 .8rem/1.3 var(--font-ui)', letterSpacing: '.04em', textTransform: 'uppercase' }}>
+          {a.readingMinutes} Min. Lesezeit
+        </span>
+        <h4 style={{ margin: 0 }}>
+          <Link href={a.path} style={{ color: 'inherit', textDecoration: 'none' }}>
+            {a.title}
+          </Link>
+        </h4>
+        <p style={{ flex: 1 }}>{a.excerpt.length > 190 ? `${a.excerpt.slice(0, 187).replace(/\s+\S*$/, '')} …` : a.excerpt}</p>
+        <Link href={a.path} style={readMore}>Weiterlesen →</Link>
+      </div>
+    </article>
+  )
+}
+
 export default function Ratgeber() {
   const articles = getAllPosts()
+  const groups = categoryOrder
+    .map((name) => ({ name, id: headingId(name), posts: articles.filter((a) => a.category === name) }))
+    .filter((g) => g.posts.length)
+  const other = articles.filter((a) => !categoryOrder.includes(a.category))
+  if (other.length) groups.push({ name: 'Weitere Themen', id: 'weitere-themen', posts: other })
 
   return (
     <>
@@ -64,58 +107,37 @@ export default function Ratgeber() {
             >
               Fachartikel für Betriebe: von Einbruchschutz und Videoüberwachung bis
               Zutrittskontrolle, Brandschutz und regionaler Planung rund um Mannheim.
+              Geschrieben von dem Team, das diese Anlagen seit 2013 plant, installiert und wartet.
             </p>
           </div>
         </div>
       </section>
 
-      {/* 15.2 Fachartikel */}
-      <section style={{ padding: 'clamp(4rem,6vw,6rem) 0 clamp(5rem,7vw,8rem)' }}>
+      {/* 15.2 Fachartikel, grouped by topic */}
+      <section style={{ padding: 'clamp(3rem,5vw,4.5rem) 0 clamp(5rem,7vw,8rem)' }}>
         <div className="ft-shell">
-          <SectionHead
-            eyebrow="Ratgeber & Fachartikel"
-            title="Sicherheitstechnik im Betrieb richtig entscheiden"
-            lead="Praxisnah, regional und ohne Pauschalversprechen: diese Ratgeber helfen bei Planung, Pflichten und Systemauswahl."
-          />
-          <div
-            data-rev-group
-            style={{
-              display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(min(340px,100%),1fr))',
-              gap: '1.25rem', marginTop: '3rem',
-            }}
-          >
-            {articles.map((a, index) => (
-              <div data-rev key={a.slug}>
-                <article className="ft-card" style={teaserCard}>
-                  <Link href={a.path} className="ft-ratgeber-card-img">
-                    <Image
-                      src={a.image.src}
-                      alt={a.image.alt}
-                      width={a.image.width}
-                      height={a.image.height}
-                      sizes="(max-width: 900px) 100vw, 380px"
-                      priority={index === 0}
-                    />
-                  </Link>
-                  <div
-                    style={{
-                      padding: '1.6rem', display: 'flex', flexDirection: 'column',
-                      gap: 10, flex: 1,
-                    }}
-                  >
-                    <Chip style={{ alignSelf: 'flex-start' }}>{a.category}</Chip>
-                    <h4 style={{ margin: 0 }}>
-                      <Link href={a.path} style={{ color: 'inherit', textDecoration: 'none' }}>
-                        {a.title}
-                      </Link>
-                    </h4>
-                    <p style={{ flex: 1 }}>{a.excerpt}</p>
-                    <Link href={a.path} style={readMore}>Weiterlesen →</Link>
-                  </div>
-                </article>
-              </div>
+          <nav aria-label="Themen" style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            {groups.map((g) => (
+              <a key={g.id} href={`#${g.id}`} className="ft-chip" style={{ textDecoration: 'none' }}>
+                {g.name} · {g.posts.length}
+              </a>
             ))}
-          </div>
+          </nav>
+          {groups.map((g, gi) => (
+            <div key={g.id} id={g.id} style={{ scrollMarginTop: 'calc(var(--ft-nav-h) + 1.5rem)', marginTop: 'clamp(3rem,5vw,4.5rem)' }}>
+              <h2 style={{ margin: 0 }}>{g.name}</h2>
+              <div
+                style={{
+                  display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(min(340px,100%),1fr))',
+                  gap: '1.25rem', marginTop: '1.6rem',
+                }}
+              >
+                {g.posts.map((a, index) => (
+                  <TeaserCard key={a.slug} a={a} priority={gi === 0 && index === 0} />
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 

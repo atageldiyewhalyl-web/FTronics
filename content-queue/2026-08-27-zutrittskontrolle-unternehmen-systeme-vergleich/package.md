@@ -11,6 +11,9 @@ title_tag: Zutrittskontrolle im Unternehmen: RFID, PIN, App, Biometrie
 meta_description: Zutrittskontrolle für Unternehmen: RFID, PIN, App oder Fingerprint im Vergleich — mit Berechtigungskonzept, DSGVO-Grenzen und Zeiterfassung.
 author: FT Sicherheitstechnik (Organisation als Autor; Byline "Redaktion FT Sicherheitstechnik")
 category: Zutrittskontrolle
+updated: 2026-11-24
+image: /ratgeber/zutrittskontrolle-unternehmen-systeme-vergleich.webp
+image_alt: RFID-Schlüsselanhänger vor einem Kartenleser an einer Bürotür
 ---
 
 # Zutrittskontrolle im Unternehmen: RFID, PIN, App oder Fingerprint?
@@ -55,6 +58,8 @@ Was das im Betrieb bedeutet:
 
 Technisch entscheidend: Moderne Leser speichern in der Regel **kein Bild des Fingerabdrucks**, sondern ein mathematisches Template, aus dem sich das Original nicht rekonstruieren lässt. Ob die Speicherung zentral im Server oder dezentral auf einer Karte erfolgt, gehört in die Betriebsvereinbarung — und in die Systementscheidung, bevor gekauft wird.
 
+[[cta]]
+
 ## Das Berechtigungskonzept — der eigentliche Kern
 
 Bevor Hardware bestellt wird, entsteht eine Matrix: **Zonen × Personengruppen × Zeitfenster.**
@@ -88,6 +93,8 @@ Zwei Einschränkungen gehören dazu:
 - **Mitbestimmung.** Zeiterfassungssysteme sind technische Einrichtungen im Sinne von § 87 Abs. 1 Nr. 6 BetrVG — der Betriebsrat ist zu beteiligen.
 
 Wie das bei uns zusammenspielt, steht auf der Seite [Sicherheitstechnik für Gewerbe & Industrie](/loesungen-gewerbe).
+
+[[cta]]
 
 ## Was bei der Installation zählt
 

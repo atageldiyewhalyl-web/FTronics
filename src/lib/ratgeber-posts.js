@@ -2,71 +2,40 @@ import fs from 'fs'
 import path from 'path'
 import { site } from './site'
 
-/* readPost() below reads each post's body straight out of
-   content-queue/<package>/package.md at build time — that directory is
-   therefore a HARD BUILD DEPENDENCY, not scratch/working content. Deploy
-   tooling and any future `.gitignore` or cleanup pass must not exclude it, or
-   every Ratgeber route fails to prerender. If the content ever moves into
-   `src/` (e.g. once it outgrows a handful of posts), update packageBySlug
-   and readPost() together. */
-const posts = [
-  'alarmanlage-gewerbe-mannheim',
-  'videoueberwachung-unternehmen-dsgvo',
-  'kameratypen-dome-bullet-turret-ptz-vergleich',
-  'zutrittskontrolle-unternehmen-systeme-vergleich',
-  'brandmeldeanlage-wartung-pflichten-betrieb',
-  'sicherheitstechnik-rhein-neckar-einzugsgebiet',
-]
+/* Every post lives in content-queue/<YYYY-MM-DD>-<slug>/package.md and is
+   read at build time, so that directory is a HARD BUILD DEPENDENCY, not
+   scratch/working content. Deploy tooling and any `.gitignore` or cleanup
+   pass must not exclude it, or every Ratgeber route fails to prerender.
 
-const packageBySlug = {
-  'alarmanlage-gewerbe-mannheim': '2026-08-27-alarmanlage-gewerbe-mannheim',
-  'videoueberwachung-unternehmen-dsgvo': '2026-08-27-videoueberwachung-unternehmen-dsgvo',
-  'kameratypen-dome-bullet-turret-ptz-vergleich': '2026-09-02-kameratypen-dome-bullet-turret-ptz-vergleich',
-  'zutrittskontrolle-unternehmen-systeme-vergleich': '2026-08-27-zutrittskontrolle-unternehmen-systeme-vergleich',
-  'brandmeldeanlage-wartung-pflichten-betrieb': '2026-08-27-brandmeldeanlage-wartung-pflichten-betrieb',
-  'sicherheitstechnik-rhein-neckar-einzugsgebiet': '2026-08-27-sicherheitstechnik-rhein-neckar-einzugsgebiet',
+   Posts are discovered automatically: any package with `status: ready` and a
+   `slug` is published. A package's hero image comes from its `image` and
+   `image_alt` frontmatter (generated heroes are 1600x900 WebP files in
+   public/ratgeber/). */
+const QUEUE_DIR = path.join(process.cwd(), 'content-queue')
+const DEFAULT_IMAGE = { src: '/loesungen-gewerbe-werk.webp', width: 1800, height: 1207 }
+
+function discoverPackages() {
+  const bySlug = {}
+  for (const dir of fs.readdirSync(QUEUE_DIR)) {
+    const file = path.join(QUEUE_DIR, dir, 'package.md')
+    if (dir.startsWith('_') || !fs.existsSync(file)) continue
+    const [frontmatter] = parseFrontmatter(fs.readFileSync(file, 'utf8'))
+    if (frontmatter.status !== 'ready' || !frontmatter.slug) continue
+    bySlug[frontmatter.slug] = { dir, date: frontmatter.date || '' }
+  }
+  return bySlug
 }
 
-/* Intrinsic pixel dimensions travel with each hero so <Image> can reserve the
-   space before the file arrives. The rendered size is still set by
-   .ft-article-hero-img in globals.css; these only fix the aspect ratio. */
-const images = {
-  'alarmanlage-gewerbe-mannheim': {
-    src: '/loesungen-gewerbe-werk.webp',
-    width: 1800,
-    height: 1207,
-    alt: 'Alarmanlage an einem Gewerbeobjekt in Mannheim sichert Ladezone und Hallentor',
-  },
-  'videoueberwachung-unternehmen-dsgvo': {
-    src: '/fc-8d-pro-hero.webp',
-    width: 2400,
-    height: 1339,
-    alt: 'Videoüberwachung im Unternehmen: Kamera an einem Gewerbeobjekt',
-  },
-  'kameratypen-dome-bullet-turret-ptz-vergleich': {
-    src: '/produkte-hero.webp',
-    width: 2400,
-    height: 1018,
-    alt: 'Kameratypen im Vergleich: Dome, Bullet, Turret und PTZ',
-  },
-  'zutrittskontrolle-unternehmen-systeme-vergleich': {
-    src: '/loesungen-band.webp',
-    width: 2200,
-    height: 1476,
-    alt: 'Zutrittskontrolle im Unternehmen: Installation von Sicherheitstechnik an einer Bürotür',
-  },
-  'brandmeldeanlage-wartung-pflichten-betrieb': {
-    src: '/schutz-03.webp',
-    width: 1800,
-    height: 1344,
-    alt: 'Techniker prüft Sicherheitstechnik in einem Gewerbeobjekt',
-  },
-  'sicherheitstechnik-rhein-neckar-einzugsgebiet': {
-    src: '/hand-made-mannheim.webp',
-    width: 2200,
-    height: 1476,
-    alt: 'Sicherheitstechnik für Gewerbebetriebe in Mannheim und der Metropolregion Rhein-Neckar',
-  },
+let packageCache
+function packages() {
+  if (!packageCache) packageCache = discoverPackages()
+  return packageCache
+}
+
+/* Newest first, so fresh posts lead the Ratgeber index. */
+function postSlugs() {
+  const all = packages()
+  return Object.keys(all).sort((a, b) => all[b].date.localeCompare(all[a].date) || a.localeCompare(b))
 }
 
 function parseFrontmatter(raw) {
@@ -101,15 +70,30 @@ function extractFaq(markdown) {
   return faqs
 }
 
+export function headingId(text) {
+  return stripMarkdown(text)
+    .toLowerCase()
+    .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+}
+
 function readPost(slug) {
-  const file = path.join(process.cwd(), 'content-queue', packageBySlug[slug], 'package.md')
+  const file = path.join(QUEUE_DIR, packages()[slug].dir, 'package.md')
   const raw = fs.readFileSync(file, 'utf8')
   const [frontmatter, rest] = parseFrontmatter(raw)
   const articleMarkdown = rest.split('\n## Schema\n')[0].trim()
   const title = articleMarkdown.match(/^# (.+)$/m)?.[1] || frontmatter.title_tag
   const body = articleMarkdown.replace(/^# .+\n+/, '').trim()
-  const excerpt = stripMarkdown(body.match(/^\*\*Kurz gesagt:\*\*([^\n]+)/)?.[1] || body.split('\n')[0])
+  const summaryMatch = body.match(/^\*\*Kurz gesagt:\*\*([^\n]+)/)
+  const excerpt = stripMarkdown(summaryMatch?.[1] || body.split('\n')[0])
   const slugPath = `/ratgeber/${slug}`
+  const words = stripMarkdown(body).split(' ').length
+  const toc = [...body.matchAll(/^## (.+)$/gm)]
+    .map((m) => ({ id: headingId(m[1]), label: stripMarkdown(m[1]) }))
+  const image = frontmatter.image
+    ? { src: frontmatter.image, width: 1600, height: 900, alt: frontmatter.image_alt || title }
+    : { ...DEFAULT_IMAGE, alt: frontmatter.image_alt || title }
 
   return {
     slug,
@@ -120,25 +104,38 @@ function readPost(slug) {
     description: frontmatter.meta_description,
     category: frontmatter.category,
     date: frontmatter.date,
+    updated: frontmatter.updated || frontmatter.date,
     author: 'Redaktion FT Sicherheitstechnik',
-    image: images[slug],
+    image,
     excerpt,
-    markdown: body,
+    summary: summaryMatch ? summaryMatch[1].trim() : '',
+    markdown: summaryMatch ? body.slice(summaryMatch[0].length).trim() : body,
+    readingMinutes: Math.max(3, Math.round(words / 200)),
+    toc: toc.filter((item) => item.label !== 'Häufige Fragen' && !item.label.startsWith('Häufige Fragen')),
+    hasFaq: toc.some((item) => item.label.startsWith('Häufige Fragen')),
     faqs: extractFaq(body),
   }
 }
 
 export function getAllPosts() {
-  return posts.map(readPost)
+  return postSlugs().map(readPost)
 }
 
 export function getPostBySlug(slug) {
-  if (!posts.includes(slug)) return null
+  if (!packages()[slug]) return null
   return readPost(slug)
 }
 
 export function getPostSlugs() {
-  return posts
+  return postSlugs()
+}
+
+/* Same category first, then the newest of the rest. */
+export function getRelatedPosts(post, count = 3) {
+  const others = getAllPosts().filter((p) => p.slug !== post.slug)
+  const same = others.filter((p) => p.category === post.category)
+  const rest = others.filter((p) => p.category !== post.category)
+  return [...same, ...rest].slice(0, count)
 }
 
 export function blogJsonLd(post) {
@@ -150,7 +147,7 @@ export function blogJsonLd(post) {
       description: post.description,
       inLanguage: 'de-DE',
       datePublished: post.date,
-      dateModified: post.date,
+      dateModified: post.updated,
       mainEntityOfPage: { '@type': 'WebPage', '@id': post.url },
       author: { '@id': `${site.url}/#organization` },
       publisher: { '@id': `${site.url}/#organization` },

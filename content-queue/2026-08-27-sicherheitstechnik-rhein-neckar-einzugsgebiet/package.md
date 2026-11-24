@@ -11,6 +11,9 @@ title_tag: Sicherheitstechnik Rhein-Neckar: 50 km rund um Mannheim
 meta_description: Sicherheitstechnik im Rhein-Neckar-Raum: Wo wir von Mannheim aus arbeiten, wie ein Projekt abläuft und was die Kriminalstatistik 2025 für Betriebe zeigt.
 author: FT Sicherheitstechnik (Organisation als Autor; Byline "Redaktion FT Sicherheitstechnik")
 category: Sicherheitstechnik
+updated: 2026-11-24
+image: /ratgeber/sicherheitstechnik-rhein-neckar-einzugsgebiet.webp
+image_alt: Luftbild des Mannheimer Hafens mit Lagerhallen und Rhein bei Abendlicht
 ---
 
 # Sicherheitstechnik im Rhein-Neckar-Raum: 50 Kilometer rund um Mannheim
@@ -57,6 +60,8 @@ Für Betriebe heißt das schlicht: Widerstand und Entdeckungsrisiko wirken, nach
 **Nordbaden** — Bruchsal, Ubstadt-Weiher, Östringen.
 
 Liegt Ihr Objekt am Rand oder knapp außerhalb dieser Aufzählung? Fragen Sie trotzdem an — bei Projekten mit mehreren Standorten oder Wartungsverträgen entscheiden wir das im Einzelfall.
+
+[[cta]]
 
 ## Typische Objekte in der Region — und was sie brauchen
 

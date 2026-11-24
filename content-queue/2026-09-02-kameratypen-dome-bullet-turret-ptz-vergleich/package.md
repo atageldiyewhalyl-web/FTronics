@@ -8,9 +8,12 @@ secondary_keywords: [dome bullet turret unterschied, ptz kamera wann sinnvoll, w
 intent: informational
 languages: [de]
 title_tag: Dome, Bullet, Turret, PTZ: Kameratypen im Vergleich
-meta_description: Dome, Bullet, Turret oder PTZ – welcher Kameratyp gehört an welchen Punkt im Unternehmen? Bauform, Reichweite, Vandalismusschutz und die passende FTronics-Kamera.
+meta_description: Dome, Bullet, Turret oder PTZ: Welcher Kameratyp passt an welchen Punkt im Betrieb? Bauform, Reichweite, Schutzklasse und die passende FTronics-Kamera.
 author: FT Sicherheitstechnik (Organisation als Autor; Byline "Redaktion FT Sicherheitstechnik")
 category: Videoüberwachung
+updated: 2026-11-24
+image: /ratgeber/kameratypen-dome-bullet-turret-ptz-vergleich.webp
+image_alt: Dome-, Bullet-, Turret- und PTZ-Kamera nebeneinander im Vergleich
 ---
 
 # Kameratypen im Vergleich: Dome, Bullet, Turret und PTZ – und wann welche passt
@@ -62,6 +65,8 @@ Faustregel: Alles, was eine Person vom Boden oder von einer Ladefläche aus mit 
 **Wo sie hingehört:** Innenräume mit Deckenmontage – Verkaufsflächen, Lager-Innengänge, Flure, Kassenzonen, Aufzugsvorräume. Außen nur unter Dach oder in Durchfahrten.
 
 **FTronics-Modelle:** die kompakte [FC-8D Pro](/produkte/fc-8d-pro/) mit 4K und KI-Personenerkennung, die FC-8D als Basisvariante für Innen und Außen, sowie die FC-8D Zoom mit motorisiertem 2,8–8-mm-Objektiv und Gesichtserkennung, wenn eine Fläche flexibel eingestellt werden soll. Den gesamten Überblick gibt der [FTronics-Produktkatalog](/produkte/).
+
+[[cta]]
 
 ## Bullet-Kameras
 
@@ -126,6 +131,8 @@ Faustregel: Alles, was eine Person vom Boden oder von einer Ladefläche aus mit 
 **Wo sie hingehört:** Betriebsgelände mit großen Freiflächen, Außenläger, Logistik-Höfe, Perimeter mit KI-Auslösung, Veranstaltungsflächen. **Grundregel: PTZ immer nur zusätzlich zu feststehenden Kameras, nie als deren Ersatz.**
 
 **FTronics-Modelle:** die [FP-8T 20X](/produkte/fp-8t-20x/) mit 20-fach-Zoom, Auto-Tracking und Dual-Light (IR 100 m plus Warmlicht 50 m); die FP-8S 25X mit 25-fach-Zoom und 100 m IR für sehr große Flächen. Für den Innenbereich gibt es mit der FC-6Z Mini eine kompakte, vandalismusgeschützte Mini-PTZ mit 3-fach-Zoom.
+
+[[cta]]
 
 ## Die vier Bauformen auf einen Blick
 

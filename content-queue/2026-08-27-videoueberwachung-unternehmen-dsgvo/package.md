@@ -11,6 +11,9 @@ title_tag: Videoüberwachung im Unternehmen: DSGVO-Regeln 2026
 meta_description: Videoüberwachung im Unternehmen DSGVO-konform: Rechtsgrundlage, erlaubte Bereiche, Speicherdauer, Betriebsrat und Kennzeichnung — praxisnah erklärt.
 author: FT Sicherheitstechnik (Organisation als Autor; Byline "Redaktion FT Sicherheitstechnik")
 category: Recht & Datenschutz
+updated: 2026-11-24
+image: /ratgeber/videoueberwachung-unternehmen-dsgvo.webp
+image_alt: Turret-Kamera an der Ecke eines Bürogebäudes über dem Mitarbeitereingang
 ---
 
 # Videoüberwachung im Unternehmen: Was die DSGVO erlaubt — und was nicht
@@ -58,6 +61,8 @@ Zwei häufige Fehlkonfigurationen:
 - **Dauerspeicherung statt Ereignisaufzeichnung.** Ereignisgesteuerte Aufnahme über Personen- und Fahrzeugerkennung senkt das Datenvolumen und die Zahl der erfassten Personen erheblich — Datenminimierung im Sinne von Art. 5 DSGVO, nicht nur eine Speicherfrage.
 - **Exporte ohne Protokoll.** Wer wann welche Sequenz exportiert hat, gehört protokolliert. Sonst existiert neben dem gelöschten Original ein unkontrollierter zweiter Datenbestand.
 
+[[cta]]
+
 ## 4. Kennzeichnung und Information
 
 Ein Hinweisschild ist Pflicht, und es muss **vor** dem Betreten des überwachten Bereichs sichtbar sein. Die Informationen nach Art. 13 DSGVO müssen erkennbar sein:
@@ -91,6 +96,8 @@ Kein Ersatz für die Vereinbarung ist eine pauschale Einwilligung der Mitarbeite
 Die Rechtsgrundlagen für Videoüberwachung decken **keine Tonaufnahmen**. Bietet die Kamera eine Audiofunktion, muss sie deaktiviert bleiben; das unbefugte Abhören des nichtöffentlich gesprochenen Wortes ist nach § 201 StGB strafbar. Wir deaktivieren die Audiofunktion bei der Installation standardmäßig.
 
 Davon zu unterscheiden ist die **Live-Durchsage**: Ein IP-Lautsprecher wie der [FS-30](/produkte/fs-30) gibt im Alarmfall eine Ansage aus, ohne aufzuzeichnen. Das ist eine Abschreckungsfunktion, keine Datenerhebung.
+
+[[cta]]
 
 ## 7. Was KI-Analyse rechtlich verändert
 

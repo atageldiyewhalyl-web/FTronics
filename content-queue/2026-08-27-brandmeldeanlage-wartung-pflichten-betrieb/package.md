@@ -7,15 +7,30 @@ primary_keyword: brandmeldeanlage wartung intervalle
 secondary_keywords: [brandwarnanlagen, brandmeldeanlage betreiberpflichten, din 14675 wartung, brandwarnanlage unterschied brandmeldeanlage, brandschutz gewerbe mannheim]
 intent: informational
 languages: [de]
-title_tag: Brandmeldeanlage warten: Intervalle & Betreiberpflichten
-meta_description: Brandmeldeanlage und Brandwarnanlage im Betrieb: Wartungsintervalle nach DIN 14675 und DIN VDE 0833, Betreiberpflichten und Dokumentation erklärt.
+title_tag: BMA Wartung & Inspektion: Wie oft? Fristen nach DIN 14675
+meta_description: Wie oft muss eine Brandmeldeanlage gewartet werden? Inspektion alle 3 Monate, Wartung jährlich, Betriebsbuch: alle Fristen nach DIN 14675 im Überblick.
 author: FT Sicherheitstechnik (Organisation als Autor; Byline "Redaktion FT Sicherheitstechnik")
 category: Brandschutz
+updated: 2026-11-24
+image: /ratgeber/brandmeldeanlage-wartung-pflichten-betrieb.webp
+image_alt: Techniker prüft einen Rauchmelder in einem Bürokorridor mit einem Prüfstab
 ---
 
-# Brandmelde- und Brandwarnanlagen im Betrieb: Pflichten, Intervalle, Dokumentation
+# Brandmeldeanlage warten: Wie oft? Inspektion, Wartung und Betriebsbuch nach DIN 14675
 
 **Kurz gesagt:** Wer eine Brandmeldeanlage betreibt, trägt die Verantwortung dafür, dass sie geprüft wird — nicht der Errichter und nicht die Versicherung. Der Regelrhythmus: **vierteljährliche Inspektion** durch eine unterwiesene Person, **mindestens jährliche Wartung** durch eine zertifizierte Fachfirma nach DIN 14675 und DIN VDE 0833, dazu je nach Landesbauordnung eine wiederkehrende Prüfung durch einen Sachverständigen. Alles davon gehört lückenlos ins Betriebsbuch. Fehlt die Dokumentation, wird es im Schadensfall teuer — bis hin zum Verlust des Versicherungsschutzes.
+
+## Fristen auf einen Blick: wie oft, durch wen
+
+| Was | Wie oft | Wer |
+|---|---|---|
+| Inspektion der BMA/BMZ | vierteljährlich, höchstens drei Monate Abstand | Betreiber oder unterwiesene Person |
+| Wartung | mindestens einmal jährlich | Fachfirma nach DIN 14675 / DIN VDE 0833 |
+| Sachverständigenprüfung | wiederkehrend, meist alle drei Jahre (laut Baugenehmigung und Prüfverordnung des Landes) | anerkannter Sachverständiger |
+| Betriebsbuch | bei jeder Inspektion, Wartung, Störung und Abschaltung | Betreiber |
+| Rauchwarnmelder tauschen | nach zehn Jahren | Fachfirma |
+
+[[cta]]
 
 ## Erst die Begriffe: Warnanlage ist nicht Meldeanlage
 
@@ -91,6 +106,8 @@ Falschalarme sind der Hauptgrund, warum Meldergruppen "vorübergehend" abgeschal
 - **Bauarbeiten ohne Abschaltkonzept.** Vor Staub- und Schweißarbeiten werden betroffene Meldergruppen dokumentiert abgeschaltet und mit Ersatzmaßnahmen abgesichert — nicht spontan, und mit Eintrag im Betriebsbuch.
 
 Wenn eine Anlage auf die Feuerwehr aufgeschaltet ist, ist die Vermeidung von Falschalarmen zusätzlich ein Kostenthema: Feuerwehreinsätze aufgrund von Falschalarmen werden nach kommunaler Satzung in Rechnung gestellt.
+
+[[cta]]
 
 ## Zusammenspiel mit Einbruchmelde- und Videotechnik
 
