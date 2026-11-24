@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { Button, Card, SectionHead, Media } from '@/components/ui'
 import { PinStack, ScrollGallery } from '@/components/scroll'
 import { HeroField, RingField } from '@/components/hero-field'
@@ -150,12 +151,12 @@ const handMade = [
 ]
 
 const services = [
-  ['Alarmanlagen', 'Hybride Ajax-Alarmanlagen mit App-Steuerung, Funk- und Draht-Komponenten. Professionell geplant, sauber installiert, jährlich gewartet.', 'alarm'],
-  ['Videoüberwachung', '4K/8MP Kameras mit KI-Erkennung von Menschen und Fahrzeugen. FTronics-Eigenmarke für höchste Qualität.', 'video'],
+  ['Alarmanlagen', 'Hybride Ajax-Alarmanlagen mit App-Steuerung, Funk- und Draht-Komponenten. Professionell geplant, sauber installiert, jährlich gewartet.', 'alarm', '/alarmanlagen-gewerbe', 'Alarmanlagen für Gewerbe'],
+  ['Videoüberwachung', '4K/8MP Kameras mit KI-Erkennung von Menschen und Fahrzeugen. FTronics-Eigenmarke für höchste Qualität.', 'video', '/videoueberwachung-gewerbe', 'Videoüberwachung für Gewerbe'],
   ['Türsprechanlagen', 'Video-Türsprechanlagen mit Smartphone-Steuerung und Aufzeichnung. Immer wissen, wer vor der Tür steht.', 'tuersprech'],
-  ['Zutrittskontrolle', 'Moderne Zutrittssysteme für Unternehmen und Privat. Fingerprint, RFID, PIN: flexibel und sicher.', 'zutritt'],
+  ['Zutrittskontrolle', 'Moderne Zutrittssysteme für Unternehmen und Privat. Fingerprint, RFID, PIN: flexibel und sicher.', 'zutritt', '/zutrittskontrolle-gewerbe', 'Zutrittskontrolle für Gewerbe'],
   ['Smart Home', 'KNX-Schnittstellen, Home Assistant Integration. Licht, Heizung, Sicherheit: alles intelligent vernetzt.', 'smarthome'],
-  ['Brandschutz', 'Rauchmelder und Brandwarnanlagen nach DIN VDE Standards. Frühwarnung rettet Leben.', 'brand'],
+  ['Brandschutz', 'Rauchmelder und Brandwarnanlagen nach DIN VDE Standards. Frühwarnung rettet Leben.', 'brand', '/ratgeber/brandwarnanlage-oder-brandmeldeanlage', 'Brandwarnanlage oder Brandmeldeanlage?'],
 ]
 
 const stats = [
@@ -407,9 +408,14 @@ export default function Startseite() {
               Sicherheitskonzepte für jeden Bedarf.
             </p>
             <div className="ft-band-list ft-band-list--split">
-              {services.map(([t, d, mark]) => (
+              {services.map(([t, d, mark, href, linkLabel]) => (
                 <div data-rev key={t}>
-                  <Card variant="flat" icon={marks[mark]} title={t}>{d}</Card>
+                  <Card variant="flat" icon={marks[mark]} title={t}>
+                    {d}
+                    {href && (
+                      <Link href={href} className="ft-card-more">{linkLabel} →</Link>
+                    )}
+                  </Card>
                 </div>
               ))}
             </div>

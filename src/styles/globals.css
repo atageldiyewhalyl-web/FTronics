@@ -685,6 +685,10 @@ html{font-optical-sizing:auto}
   .ft-article-body{line-height:1.68}
 }
 
+/* Text link at the end of a service card (homepage "Unsere Leistungen"). */
+.ft-card-copy .ft-card-more{display:inline-block;margin-top:.7rem;color:var(--fg);font:600 var(--t-body-sm)/1.3 var(--font-ui);text-decoration:underline;text-decoration-color:rgba(235,10,22,.4);text-underline-offset:.2em}
+.ft-card-copy .ft-card-more:hover{text-decoration-color:var(--ft-red-brand)}
+
 /* ---------------- Ratgeber index v2 (2026-11) ---------------- */
 .ft-rg-hero{padding:clamp(3.5rem,6vw,6rem) 0 clamp(2.5rem,4vw,3.5rem)}
 .ft-rg-hero-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(2rem,5vw,4.5rem);align-items:center}

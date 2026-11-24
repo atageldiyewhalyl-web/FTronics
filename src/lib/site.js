@@ -48,10 +48,13 @@ export const navItems = [
   { label: 'Startseite', href: '/' },
   {
     label: 'Lösungen',
-    match: ['/loesungen-privat', '/loesungen-gewerbe'],
+    match: ['/loesungen-privat', '/loesungen-gewerbe', '/alarmanlagen-gewerbe', '/videoueberwachung-gewerbe', '/zutrittskontrolle-gewerbe'],
     children: [
-      { label: 'Privatkunden', href: '/loesungen-privat' },
       { label: 'Gewerbekunden', href: '/loesungen-gewerbe' },
+      { label: 'Alarmanlagen für Gewerbe', href: '/alarmanlagen-gewerbe' },
+      { label: 'Videoüberwachung für Gewerbe', href: '/videoueberwachung-gewerbe' },
+      { label: 'Zutrittskontrolle für Gewerbe', href: '/zutrittskontrolle-gewerbe' },
+      { label: 'Privatkunden', href: '/loesungen-privat' },
     ],
   },
   { label: 'Produkte', href: '/produkte' },
@@ -65,6 +68,9 @@ export const footerColumns = {
   'Lösungen': [
     { label: 'Privatkunden', href: '/loesungen-privat' },
     { label: 'Gewerbekunden', href: '/loesungen-gewerbe' },
+    { label: 'Alarmanlagen für Gewerbe', href: '/alarmanlagen-gewerbe' },
+    { label: 'Videoüberwachung für Gewerbe', href: '/videoueberwachung-gewerbe' },
+    { label: 'Zutrittskontrolle für Gewerbe', href: '/zutrittskontrolle-gewerbe' },
     { label: 'FTronics Produkte', href: '/produkte' },
     { label: 'System-Konfigurator', href: '/konfigurator' },
     { label: 'Partner', href: '/partner' },
