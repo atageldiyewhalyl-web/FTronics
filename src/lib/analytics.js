@@ -54,9 +54,15 @@ function logInteraction(eventType, details = {}) {
 }
 
 const GOOGLE_ADS_ID = 'AW-960863776'
+/* "Formularanfrage Website (bestätigt)" (conversion action 7919573267), the
+   primary lead conversion since 2026-11-27. It is sent only here, after the
+   lead endpoint confirmed the submission. The older "Website Lead - Contact
+   Form" label is also fired on every page load by a GTM tag we cannot edit, so
+   it was set to secondary in Google Ads and is no longer used by the site. */
+const GOOGLE_ADS_LEAD_LABEL = 'nNzbCJOyrMAdEKC8lsoD'
 const GOOGLE_ADS_CONVERSION_LABELS = {
-  contact_form: '9ERXCKa2g4AdEKC8lsoD',
-  configurator: 'sfQqCKm2g4AdEKC8lsoD',
+  contact_form: GOOGLE_ADS_LEAD_LABEL,
+  configurator: GOOGLE_ADS_LEAD_LABEL,
 }
 
 export function createAnalyticsEventId() {
